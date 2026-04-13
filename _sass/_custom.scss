@@ -1,0 +1,24 @@
+/* add your tweaks here! */
+
+/* Basic table styling */
+table {
+    border-collapse: collapse !important; /* Ensure borders are collapsed into a single line */
+    width: 100% !important; /* Optional: makes the table width 100% of its container */
+  }
+  
+  /* Styling table borders */
+  table, th, td {
+    border: 1px solid #dddddd !important; /* Change the border color and width as needed */
+  }
+  
+  /* Optional: Styling table headers */
+  th {
+    background-color: #f2f2f2 !important; /* Change background color for headers */
+    padding: 8px !important; /* Adjust padding for headers */
+  }
+  
+  /* Optional: Styling table cells */
+  td {
+    padding: 8px !important; /* Adjust padding for cells */
+  }
+  
