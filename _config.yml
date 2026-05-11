@@ -65,6 +65,8 @@ base-font-size: 1rem
 # on gh-pages this is a / followed by the name of the repository
 # baseurl is your github repository's name prefixed with a /
 # baseurl:
+url: "https://slssa-soc.github.io"
+baseurl: "/sops-working"
 
 
 ##########
