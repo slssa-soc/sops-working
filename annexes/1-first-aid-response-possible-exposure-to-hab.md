@@ -1,5 +1,5 @@
 ---
-section_id: Annexes
+section: Annexes
 nav_order: 18
 title: Annex 1 - First Aid Response - Possible Exposure to Harmful Algal Bloom (HAB)
 layout: lesson-content
