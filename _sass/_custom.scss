@@ -22,3 +22,22 @@ table {
     padding: 8px !important; /* Adjust padding for cells */
   }
   
+  /* Sidebar section heading alignment */
+.side-bar-item {
+  width: 100%;
+  text-align: left;
+}
+
+button.side-bar-item.btn-toggle {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+button.side-bar-item.btn-toggle::after {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
