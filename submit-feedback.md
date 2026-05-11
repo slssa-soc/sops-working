@@ -1,6 +1,6 @@
 ---
 section: Introduction and Submit Feedback
-nav_order: 2
+nav_order: 3
 title: Feedback
 layout: lesson-content
 #topics: GitHub; Optional Software

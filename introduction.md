@@ -1,6 +1,6 @@
 ---
-section_id: Introduction and Submit Feedback
-nav_order: 0
+section: Introduction and Submit Feedback
+nav_order: 2
 title: Introduction
 layout: lesson-content
 ---

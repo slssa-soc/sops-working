@@ -1,7 +1,9 @@
 ---
-title: Welcome
+section_id: Introduction and Submit Feedback
 nav_order: 1
+title: Feedback
 layout: lesson-content
+#topics: GitHub; Optional Software
 ---
 
 <style>
