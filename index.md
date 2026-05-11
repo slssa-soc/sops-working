@@ -1,6 +1,5 @@
 ---
-title: Surf Life Saving SA Standard Operating Procedures
-nav: Welcome
+title: Welcome
 nav_order: 1
 layout: lesson-content
 ---
@@ -14,20 +13,11 @@ layout: lesson-content
   }
 
   .sop-hero {
-    padding: 34px 28px;
+    padding: 30px 28px;
     margin-bottom: 24px;
     border: 1px solid #e5e7eb;
     border-radius: 24px;
     background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-    text-align: center;
-  }
-
-  .sop-hero h1 {
-    margin-top: 0;
-    margin-bottom: 14px;
-    font-size: 2.05rem;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
     text-align: center;
   }
 
@@ -208,19 +198,35 @@ layout: lesson-content
     text-align: center;
   }
 
-  .sop-neutral { background: #f8fafc; border-color: #cbd5e1; }
-  .sop-admin { background: #f9fafb; border-color: #d1d5db; }
-  .sop-whs { background: #fff7ed; border-color: #fed7aa; }
-  .sop-info { background: #eff6ff; border-color: #bfdbfe; }
-  .sop-standards { background: #f0fdf4; border-color: #bbf7d0; }
-  .sop-licences { background: #f5f3ff; border-color: #ddd6fe; }
-  .sop-equipment { background: #f4f4f5; border-color: #d4d4d8; }
-  .sop-comms { background: #ecfeff; border-color: #a5f3fc; }
-  .sop-patrol { background: #fffbeb; border-color: #fde68a; }
-  .sop-emergency { background: #fef2f2; border-color: #fecaca; }
-  .sop-sar { background: #f0f9ff; border-color: #bae6fd; }
-  .sop-soc { background: #eef2ff; border-color: #c7d2fe; }
-  .sop-support { background: #faf5ff; border-color: #e9d5ff; }
+  .sop-grey {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+  }
+
+  .sop-red {
+    background: #fef2f2;
+    border-color: #fecaca;
+  }
+
+  .sop-yellow {
+    background: #fffbeb;
+    border-color: #fde68a;
+  }
+
+  .sop-blue {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+  }
+
+  .sop-green {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+  }
+
+  .sop-orange {
+    background: #fff7ed;
+    border-color: #fed7aa;
+  }
 
   @media (max-width: 900px) {
     .sop-tile-grid {
@@ -232,10 +238,6 @@ layout: lesson-content
     .sop-hero {
       padding: 24px 20px;
       border-radius: 22px;
-    }
-
-    .sop-hero h1 {
-      font-size: 1.65rem;
     }
 
     .sop-ai-placeholder {
@@ -271,8 +273,6 @@ layout: lesson-content
 <div class="sop-home">
 
   <section class="sop-hero">
-    <h1>Surf Life Saving SA Standard Operating Procedures</h1>
-
     <p>
       The Surf Life Saving SA (SLSSA) Standard Operating Procedures provide the operational framework for lifesaving services, patrol operations, emergency response, communications, equipment use, incident management, and post-incident support.
     </p>
@@ -307,7 +307,7 @@ layout: lesson-content
 
   <section class="sop-tile-grid">
 
-    <a class="sop-tile sop-neutral" href="./">
+    <a class="sop-tile sop-grey" href="./">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Home</span>
         <span class="sop-tile-title">Welcome</span>
@@ -315,23 +315,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-whs" href="./1-work-health-and-safety/1.1-work-health-and-safety.html">
-      <span class="sop-tile-content">
-        <span class="sop-tile-number">Section 1</span>
-        <span class="sop-tile-title">Work Health and Safety</span>
-        <span class="sop-tile-link">Open section →</span>
-      </span>
-    </a>
-
-    <a class="sop-tile sop-info" href="./2-information-management/2.1-information-management-and-online-services.html">
-      <span class="sop-tile-content">
-        <span class="sop-tile-number">Section 2</span>
-        <span class="sop-tile-title">Information Management</span>
-        <span class="sop-tile-link">Open section →</span>
-      </span>
-    </a>
-
-    <a class="sop-tile sop-admin" href="./introduction.html">
+    <a class="sop-tile sop-grey" href="./introduction.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Introduction</span>
         <span class="sop-tile-title">Introduction and Submit Feedback</span>
@@ -339,7 +323,23 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-standards" href="./3-lifesaving-standards/3.1-lifesaving-service-agreements.html">
+    <a class="sop-tile sop-grey" href="./1-work-health-and-safety/1.1-work-health-and-safety.html">
+      <span class="sop-tile-content">
+        <span class="sop-tile-number">Section 1</span>
+        <span class="sop-tile-title">Work Health and Safety</span>
+        <span class="sop-tile-link">Open section →</span>
+      </span>
+    </a>
+
+    <a class="sop-tile sop-grey" href="./2-information-management/2.1-information-management-and-online-services.html">
+      <span class="sop-tile-content">
+        <span class="sop-tile-number">Section 2</span>
+        <span class="sop-tile-title">Information Management</span>
+        <span class="sop-tile-link">Open section →</span>
+      </span>
+    </a>
+
+    <a class="sop-tile sop-green" href="./3-lifesaving-standards/3.1-lifesaving-service-agreements.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 3</span>
         <span class="sop-tile-title">Lifesaving Standards</span>
@@ -347,7 +347,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-licences" href="./4-rescue-vessels/4.1-licences.html">
+    <a class="sop-tile sop-grey" href="./4-rescue-vessels/4.1-licences.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 4</span>
         <span class="sop-tile-title">Licences</span>
@@ -355,7 +355,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-equipment" href="./5-gear-and-equipment/5.1-lifesaving-vehicles.html">
+    <a class="sop-tile sop-grey" href="./5-gear-and-equipment/5.1-lifesaving-vehicles.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 5</span>
         <span class="sop-tile-title">Gear and Equipment</span>
@@ -363,7 +363,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-equipment" href="./6-rescue-equipment/6.1-public-rescue-equipment-to-be-issued.html">
+    <a class="sop-tile sop-grey" href="./6-rescue-equipment/6.1-public-rescue-equipment-to-be-issued.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 6</span>
         <span class="sop-tile-title">Rescue Equipment</span>
@@ -371,7 +371,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-comms" href="./7-communications/7.1-radio-communications.html">
+    <a class="sop-tile sop-orange" href="./7-communications/7.1-radio-communications.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 7</span>
         <span class="sop-tile-title">Communications</span>
@@ -379,7 +379,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-patrol" href="./8-patrol-operations-general/8.1-beach-management-methods-and-roles.html">
+    <a class="sop-tile sop-yellow" href="./8-patrol-operations-general/8.1-beach-management-methods-and-roles.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 8</span>
         <span class="sop-tile-title">Patrol Operations (General)</span>
@@ -387,7 +387,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-emergency" href="./9-patrol-operations-emergency/9.1-emergency-patrol-area-closure-and-evacuation.html">
+    <a class="sop-tile sop-red" href="./9-patrol-operations-emergency/9.1-emergency-patrol-area-closure-and-evacuation.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 9</span>
         <span class="sop-tile-title">Patrol Operations (Emergency)</span>
@@ -395,7 +395,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-emergency" href="./10-reduced-visibility-operations/10.1-reduced-visibility-operations.html">
+    <a class="sop-tile sop-grey" href="./10-reduced-visibility-operations/10.1-reduced-visibility-operations.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 10</span>
         <span class="sop-tile-title">Reduced Visibility Operations</span>
@@ -403,7 +403,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-sar" href="./11-search-and-rescue-SAR-operations/11.1-sar-responsibilities-to-be-issued.html">
+    <a class="sop-tile sop-grey" href="./11-search-and-rescue-SAR-operations/11.1-sar-responsibilities-to-be-issued.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 11</span>
         <span class="sop-tile-title">Search and Rescue (SAR) Operations</span>
@@ -411,7 +411,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-soc" href="./12-state-operations-centre-soc-surfcom/12.1-state-operations-centre-soc-surfcom.html">
+    <a class="sop-tile sop-grey" href="./12-state-operations-centre-soc-surfcom/12.1-state-operations-centre-soc-surfcom.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 12</span>
         <span class="sop-tile-title">State Operations Centre (SURFCOM)</span>
@@ -419,7 +419,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-soc" href="./13-operations-app/13.1-operations-app-general-operations.html">
+    <a class="sop-tile sop-grey" href="./13-operations-app/13.1-operations-app-general-operations.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 13</span>
         <span class="sop-tile-title">Operations App</span>
@@ -427,7 +427,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-equipment" href="./14-vessels-and-aircraft/14.1-helicopter-landing-site.html">
+    <a class="sop-tile sop-grey" href="./14-vessels-and-aircraft/14.1-helicopter-landing-site.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 14</span>
         <span class="sop-tile-title">Vessels and Aircraft</span>
@@ -435,7 +435,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-support" href="./15-critical-incident-management-and-member-support/15.1-critical-incidents.html">
+    <a class="sop-tile sop-blue" href="./15-critical-incident-management-and-member-support/15.1-critical-incidents.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 15</span>
         <span class="sop-tile-title">Critical Incident Management and Member Support</span>
@@ -443,7 +443,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-neutral" href="./16-SLSA-references/16.1-slsa-references.html">
+    <a class="sop-tile sop-grey" href="./16-SLSA-references/16.1-slsa-references.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 16</span>
         <span class="sop-tile-title">SLSA References</span>
@@ -451,7 +451,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-neutral" href="./17-glossary/17.1-glossary.html">
+    <a class="sop-tile sop-grey" href="./17-glossary/17.1-glossary.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 17</span>
         <span class="sop-tile-title">Glossary</span>
@@ -459,7 +459,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-neutral" href="./annexes/1-first-aid-response-possible-exposure-to-hab.html">
+    <a class="sop-tile sop-grey" href="./annexes/1-first-aid-response-possible-exposure-to-hab.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Annexes</span>
         <span class="sop-tile-title">Annexes</span>
@@ -467,7 +467,7 @@ layout: lesson-content
       </span>
     </a>
 
-    <a class="sop-tile sop-neutral" href="./18-change-log/18.1-change-log.html">
+    <a class="sop-tile sop-grey" href="./18-change-log/18.1-change-log.html">
       <span class="sop-tile-content">
         <span class="sop-tile-number">Section 18</span>
         <span class="sop-tile-title">Change Log</span>
