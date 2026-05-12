@@ -38,7 +38,7 @@ layout: lesson-content
     overflow: hidden;
     background-image:
       linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0.96) 38%, rgba(255,255,255,0.55) 64%, rgba(255,255,255,0.08) 100%),
-      url("{{ '/assets/images/sop-header.png' | relative_url }}");
+      url("{{ '/images/sop-header.png' | relative_url }}");
     background-size: cover;
     background-position: center right;
     background-repeat: no-repeat;
