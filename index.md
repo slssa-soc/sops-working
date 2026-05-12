@@ -6,6 +6,12 @@ layout: lesson-content
 ---
 
 <style>
+  /* Hide the theme-generated page heading on this landing page */
+  #maincontent > div > h1:first-child,
+  #maincontent h1:first-child {
+    display: none;
+  }
+
   .sop-home {
     max-width: 1120px;
     margin: 0 auto;
@@ -19,49 +25,35 @@ layout: lesson-content
 
   .sop-card {
     border: 1px solid #d9e2ec;
-    border-radius: 20px;
+    border-radius: 22px;
     background: #ffffff;
     box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
   }
 
   .sop-hero {
     display: grid;
-    grid-template-columns: 140px 1fr;
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
     gap: 28px;
-    align-items: center;
-    padding: 32px 36px;
+    align-items: stretch;
+    padding: 0;
     margin-bottom: 22px;
+    overflow: hidden;
   }
 
-  .sop-hero-illustration {
-    width: 118px;
-    height: 118px;
-    border-radius: 999px;
-    background:
-      radial-gradient(circle at 65% 25%, #e8f2ff 0 10%, transparent 11%),
-      linear-gradient(145deg, #eaf4ff 0%, #cfe4fb 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #0a4a8f;
-    border: 1px solid #c7dff7;
-  }
-
-  .sop-hero-illustration svg {
-    width: 76px;
-    height: 76px;
+  .sop-hero-content {
+    padding: 34px 38px;
   }
 
   .sop-hero h1 {
-    margin: 0 0 12px;
-    font-size: 2rem;
+    margin: 0 0 14px;
+    font-size: 1.75rem;
     line-height: 1.18;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.03em;
     color: #0f172a;
   }
 
   .sop-hero p {
-    max-width: 780px;
+    max-width: 760px;
     margin: 0 0 12px;
     color: #334155;
     font-size: 0.98rem;
@@ -72,7 +64,7 @@ layout: lesson-content
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 22px;
   }
 
   .sop-button {
@@ -94,95 +86,137 @@ layout: lesson-content
   }
 
   .sop-button-primary {
-    background: #003f87;
+    background: #0161AA;
     color: #ffffff !important;
-    border: 1px solid #00346f;
-    box-shadow: 0 8px 18px rgba(0, 63, 135, 0.18);
+    border: 1px solid #014f8c;
+    box-shadow: 0 8px 18px rgba(1, 97, 170, 0.18);
   }
 
   .sop-button-primary:hover {
-    background: #00346f;
+    background: #014f8c;
   }
 
   .sop-button-secondary {
     background: #ffffff;
-    color: #003f87 !important;
-    border: 1px solid #bfdbfe;
+    color: #0161AA !important;
+    border: 1px solid #9fc5e8;
   }
 
   .sop-button-secondary:hover {
-    border-color: #003f87;
+    border-color: #0161AA;
+    background: #f4f9ff;
+  }
+
+  .sop-hero-visual {
+    position: relative;
+    min-height: 100%;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.58) 34%, rgba(255, 255, 255, 0.08) 100%),
+      linear-gradient(180deg, #e8f3ff 0%, #f7fbff 38%, #f7e8cd 100%);
+    overflow: hidden;
+  }
+
+  .sop-hero-visual::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 78% 22%, rgba(255, 255, 255, 0.9) 0 5%, transparent 6%),
+      linear-gradient(180deg, rgba(1, 97, 170, 0.08) 0%, rgba(1, 97, 170, 0.03) 45%, rgba(194, 132, 40, 0.1) 100%);
+  }
+
+  .sop-hero-visual svg {
+    position: absolute;
+    right: 22px;
+    bottom: 0;
+    width: min(260px, 86%);
+    height: auto;
   }
 
   .sop-ask {
     display: grid;
-    grid-template-columns: 68px 1fr;
-    gap: 20px;
+    grid-template-columns: minmax(260px, 0.9fr) minmax(320px, 1.1fr);
+    gap: 24px;
     align-items: center;
-    padding: 24px 28px;
-    margin-bottom: 26px;
+    padding: 26px 30px;
+    margin-bottom: 28px;
+    background: #f8fafc;
+  }
+
+  .sop-ask-text {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 16px;
+    align-items: start;
   }
 
   .sop-ask-icon {
-    width: 52px;
-    height: 52px;
+    width: 46px;
+    height: 46px;
     border-radius: 999px;
     background: #e7f0ff;
-    color: #005eb8;
+    color: #0161AA;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   .sop-ask-icon svg {
-    width: 28px;
-    height: 28px;
+    width: 25px;
+    height: 25px;
   }
 
   .sop-ask h2 {
     margin: 0 0 6px;
-    font-size: 1.28rem;
+    font-size: 1.24rem;
     line-height: 1.25;
     color: #0f172a;
   }
 
   .sop-ask p {
-    margin: 0 0 14px;
+    margin: 0;
     color: #475569;
     line-height: 1.55;
   }
 
   .sop-ask-input {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    max-width: 100%;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
   }
 
-  .sop-ask-placeholder {
+  .sop-ask-input input {
     flex: 1;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    padding: 10px 14px;
+    min-height: 48px;
+    padding: 12px 14px;
     border: 1px solid #cfd8e3;
     border-radius: 14px;
-    color: #64748b;
+    color: #0f172a;
     background: #ffffff;
     font-size: 0.92rem;
+    outline: none;
+  }
+
+  .sop-ask-input input:focus {
+    border-color: #0161AA;
+    box-shadow: 0 0 0 3px rgba(1, 97, 170, 0.12);
   }
 
   .sop-coming-soon {
     flex: 0 0 auto;
-    min-height: 42px;
+    min-height: 48px;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     padding: 10px 16px;
+    border: 0;
     border-radius: 13px;
     background: #9ca3af;
     color: #ffffff;
     font-weight: 700;
     font-size: 0.88rem;
+    cursor: not-allowed;
   }
 
   .sop-section-heading {
@@ -195,7 +229,7 @@ layout: lesson-content
   .sop-section-heading-icon {
     width: 28px;
     height: 28px;
-    color: #005eb8;
+    color: #0161AA;
     flex: 0 0 auto;
     margin-top: 2px;
   }
@@ -216,18 +250,18 @@ layout: lesson-content
 
   .sop-tile-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
   }
 
   .sop-tile {
-    min-height: 76px;
+    min-height: 82px;
     display: grid;
     grid-template-columns: 42px 1fr 18px;
     gap: 12px;
     align-items: center;
-    padding: 14px 16px;
-    border-radius: 14px;
+    padding: 15px 16px;
+    border-radius: 15px;
     border: 1px solid #d9e2ec;
     background: #ffffff;
     color: #0f172a !important;
@@ -253,14 +287,14 @@ layout: lesson-content
   }
 
   .sop-tile-icon svg {
-    width: 21px;
-    height: 21px;
+    width: 20px;
+    height: 20px;
   }
 
   .sop-tile-label {
     display: block;
     margin-bottom: 3px;
-    color: #2563eb;
+    color: #0161AA;
     font-size: 0.68rem;
     font-weight: 800;
     letter-spacing: 0.06em;
@@ -271,9 +305,9 @@ layout: lesson-content
   .sop-tile-title {
     display: block;
     color: #111827;
-    font-size: 0.92rem;
+    font-size: 0.94rem;
     font-weight: 750;
-    line-height: 1.25;
+    line-height: 1.23;
   }
 
   .sop-tile-chevron {
@@ -293,12 +327,12 @@ layout: lesson-content
   }
 
   .sop-tile-green {
-    background: linear-gradient(180deg, #f0fdf4 0%, #ecfdf5 100%);
-    border-color: #bbf7d0;
+    background: linear-gradient(180deg, #dcfce7 0%, #ecfdf5 100%);
+    border-color: #86efac;
   }
 
   .sop-tile-green .sop-tile-icon {
-    background: #dcfce7;
+    background: #bbf7d0;
     color: #15803d;
   }
 
@@ -307,12 +341,12 @@ layout: lesson-content
   }
 
   .sop-tile-orange {
-    background: linear-gradient(180deg, #fff7ed 0%, #fffbf5 100%);
-    border-color: #fed7aa;
+    background: linear-gradient(180deg, #ffedd5 0%, #fff7ed 100%);
+    border-color: #fdba74;
   }
 
   .sop-tile-orange .sop-tile-icon {
-    background: #ffedd5;
+    background: #fed7aa;
     color: #ea580c;
   }
 
@@ -321,12 +355,12 @@ layout: lesson-content
   }
 
   .sop-tile-yellow {
-    background: linear-gradient(180deg, #fffbeb 0%, #fffdf3 100%);
-    border-color: #fde68a;
+    background: linear-gradient(180deg, #fef3c7 0%, #fffbeb 100%);
+    border-color: #fcd34d;
   }
 
   .sop-tile-yellow .sop-tile-icon {
-    background: #fef3c7;
+    background: #fde68a;
     color: #b45309;
   }
 
@@ -335,12 +369,12 @@ layout: lesson-content
   }
 
   .sop-tile-red {
-    background: linear-gradient(180deg, #fef2f2 0%, #fff7f7 100%);
-    border-color: #fecaca;
+    background: linear-gradient(180deg, #fee2e2 0%, #fff1f2 100%);
+    border-color: #fca5a5;
   }
 
   .sop-tile-red .sop-tile-icon {
-    background: #fee2e2;
+    background: #fecaca;
     color: #dc2626;
   }
 
@@ -349,34 +383,37 @@ layout: lesson-content
   }
 
   .sop-tile-blue {
-    background: linear-gradient(180deg, #eff6ff 0%, #f8fbff 100%);
-    border-color: #bfdbfe;
+    background: linear-gradient(180deg, #dbeafe 0%, #eff6ff 100%);
+    border-color: #93c5fd;
   }
 
   .sop-tile-blue .sop-tile-icon {
-    background: #dbeafe;
-    color: #2563eb;
+    background: #bfdbfe;
+    color: #0161AA;
   }
 
   .sop-tile-blue .sop-tile-label {
-    color: #2563eb;
+    color: #0161AA;
   }
 
-  @media (max-width: 1100px) {
+  @media (max-width: 1050px) {
+    .sop-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .sop-hero-visual {
+      min-height: 180px;
+    }
+
     .sop-tile-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 850px) {
-    .sop-hero {
-      grid-template-columns: 1fr;
-      text-align: center;
+    .sop-hero-content {
       padding: 28px 22px;
-    }
-
-    .sop-hero-illustration {
-      margin: 0 auto;
+      text-align: center;
     }
 
     .sop-hero-actions {
@@ -389,6 +426,10 @@ layout: lesson-content
       padding: 24px 20px;
     }
 
+    .sop-ask-text {
+      grid-template-columns: 1fr;
+    }
+
     .sop-ask-icon {
       margin: 0 auto;
     }
@@ -397,13 +438,13 @@ layout: lesson-content
       display: block;
     }
 
-    .sop-ask-placeholder {
+    .sop-ask-input input {
+      width: 100%;
       margin-bottom: 10px;
       text-align: left;
     }
 
     .sop-coming-soon {
-      justify-content: center;
       width: 100%;
     }
 
@@ -461,19 +502,7 @@ layout: lesson-content
 <div class="sop-home">
 
   <section class="sop-card sop-hero">
-    <div class="sop-hero-illustration" aria-hidden="true">
-      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 58c8-7 15-7 23 0s15 7 23 0 10-5 10-5v12H12v-7Z" fill="currentColor" opacity="0.22"/>
-        <path d="M19 49h30v8H19v-8Z" fill="currentColor" opacity="0.38"/>
-        <path d="M24 31h20v18H24V31Z" fill="currentColor" opacity="0.95"/>
-        <path d="M21 31h26L34 21 21 31Z" fill="currentColor"/>
-        <path d="M29 38h10v11H29V38Z" fill="#ffffff" opacity="0.85"/>
-        <path d="M55 22v32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-        <path d="M55 24c6-3 10 2 15-1v12c-5 3-9-2-15 1V24Z" fill="currentColor" opacity="0.82"/>
-      </svg>
-    </div>
-
-    <div>
+    <div class="sop-hero-content">
       <h1>Surf Life Saving SA Standard Operating Procedures</h1>
 
       <p>
@@ -486,33 +515,57 @@ layout: lesson-content
 
       <div class="sop-hero-actions">
         <a class="sop-button sop-button-primary" href="{{ '/introduction.html' | relative_url }}">Continue reading →</a>
-        <a class="sop-button sop-button-secondary" href="{{ '/17-glossary/17.1-glossary.html' | relative_url }}">View glossary</a>
+        <a class="sop-button sop-button-secondary" href="{{ '/submit-feedback.html' | relative_url }}">Submit Feedback</a>
       </div>
+    </div>
+
+    <div class="sop-hero-visual" aria-hidden="true">
+      <svg viewBox="0 0 300 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 210c34-20 58-20 92 0s58 20 92 0 58-20 116 0v40H0v-40Z" fill="#d7b98c" opacity="0.55"/>
+        <path d="M0 184c38-19 73-19 111 0s74 19 112 0 51-15 77-7v31H0v-24Z" fill="#e5cfae" opacity="0.72"/>
+        <path d="M0 158c42-14 84-14 126 0s84 14 126 0 38-9 48-8v28H0v-20Z" fill="#dbeafe" opacity="0.95"/>
+        <path d="M170 73h72v85h-72V73Z" fill="#fbbf24" opacity="0.95"/>
+        <path d="M158 73h96l-48-30-48 30Z" fill="#f59e0b"/>
+        <path d="M179 92h17v20h-17V92Z" fill="#0f172a" opacity="0.28"/>
+        <path d="M211 92h17v20h-17V92Z" fill="#0f172a" opacity="0.28"/>
+        <path d="M176 125h56" stroke="#92400e" stroke-width="5" stroke-linecap="round"/>
+        <path d="M183 158l-18 70" stroke="#92400e" stroke-width="6" stroke-linecap="round"/>
+        <path d="M231 158l18 70" stroke="#92400e" stroke-width="6" stroke-linecap="round"/>
+        <path d="M250 50v130" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
+        <path d="M250 55c18-8 31 6 48-3v34c-17 9-30-5-48 3V55Z" fill="#fbbf24"/>
+        <path d="M250 88c15-5 25 5 40-1v29c-15 7-25-3-40 2V88Z" fill="#dc2626"/>
+        <path d="M24 70c32-18 65-18 97 0" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+        <path d="M48 98c22-10 44-10 66 0" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+      </svg>
     </div>
   </section>
 
   <section class="sop-card sop-ask">
-    <div class="sop-ask-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/>
-        <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"/>
-        <path d="M12 17h.01"/>
-      </svg>
+    <div class="sop-ask-text">
+      <div class="sop-ask-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/>
+          <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"/>
+          <path d="M12 17h.01"/>
+        </svg>
+      </div>
+
+      <div>
+        <h2>Ask the SOPs</h2>
+        <p>
+          A future search and question tool will allow SLS personnel to ask operational questions and be guided to relevant SOP content.
+        </p>
+      </div>
     </div>
 
-    <div>
-      <h2>Ask the SOPs</h2>
-
-      <p>
-        A future search and question tool will allow SLS personnel to ask operational questions and be guided to relevant SOP content.
-      </p>
-
-      <div class="sop-ask-input" aria-label="Future SOP question tool placeholder">
-        <div class="sop-ask-placeholder">
-          Ask a question about patrol operations, emergency response, equipment, SOC procedures, or member support...
-        </div>
-        <div class="sop-coming-soon">Coming soon</div>
-      </div>
+    <div class="sop-ask-input" aria-label="Future SOP question tool placeholder">
+      <input
+        type="text"
+        placeholder="What temperature does a surf club patrol need to conduct a weekday patrol?"
+        onfocus="this.placeholder=''"
+        onblur="this.placeholder='What temperature does a surf club patrol need to conduct a weekday patrol?'"
+      >
+      <button class="sop-coming-soon" type="button" disabled>Coming soon</button>
     </div>
   </section>
 
