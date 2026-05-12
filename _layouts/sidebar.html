@@ -5,31 +5,46 @@ layout: default
 
 <div id="print-version-control-notice" aria-hidden="true">
   <div class="print-notice-card">
-    <p class="print-notice-kicker">Version control notice</p>
 
-    <h1>Printed SOPs are uncontrolled</h1>
+    <div class="print-logo-wrap">
+      <div class="print-logo">
+        {% include icon.html icon="logo" %}
+      </div>
+    </div>
 
-    <p>
-      Printed copies of SLSSA Standard Operating Procedures are uncontrolled and may be out of date.
-    </p>
+    <p class="print-notice-kicker">Version Control</p>
 
-    <p>
-      These procedures must be accessed from the current online version to ensure version control, accuracy, and operational consistency.
-    </p>
+    <h1>{{ page.nav | default: page.title }}</h1>
 
-    <p>
-      Do not display or rely on a printed copy of this SOP.
-    </p>
+    <div class="print-meta">
+      <div>
+        <span>Printed</span>
+        <strong id="print-date">Generated at time of printing</strong>
+      </div>
+      <div>
+        <span>Destroy after</span>
+        <strong id="destroy-date">12 months from print date</strong>
+      </div>
+    </div>
 
-    <p>
-      If access information is required in a patrol room, operations area, or training environment, display the QR code below so personnel can access the current online page.
-    </p>
+    <div class="print-message-box">
+      <p>
+        SLSSA Standard Operating Procedures are controlled documents. Printed copies may become out of date and should not be relied on as the current version of the procedure.
+      </p>
 
-    <div id="print-qr-code" class="print-qr-code"></div>
+      <p>
+        To display this SOP in a patrol room, operations area, training environment, or similar location, use the QR code below so personnel can access the current online version.
+      </p>
+    </div>
 
-    <p class="print-page-url" id="print-page-url">
-      {{ page.url | absolute_url }}
-    </p>
+    <div class="print-qr-panel">
+      <p class="print-qr-heading">Scan to view the current SOP</p>
+      <div id="print-qr-code" class="print-qr-code"></div>
+      <p class="print-qr-note">
+        This QR code links to the current online version at sops.surflifesavingsa.com.au.
+      </p>
+    </div>
+
   </div>
 </div>
 
@@ -203,25 +218,49 @@ layout: default
 
 <script>
   (function () {
-    const pageUrl = "{{ page.url | absolute_url }}";
+    const canonicalDomain = "https://sops.surflifesavingsa.com.au";
+    const pagePath = "{{ page.url }}";
+    const pageUrl = canonicalDomain + pagePath;
+
+    function formatAustralianDate(date) {
+      return date.toLocaleDateString("en-AU", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      });
+    }
+
+    function populatePrintDates() {
+      const printedDateElement = document.getElementById("print-date");
+      const destroyDateElement = document.getElementById("destroy-date");
+
+      const printedDate = new Date();
+      const destroyDate = new Date(printedDate);
+      destroyDate.setFullYear(destroyDate.getFullYear() + 1);
+
+      if (printedDateElement) {
+        printedDateElement.textContent = formatAustralianDate(printedDate);
+      }
+
+      if (destroyDateElement) {
+        destroyDateElement.textContent = formatAustralianDate(destroyDate);
+      }
+    }
 
     function generatePrintQrCode() {
       const qrElement = document.getElementById("print-qr-code");
-      const urlElement = document.getElementById("print-page-url");
 
       if (!qrElement) return;
 
-      if (urlElement) {
-        urlElement.textContent = pageUrl;
-      }
+      populatePrintDates();
 
       if (qrElement.dataset.generated === "true") return;
 
       if (typeof QRCode !== "undefined") {
         new QRCode(qrElement, {
           text: pageUrl,
-          width: 180,
-          height: 180,
+          width: 190,
+          height: 190,
           correctLevel: QRCode.CorrectLevel.M
         });
 

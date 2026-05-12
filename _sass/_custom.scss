@@ -59,30 +59,19 @@ button.side-bar-item.btn-toggle::after {
 
 @media print {
   @page {
-    margin: 18mm;
+    margin: 16mm;
   }
 
-  /* Hide normal page chrome and content */
-  header,
   #breadcrumb-header,
-  #sidebar-wrapper,
-  .px-1.py-4,
-  #sidebar-footer,
-  footer,
-  .btn-next,
-  .my-5,
-  hr {
+  #wrapper,
+  header,
+  footer {
     display: none !important;
   }
 
-  /* Keep the required layout containers visible for print */
   html,
-  body,
-  #wrapper,
-  #page-content-wrapper,
-  #maincontent {
+  body {
     display: block !important;
-    visibility: visible !important;
     width: 100% !important;
     height: auto !important;
     min-height: 0 !important;
@@ -90,21 +79,9 @@ button.side-bar-item.btn-toggle::after {
     background: #ffffff !important;
   }
 
-  #wrapper {
-    display: block !important;
-  }
-
-  #page-content-wrapper {
-    grid-area: auto !important;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  /* Show the print notice */
   #print-version-control-notice {
     display: block !important;
     visibility: visible !important;
-    position: static !important;
     width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -114,44 +91,136 @@ button.side-bar-item.btn-toggle::after {
 
   #print-version-control-notice * {
     visibility: visible !important;
+    box-sizing: border-box;
   }
 
   .print-notice-card {
     max-width: 170mm;
     margin: 0 auto;
-    padding: 10mm 0;
+    padding: 6mm 0 0;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
   }
 
+  .print-logo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 6mm;
+  }
+
+  .print-logo {
+    width: 22mm;
+    height: 22mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .print-logo svg {
+    max-width: 22mm;
+    max-height: 22mm;
+  }
+
   .print-notice-kicker {
-    margin: 0 0 8mm;
-    color: #0161AA;
-    font-size: 11pt;
+    display: inline-block;
+    margin: 0 0 5mm;
+    padding: 2.5mm 5mm;
+    border-radius: 999px;
+    background: #0161AA;
+    color: #ffffff;
+    font-size: 10pt;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .print-notice-card h1 {
-    margin: 0 0 8mm;
+    max-width: 150mm;
+    margin: 0 auto 7mm;
     color: #111827;
-    font-size: 24pt;
+    font-size: 22pt;
     line-height: 1.2;
+    font-weight: 700;
   }
 
-  .print-notice-card p {
+  .print-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
     max-width: 145mm;
-    margin: 0 auto 5mm;
+    margin: 0 auto 8mm;
+  }
+
+  .print-meta div {
+    padding: 4mm 5mm;
+    border: 1px solid #d9e2ec;
+    border-radius: 10mm;
+    background: #f8fafc;
+  }
+
+  .print-meta span {
+    display: block;
+    margin-bottom: 1.5mm;
+    color: #64748b;
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .print-meta strong {
+    display: block;
+    color: #111827;
+    font-size: 11pt;
+    font-weight: 700;
+  }
+
+  .print-message-box {
+    max-width: 150mm;
+    margin: 0 auto 8mm;
+    padding: 7mm 9mm;
+    border-radius: 10mm;
+    background: #f8fafc;
+    border: 1px solid #d9e2ec;
+  }
+
+  .print-message-box p {
+    margin: 0 auto 4mm;
     color: #374151;
     font-size: 12pt;
     line-height: 1.45;
   }
 
+  .print-message-box p:last-child {
+    margin-bottom: 0;
+  }
+
+  .print-qr-panel {
+    max-width: 92mm;
+    margin: 0 auto;
+    padding: 7mm;
+    border-radius: 10mm;
+    background: #0161AA;
+    color: #ffffff;
+  }
+
+  .print-qr-heading {
+    margin: 0 0 5mm;
+    color: #ffffff;
+    font-size: 12pt;
+    font-weight: 700;
+  }
+
   .print-qr-code {
     display: flex;
     justify-content: center;
-    margin: 12mm auto 6mm;
+    align-items: center;
+    width: 52mm;
+    height: 52mm;
+    margin: 0 auto 5mm;
+    padding: 3mm;
+    border-radius: 6mm;
+    background: #ffffff;
   }
 
   .print-qr-code canvas,
@@ -161,11 +230,11 @@ button.side-bar-item.btn-toggle::after {
     height: 45mm !important;
   }
 
-  .print-page-url {
-    max-width: 150mm;
-    margin-top: 5mm;
-    color: #4b5563;
+  .print-qr-note {
+    max-width: 75mm;
+    margin: 0 auto;
+    color: #eaf4ff;
     font-size: 9pt;
-    word-break: break-all;
+    line-height: 1.35;
   }
 }
