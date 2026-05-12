@@ -48,3 +48,94 @@ button.side-bar-item.btn-toggle::after {
   background: #d9e2ec;
   list-style: none;
 }
+
+/* Sidebar divider between main pages and SOP sections */
+.sidebar-divider {
+  height: 1px;
+  margin: 0.75rem 0.5rem;
+  background: #d9e2ec;
+  list-style: none;
+}
+
+/* Print version-control notice */
+#print-version-control-notice {
+  display: none;
+}
+
+@media print {
+  @page {
+    margin: 18mm;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #print-version-control-notice,
+  #print-version-control-notice * {
+    visibility: visible !important;
+  }
+
+  #print-version-control-notice {
+    display: block !important;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    padding: 0;
+    background: #ffffff;
+    color: #111827;
+  }
+
+  .print-notice-card {
+    max-width: 170mm;
+    margin: 0 auto;
+    padding: 10mm 0;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .print-notice-kicker {
+    margin: 0 0 8mm;
+    color: #0161AA;
+    font-size: 11pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .print-notice-card h1 {
+    margin: 0 0 8mm;
+    color: #111827;
+    font-size: 24pt;
+    line-height: 1.2;
+  }
+
+  .print-notice-card p {
+    max-width: 145mm;
+    margin: 0 auto 5mm;
+    color: #374151;
+    font-size: 12pt;
+    line-height: 1.45;
+  }
+
+  .print-qr-code {
+    display: flex;
+    justify-content: center;
+    margin: 12mm auto 6mm;
+  }
+
+  .print-qr-code canvas,
+  .print-qr-code img,
+  .print-qr-code svg {
+    width: 45mm !important;
+    height: 45mm !important;
+  }
+
+  .print-page-url {
+    max-width: 150mm;
+    margin-top: 5mm;
+    color: #4b5563;
+    font-size: 9pt;
+    word-break: break-all;
+  }
+}
