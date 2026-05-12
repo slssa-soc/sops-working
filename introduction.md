@@ -3,6 +3,7 @@ title: Introduction
 nav: Introduction
 nav_order: 2
 layout: lesson-content
+icon: info-circle
 ---
 
 <br>

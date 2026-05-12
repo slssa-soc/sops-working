@@ -3,6 +3,7 @@ title: Surf Life Saving SA Standard Operating Procedures
 nav: Welcome
 nav_order: 1
 layout: lesson-content
+icon: house
 ---
 
 <style>

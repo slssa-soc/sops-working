@@ -121,7 +121,12 @@ layout: default
             {%- endif -%}
 
           <button class="side-bar-item btn-toggle rounded{% unless page.section == p.section_id or page.section_id == p.section_id %} collapsed{% endunless %}" data-bs-toggle="collapse" data-bs-target="#{{ p.section_id | slugify }}-collapse" aria-expanded="{% if page.section == p.section_id or page.section_id == p.section_id %}true{% else %}false{% endif %}">
-            {{ p.section_id }}
+            <span class="sidebar-label">
+              {% if p.icon %}
+                <span class="sidebar-icon">{% include icon.html icon=p.icon %}</span>
+              {% endif %}
+              <span class="sidebar-text">{{ p.section_id }}</span>
+            </span>
           </button>
 
           <div class="collapse{% if page.section == p.section_id or page.section_id == p.section_id %} show{% endif %}" id="{{ p.section_id | slugify }}-collapse">
@@ -173,7 +178,14 @@ layout: default
                 {% assign next_page_title = nav_pages[next_number].title %}{% assign next_page_url = nav_pages[next_number].url %}
               {% endunless %}
             {%- endif -%}
-          <a href="{{ p.url | relative_url }}" class="side-bar-item link-dark rounded{% if page.url == p.url %} nav-active{% endif %}">{{ p.nav | default: p.title }}</a>
+          <a href="{{ p.url | relative_url }}" class="side-bar-item link-dark rounded{% if page.url == p.url %} nav-active{% endif %}">
+            <span class="sidebar-label">
+              {% if p.icon %}
+                <span class="sidebar-icon">{% include icon.html icon=p.icon %}</span>
+              {% endif %}
+              <span class="sidebar-text">{{ p.nav | default: p.title }}</span>
+            </span>
+          </a>
           {% endif %}
         </li>
 

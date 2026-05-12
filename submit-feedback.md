@@ -3,6 +3,7 @@ title: Feedback
 nav: Submit Feedback
 nav_order: 3
 layout: lesson-content
+icon: chat-dots
 divider_after: true
 ---
 

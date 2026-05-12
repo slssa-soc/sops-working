@@ -44,6 +44,40 @@ button.side-bar-item.btn-toggle::after {
   margin-top: 0.2rem;
 }
 
+/* Sidebar icons */
+.sidebar-label {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.sidebar-icon {
+  width: 1.15rem;
+  min-width: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  margin-top: 0.12rem;
+}
+
+.sidebar-icon .bi,
+.sidebar-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.sidebar-text {
+  min-width: 0;
+}
+
+.nav-active .sidebar-icon,
+.side-bar-item:hover .sidebar-icon,
+.side-bar-item:focus .sidebar-icon {
+  color: #0161AA;
+}
+
 /* Sidebar divider between main pages and SOP sections */
 .sidebar-divider {
   height: 1px;
