@@ -126,6 +126,10 @@ layout: default
             <a href="{{ p.url | relative_url }}" class="side-bar-item link-dark rounded{% if page.url == p.url %} nav-active{% endif %}">{{ p.nav | default: p.title }}</a>
             {% endif %}
           </li>
+
+          {% if p.divider_after %}
+            <li class="sidebar-divider" aria-hidden="true"></li>
+          {% endif %}
         {% endfor %}
           
         </ul>

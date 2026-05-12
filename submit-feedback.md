@@ -3,6 +3,7 @@ title: Feedback
 nav: Submit Feedback
 nav_order: 3
 layout: lesson-content
+divider_after: true
 ---
 
 We value your insights and encourage you to actively participate in refining our Standard Operating Procedures (SOPs). If you have questions or wish to request changes, please submit your feedback through the link below. Your input is crucial as it helps us identify areas for improvement, address potential issues, and ensure our procedures remain relevant and effective. By contributing your perspectives, you not only help enhance our operational efficiency but also support a collaborative environment where everyone’s voice is heard. Together, we can continuously improve our processes and achieve our shared goals more effectively.
