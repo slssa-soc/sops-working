@@ -6,7 +6,7 @@ layout: lesson-content
 ---
 
 <style>
-  /* Hide the theme-generated page heading on this landing page */
+  /* Hide the theme-generated page heading on this landing page only */
   #maincontent > div > h1:first-child,
   #maincontent h1:first-child {
     display: none;
@@ -31,29 +31,36 @@ layout: lesson-content
   }
 
   .sop-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
-    gap: 28px;
-    align-items: stretch;
+    position: relative;
+    min-height: 315px;
     padding: 0;
     margin-bottom: 22px;
     overflow: hidden;
+    background-image:
+      linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0.96) 38%, rgba(255,255,255,0.55) 64%, rgba(255,255,255,0.08) 100%),
+      url("{{ '/assets/images/sop-header.png' | relative_url }}");
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
   }
 
   .sop-hero-content {
-    padding: 34px 38px;
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    padding: 38px 40px;
   }
 
   .sop-hero h1 {
     margin: 0 0 14px;
-    font-size: 1.75rem;
+    font-size: 1.9rem;
     line-height: 1.18;
     letter-spacing: -0.03em;
     color: #0f172a;
   }
 
   .sop-hero p {
-    max-width: 760px;
+    max-width: 680px;
     margin: 0 0 12px;
     color: #334155;
     font-size: 0.98rem;
@@ -107,47 +114,14 @@ layout: lesson-content
     background: #f4f9ff;
   }
 
-  .sop-hero-visual {
-    position: relative;
-    min-height: 100%;
-    background:
-      linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.58) 34%, rgba(255, 255, 255, 0.08) 100%),
-      linear-gradient(180deg, #e8f3ff 0%, #f7fbff 38%, #f7e8cd 100%);
-    overflow: hidden;
-  }
-
-  .sop-hero-visual::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 78% 22%, rgba(255, 255, 255, 0.9) 0 5%, transparent 6%),
-      linear-gradient(180deg, rgba(1, 97, 170, 0.08) 0%, rgba(1, 97, 170, 0.03) 45%, rgba(194, 132, 40, 0.1) 100%);
-  }
-
-  .sop-hero-visual svg {
-    position: absolute;
-    right: 22px;
-    bottom: 0;
-    width: min(260px, 86%);
-    height: auto;
-  }
-
   .sop-ask {
-    display: grid;
-    grid-template-columns: minmax(260px, 0.9fr) minmax(320px, 1.1fr);
-    gap: 24px;
-    align-items: center;
-    padding: 26px 30px;
-    margin-bottom: 28px;
-    background: #f8fafc;
-  }
-
-  .sop-ask-text {
     display: grid;
     grid-template-columns: 54px 1fr;
     gap: 16px;
     align-items: start;
+    padding: 26px 30px;
+    margin-bottom: 28px;
+    background: #f8fafc;
   }
 
   .sop-ask-icon {
@@ -174,7 +148,7 @@ layout: lesson-content
   }
 
   .sop-ask p {
-    margin: 0;
+    margin: 0 0 14px;
     color: #475569;
     line-height: 1.55;
   }
@@ -397,21 +371,19 @@ layout: lesson-content
   }
 
   @media (max-width: 1050px) {
-    .sop-hero {
-      grid-template-columns: 1fr;
-    }
-
-    .sop-hero-visual {
-      min-height: 180px;
-    }
-
     .sop-tile-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 850px) {
+    .sop-hero {
+      min-height: auto;
+      background-image: none;
+    }
+
     .sop-hero-content {
+      max-width: none;
       padding: 28px 22px;
       text-align: center;
     }
@@ -424,10 +396,6 @@ layout: lesson-content
       grid-template-columns: 1fr;
       text-align: center;
       padding: 24px 20px;
-    }
-
-    .sop-ask-text {
-      grid-template-columns: 1fr;
     }
 
     .sop-ask-icon {
@@ -518,54 +486,33 @@ layout: lesson-content
         <a class="sop-button sop-button-secondary" href="{{ '/submit-feedback.html' | relative_url }}">Submit Feedback</a>
       </div>
     </div>
-
-    <div class="sop-hero-visual" aria-hidden="true">
-      <svg viewBox="0 0 300 250" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 210c34-20 58-20 92 0s58 20 92 0 58-20 116 0v40H0v-40Z" fill="#d7b98c" opacity="0.55"/>
-        <path d="M0 184c38-19 73-19 111 0s74 19 112 0 51-15 77-7v31H0v-24Z" fill="#e5cfae" opacity="0.72"/>
-        <path d="M0 158c42-14 84-14 126 0s84 14 126 0 38-9 48-8v28H0v-20Z" fill="#dbeafe" opacity="0.95"/>
-        <path d="M170 73h72v85h-72V73Z" fill="#fbbf24" opacity="0.95"/>
-        <path d="M158 73h96l-48-30-48 30Z" fill="#f59e0b"/>
-        <path d="M179 92h17v20h-17V92Z" fill="#0f172a" opacity="0.28"/>
-        <path d="M211 92h17v20h-17V92Z" fill="#0f172a" opacity="0.28"/>
-        <path d="M176 125h56" stroke="#92400e" stroke-width="5" stroke-linecap="round"/>
-        <path d="M183 158l-18 70" stroke="#92400e" stroke-width="6" stroke-linecap="round"/>
-        <path d="M231 158l18 70" stroke="#92400e" stroke-width="6" stroke-linecap="round"/>
-        <path d="M250 50v130" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
-        <path d="M250 55c18-8 31 6 48-3v34c-17 9-30-5-48 3V55Z" fill="#fbbf24"/>
-        <path d="M250 88c15-5 25 5 40-1v29c-15 7-25-3-40 2V88Z" fill="#dc2626"/>
-        <path d="M24 70c32-18 65-18 97 0" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
-        <path d="M48 98c22-10 44-10 66 0" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
-      </svg>
-    </div>
   </section>
 
   <section class="sop-card sop-ask">
-    <div class="sop-ask-text">
-      <div class="sop-ask-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/>
-          <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"/>
-          <path d="M12 17h.01"/>
-        </svg>
-      </div>
-
-      <div>
-        <h2>Ask the SOPs</h2>
-        <p>
-          A future search and question tool will allow SLS personnel to ask operational questions and be guided to relevant SOP content.
-        </p>
-      </div>
+    <div class="sop-ask-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/>
+        <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"/>
+        <path d="M12 17h.01"/>
+      </svg>
     </div>
 
-    <div class="sop-ask-input" aria-label="Future SOP question tool placeholder">
-      <input
-        type="text"
-        placeholder="What temperature does a surf club patrol need to conduct a weekday patrol?"
-        onfocus="this.placeholder=''"
-        onblur="this.placeholder='What temperature does a surf club patrol need to conduct a weekday patrol?'"
-      >
-      <button class="sop-coming-soon" type="button" disabled>Coming soon</button>
+    <div>
+      <h2>Ask the SOPs</h2>
+
+      <p>
+        A future search and question tool will allow SLS personnel to ask operational questions and be guided to relevant SOP content.
+      </p>
+
+      <div class="sop-ask-input" aria-label="Future SOP question tool placeholder">
+        <input
+          type="text"
+          placeholder="What temperature does a surf club patrol need to conduct a weekday patrol?"
+          onfocus="this.placeholder=''"
+          onblur="this.placeholder='What temperature does a surf club patrol need to conduct a weekday patrol?'"
+        >
+        <button class="sop-coming-soon" type="button" disabled>Coming soon</button>
+      </div>
     </div>
   </section>
 
