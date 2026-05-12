@@ -24,7 +24,7 @@ In the spirit of reconciliation, SLSSA acknowledges the First Nations of South A
 ### Endorsement
 
 **Sean Faulkner**\
-Head of Lifesaving and Emergency Operations\
+General Manager, Public Safety\
 Surf Life Saving SA
 
 **Mike Hartas**\
