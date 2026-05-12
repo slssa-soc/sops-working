@@ -51,203 +51,233 @@ layout: default
 {% endif %}
 
 <div id="breadcrumb-header" class="py-2 border-bottom">
-    <div class="container-xxl d-flex align-items-center">
+  <div class="container-xxl d-flex align-items-center">
 
-      <button class="btn" id="sidebarToggle" title="Toggle sidebar navigation" aria-controls="sidebar-wrapper">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-        </svg>
-      </button>
-      
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb ms-3 mb-0">
-          <li class="breadcrumb-item">
-            <a href="{{ '/' | relative_url }}">Home</a>
-          </li>
-          {% if page.section or page.section_id %}
-          <li class="breadcrumb-item">{{ page.section | default: page.section_id }}</li>
-          {% endif %}
-          <li class="breadcrumb-item" aria-current="page">{{ page.nav | default: page.title }}</li>
-        </ol>
-      </nav>
+    <button class="btn" id="sidebarToggle" title="Toggle sidebar navigation" aria-controls="sidebar-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+    </button>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb ms-3 mb-0">
+        <li class="breadcrumb-item">
+          <a href="{{ '/' | relative_url }}">Home</a>
+        </li>
+        {% if page.section or page.section_id %}
+        <li class="breadcrumb-item">{{ page.section | default: page.section_id }}</li>
+        {% endif %}
+        <li class="breadcrumb-item" aria-current="page">{{ page.nav | default: page.title }}</li>
+      </ol>
+    </nav>
 
-    </div>
+  </div>
 </div>
 
 <div class="container-xxl" id="wrapper">
-    <!-- Sidebar-->
-    <div class="py-4 pe-3 bg-white" id="sidebar-wrapper">
+  <!-- Sidebar-->
+  <div class="py-4 pe-3 bg-white" id="sidebar-wrapper">
 
-      <nav aria-label="Lesson content navigation">
+    <nav aria-label="Lesson content navigation">
 
-        <ul class="list-unstyled ps-0 pt-1">
+      <ul class="list-unstyled ps-0 pt-1">
 
-        {% comment %}
-          Liquid logic figures out the nav items and nesting from the content front matter, 
-          Plus figures out the previous and next page for the active page 
-        {%- endcomment -%}
-        {% assign nav_pages = site.html_pages | where_exp: 'p','p.nav_order' | where_exp: 'p', 'p.section == nil' | sort: 'nav_order' %}
-        {% for p in nav_pages %}
-          {% assign current_i = forloop.index0 %}
-          <li class="mb-2">
-            {% comment %} 
-              if the page is a section header, 
-              find the section children and display in a dropdown
-            {%- endcomment -%}
-            {% if p.section_id %}
-              {% assign p_children = site.html_pages | where: 'section', p.section_id | sort: 'nav_order' %}
-              {% comment %} figure out prev/next pages for active section header {% endcomment %}
-              {% if p.url == page.url %}
-                {% assign prev_number = forloop.index0 | minus: 1 %}
-                {% assign next_number = forloop.index0 | plus: 1 %}
-                {% if forloop.first %}
-                  {% if p_children[0] %}{% assign next_page_title = p_children[0].title %}{% assign next_page_url = p_children[0].url %}
-                  {% else %}
-                  {% assign next_page_title = nav_pages[next_number].title %}{% assign next_page_url = nav_pages[next_number].url %}
-                  {% endif %}
+      {% comment %}
+        Liquid logic figures out the nav items and nesting from the content front matter, 
+        Plus figures out the previous and next page for the active page 
+      {%- endcomment -%}
+      {% assign nav_pages = site.html_pages | where_exp: 'p','p.nav_order' | where_exp: 'p', 'p.section == nil' | sort: 'nav_order' %}
+      {% for p in nav_pages %}
+        {% assign current_i = forloop.index0 %}
+        <li class="mb-2">
+          {% comment %} 
+            if the page is a section header, 
+            find the section children and display in a dropdown
+          {%- endcomment -%}
+          {% if p.section_id %}
+            {% assign p_children = site.html_pages | where: 'section', p.section_id | sort: 'nav_order' %}
+            {% comment %} figure out prev/next pages for active section header {% endcomment %}
+            {% if p.url == page.url %}
+              {% assign prev_number = forloop.index0 | minus: 1 %}
+              {% assign next_number = forloop.index0 | plus: 1 %}
+              {% if forloop.first %}
+                {% if p_children[0] %}{% assign next_page_title = p_children[0].title %}{% assign next_page_url = p_children[0].url %}
                 {% else %}
-                  {% assign prev_page = nav_pages[prev_number] %}
-                  {% if prev_page.section_id %}
-                    {% assign prev_child = site.html_pages | where: 'section', prev_page.section_id | sort: 'nav_order' | last %}
-                    {% assign prev_page_title = prev_child.title %}{% assign prev_page_url = prev_child.url %}
-                  {% else %}
-                    {% assign prev_page_title = prev_page.title %}{% assign prev_page_url = prev_page.url %}
-                  {% endif %}
-                  {% if p_children[0] %}{% assign next_page_title = p_children[0].title %}{% assign next_page_url = p_children[0].url %}
-                  {% else %}
-                  {% unless forloop.last %}{% assign next_page_title = nav_pages[next_number].title %}{% assign next_page_url = nav_pages[next_number].url %}{% endunless %}
-                  {% endif %}
+                {% assign next_page_title = nav_pages[next_number].title %}{% assign next_page_url = nav_pages[next_number].url %}
                 {% endif %}
-              {%- endif -%}
+              {% else %}
+                {% assign prev_page = nav_pages[prev_number] %}
+                {% if prev_page.section_id %}
+                  {% assign prev_child = site.html_pages | where: 'section', prev_page.section_id | sort: 'nav_order' | last %}
+                  {% assign prev_page_title = prev_child.title %}{% assign prev_page_url = prev_child.url %}
+                {% else %}
+                  {% assign prev_page_title = prev_page.title %}{% assign prev_page_url = prev_page.url %}
+                {% endif %}
+                {% if p_children[0] %}{% assign next_page_title = p_children[0].title %}{% assign next_page_url = p_children[0].url %}
+                {% else %}
+                {% unless forloop.last %}{% assign next_page_title = nav_pages[next_number].title %}{% assign next_page_url = nav_pages[next_number].url %}{% endunless %}
+                {% endif %}
+              {% endif %}
+            {%- endif -%}
 
-            <button class="side-bar-item btn-toggle rounded{% unless page.section == p.section_id or page.section_id == p.section_id %} collapsed{% endunless %}" data-bs-toggle="collapse" data-bs-target="#{{ p.section_id | slugify }}-collapse" aria-expanded="{% if page.section == p.section_id or page.section_id == p.section_id %}true{% else %}false{% endif %}">
-              {{ p.section_id }}
-            </button>
+          <button class="side-bar-item btn-toggle rounded{% unless page.section == p.section_id or page.section_id == p.section_id %} collapsed{% endunless %}" data-bs-toggle="collapse" data-bs-target="#{{ p.section_id | slugify }}-collapse" aria-expanded="{% if page.section == p.section_id or page.section_id == p.section_id %}true{% else %}false{% endif %}">
+            {{ p.section_id }}
+          </button>
 
-            <div class="collapse{% if page.section == p.section_id or page.section_id == p.section_id %} show{% endif %}" id="{{ p.section_id | slugify }}-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="{{ p.url | relative_url }}" class="link-dark rounded{% if page.url == p.url %} nav-active{% endif %}">{{ p.nav | default: p.title }}</a></li>
-                {% for c in p_children %}
-                  {% comment %} figure out prev/next pages for active section child {% endcomment %}
-                  {% if c.url == page.url %}
-                    {% assign prev_number = forloop.index0 | minus: 1 %}
-                    {% assign next_number = forloop.index0 | plus: 1 %}
-                    {% if forloop.last %}
-                      {% if forloop.first %}
-                        {% assign prev_page_title = p.title %}{% assign prev_page_url = p.url %}
-                      {% else %}
-                        {% assign prev_page_title = p_children[prev_number].title %}{% assign prev_page_url = p_children[prev_number].url %}
-                      {% endif %}
-                      {% assign next_i = current_i | plus: 1 %}
-                      {% assign next_page_title = nav_pages[next_i].title %}{% assign next_page_url = nav_pages[next_i].url %}
-                    {% elsif forloop.first %}
+          <div class="collapse{% if page.section == p.section_id or page.section_id == p.section_id %} show{% endif %}" id="{{ p.section_id | slugify }}-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><a href="{{ p.url | relative_url }}" class="link-dark rounded{% if page.url == p.url %} nav-active{% endif %}">{{ p.nav | default: p.title }}</a></li>
+              {% for c in p_children %}
+                {% comment %} figure out prev/next pages for active section child {% endcomment %}
+                {% if c.url == page.url %}
+                  {% assign prev_number = forloop.index0 | minus: 1 %}
+                  {% assign next_number = forloop.index0 | plus: 1 %}
+                  {% if forloop.last %}
+                    {% if forloop.first %}
                       {% assign prev_page_title = p.title %}{% assign prev_page_url = p.url %}
-                      {% assign next_page_title = p_children[next_number].title %}{% assign next_page_url = p_children[next_number].url %}
                     {% else %}
                       {% assign prev_page_title = p_children[prev_number].title %}{% assign prev_page_url = p_children[prev_number].url %}
-                      {% assign next_page_title = p_children[next_number].title %}{% assign next_page_url = p_children[next_number].url %}
                     {% endif %}
-                  {%- endif -%}
-                <li><a href="{{ c.url | relative_url }}" class="link-dark rounded{% if page.url == c.url %} nav-active{% endif %}">{{ c.nav | default: c.title }}</a></li>
-                {% endfor %}
-              </ul>
-            </div>
-            {% else %}
-            {% comment %} 
-              Display individual listing (non-section pages)
-            {%- endcomment -%}
-              {% comment %} figure out prev/next pages for active individual listing {% endcomment %}
-              {% if p.url == page.url %}
-                {% assign prev_number = forloop.index0 | minus: 1 %}
-                {% assign next_number = forloop.index0 | plus: 1 %}
-                {% unless forloop.first %}
-                  {% assign prev_page = nav_pages[prev_number] %}
-                  {% if prev_page.section_id %}
-                    {% assign prev_child = site.html_pages | where: 'section', prev_page.section_id | sort: 'nav_order' | last %}
-                    {% assign prev_page_title = prev_child.title %}{% assign prev_page_url = prev_child.url %}
+                    {% assign next_i = current_i | plus: 1 %}
+                    {% assign next_page_title = nav_pages[next_i].title %}{% assign next_page_url = nav_pages[next_i].url %}
+                  {% elsif forloop.first %}
+                    {% assign prev_page_title = p.title %}{% assign prev_page_url = p.url %}
+                    {% assign next_page_title = p_children[next_number].title %}{% assign next_page_url = p_children[next_number].url %}
                   {% else %}
-                    {% assign prev_page_title = prev_page.title %}{% assign prev_page_url = prev_page.url %}
+                    {% assign prev_page_title = p_children[prev_number].title %}{% assign prev_page_url = p_children[prev_number].url %}
+                    {% assign next_page_title = p_children[next_number].title %}{% assign next_page_url = p_children[next_number].url %}
                   {% endif %}
-                {% endunless %}
-                {% unless forloop.last %}
-                  {% assign next_page_title = nav_pages[next_number].title %}{% assign next_page_url = nav_pages[next_number].url %}
-                {% endunless %}
-              {%- endif -%}
-            <a href="{{ p.url | relative_url }}" class="side-bar-item link-dark rounded{% if page.url == p.url %} nav-active{% endif %}">{{ p.nav | default: p.title }}</a>
-            {% endif %}
-          </li>
-
-          {% if p.divider_after %}
-            <li class="sidebar-divider" aria-hidden="true"></li>
+                {%- endif -%}
+              <li><a href="{{ c.url | relative_url }}" class="link-dark rounded{% if page.url == c.url %} nav-active{% endif %}">{{ c.nav | default: c.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% else %}
+          {% comment %} 
+            Display individual listing (non-section pages)
+          {%- endcomment -%}
+            {% comment %} figure out prev/next pages for active individual listing {% endcomment %}
+            {% if p.url == page.url %}
+              {% assign prev_number = forloop.index0 | minus: 1 %}
+              {% assign next_number = forloop.index0 | plus: 1 %}
+              {% unless forloop.first %}
+                {% assign prev_page = nav_pages[prev_number] %}
+                {% if prev_page.section_id %}
+                  {% assign prev_child = site.html_pages | where: 'section', prev_page.section_id | sort: 'nav_order' | last %}
+                  {% assign prev_page_title = prev_child.title %}{% assign prev_page_url = prev_child.url %}
+                {% else %}
+                  {% assign prev_page_title = prev_page.title %}{% assign prev_page_url = prev_page.url %}
+                {% endif %}
+              {% endunless %}
+              {% unless forloop.last %}
+                {% assign next_page_title = nav_pages[next_number].title %}{% assign next_page_url = nav_pages[next_number].url %}
+              {% endunless %}
+            {%- endif -%}
+          <a href="{{ p.url | relative_url }}" class="side-bar-item link-dark rounded{% if page.url == p.url %} nav-active{% endif %}">{{ p.nav | default: p.title }}</a>
           {% endif %}
-        {% endfor %}
-          
-        </ul>
+        </li>
 
-      </nav>
+        {% if p.divider_after %}
+          <li class="sidebar-divider" aria-hidden="true"></li>
+        {% endif %}
+      {% endfor %}
+        
+      </ul>
 
-      <div id="sidebar-footer" class="mt-5 py-3 border-top">
-        {% include template/sidebar-footer.html %}
+    </nav>
+
+    <div id="sidebar-footer" class="mt-5 py-3 border-top">
+      {% include template/sidebar-footer.html %}
+    </div>
+
+  </div>
+
+  <!-- Page content wrapper-->
+  <div id="page-content-wrapper">
+    
+    <!-- Page content-->
+    <main id="maincontent" role="main" aria-label="Content">
+      <div class="px-1 py-4">
+      {{ content }}
       </div>
 
-    </div>
+      {% if page.section or page.section_id %}
+      <div id="sop-page-actions" class="sop-page-actions" aria-label="SOP page actions">
+        <button id="toggle-qr-panel" class="sop-qr-primary-btn" type="button">
+          Generate QR Code
+        </button>
 
-    <!-- Page content wrapper-->
-    <div id="page-content-wrapper">
-      
-        <!-- Page content-->
-        <main id="maincontent" role="main" aria-label="Content">
-          <div class="px-1 py-4">
-          {{ content }}
+        <button id="copy-link-btn" class="sop-qr-outline-btn" type="button">
+          Copy Link
+        </button>
+      </div>
+
+      <div id="qr-generator-modal" class="sop-qr-modal" hidden>
+        <div class="sop-qr-modal-backdrop" data-close-qr-modal></div>
+
+        <div class="sop-qr-modal-card" role="dialog" aria-modal="true" aria-labelledby="qr-generator-title">
+          <div class="sop-qr-modal-header">
+            <div>
+              <p class="sop-qr-modal-kicker">SOP QR Code</p>
+              <h2 id="qr-generator-title">Generate QR Code</h2>
+            </div>
+
+            <button class="sop-qr-close-btn" type="button" data-close-qr-modal aria-label="Close QR code generator">
+              ×
+            </button>
           </div>
 
-          {% if page.section or page.section_id %}
-          <div class="sop-qr-tools">
-            <button id="toggle-qr-panel" class="sop-qr-primary-btn" type="button">
-              Generate QR Code
+          <p class="sop-qr-modal-intro">
+            Generate a QR code linking to the current online version of this SOP at sops.surflifesavingsa.com.au.
+          </p>
+
+          <div class="sop-qr-style-buttons">
+            <button type="button" class="sop-qr-style-btn" data-style="blue">
+              <span class="sop-qr-style-title">Blue</span>
+              <span class="sop-qr-style-desc">Transparent background. Best for most SLSSA documents.</span>
             </button>
 
-            <div id="qr-generator-panel" class="sop-qr-panel" hidden>
-              <p class="sop-qr-panel-title">Choose a QR code style</p>
+            <button type="button" class="sop-qr-style-btn" data-style="black">
+              <span class="sop-qr-style-title">Black</span>
+              <span class="sop-qr-style-desc">Transparent background. Best for standard print documents.</span>
+            </button>
 
-              <div class="sop-qr-style-buttons">
-                <button type="button" class="sop-qr-style-btn" data-style="blue">Blue, transparent background</button>
-                <button type="button" class="sop-qr-style-btn" data-style="black">Black, transparent background</button>
-                <button type="button" class="sop-qr-style-btn" data-style="white">White, transparent background</button>
-              </div>
+            <button type="button" class="sop-qr-style-btn" data-style="white">
+              <span class="sop-qr-style-title">White</span>
+              <span class="sop-qr-style-desc">Transparent background. Use only on dark backgrounds.</span>
+            </button>
+          </div>
 
-              <div id="qr-generated-output" class="sop-qr-output" hidden>
-                <canvas id="sop-qr-canvas" width="720" height="860" aria-label="Generated QR code"></canvas>
+          <div id="qr-generated-output" class="sop-qr-output" hidden>
+            <canvas id="sop-qr-canvas" width="720" height="860" aria-label="Generated QR code"></canvas>
 
-                <div class="sop-qr-action-buttons">
-                  <button id="copy-qr-btn" class="sop-qr-primary-btn" type="button">Copy QR Code</button>
-                  <a id="download-qr-btn" class="sop-qr-secondary-btn" href="#" download>Download PNG</a>
-                </div>
+            <div class="sop-qr-action-buttons">
+              <button id="copy-qr-btn" class="sop-qr-primary-btn" type="button">Copy QR Code</button>
+              <a id="download-qr-btn" class="sop-qr-secondary-btn" href="#" download>Download PNG</a>
+            </div>
 
-                <p class="sop-qr-help">
-                  The generated QR code includes the SOP title underneath. You can crop the title out if needed.
-                </p>
-
-                <p class="sop-qr-help sop-qr-help-small">
-                  White QR codes only work well when placed on a dark background.
-                </p>
-              </div>
+            <div class="sop-qr-info-box">
+              <p>
+                The generated image includes the QR code, the SLSSA logo, and the SOP name underneath. The SOP name can be cropped out if only the QR code is required.
+              </p>
             </div>
           </div>
-          {% endif %}
-          
-          {% if prev_page_title or next_page_title %}<hr>{% endif %}
-          <!-- Custom for SLSSA </a> -->
-          {% include foot.html %}
-          
-          <div class="my-5 d-flex justify-content-between">
-            {% if prev_page_title %}<a class="btn btn-outline-dark btn-next" href="{{ prev_page_url | relative_url }}">{% include icon.html icon="chevron-left" %} {{ prev_page_title }}</a>{% endif %}
-            {% if next_page_title %}<a class="btn btn-outline-dark btn-next" href="{{ next_page_url | relative_url }}">{{ next_page_title }} {% include icon.html icon="chevron-right" %}</a>{% endif %}
-          </div>
+        </div>
+      </div>
+      {% endif %}
+      
+      {% if prev_page_title or next_page_title %}<hr>{% endif %}
+      <!-- Custom for SLSSA </a> -->
+      {% include foot.html %}
+      
+      <div class="my-5 d-flex justify-content-between">
+        {% if prev_page_title %}<a class="btn btn-outline-dark btn-next" href="{{ prev_page_url | relative_url }}">{% include icon.html icon="chevron-left" %} {{ prev_page_title }}</a>{% endif %}
+        {% if next_page_title %}<a class="btn btn-outline-dark btn-next" href="{{ next_page_url | relative_url }}">{{ next_page_title }} {% include icon.html icon="chevron-right" %}</a>{% endif %}
+      </div>
 
-        </main>
+    </main>
 
-    </div>
+  </div>
 </div>
 
 {% if page.section or page.section_id %}
@@ -436,14 +466,16 @@ layout: default
 
       try {
         const logo = await loadImage(qrLogoPath);
-        const badgeSize = 110;
-        const logoSize = 72;
+
+        /* Larger logo badge. If scanning becomes unreliable, reduce these values slightly. */
+        const badgeSize = 180;
+        const logoSize = 140;
         const badgeX = (finalCanvas.width - badgeSize) / 2;
         const badgeY = qrY + (qrSize - badgeSize) / 2;
 
         ctx.save();
         ctx.fillStyle = "rgba(255,255,255,0.96)";
-        roundRect(ctx, badgeX, badgeY, badgeSize, badgeSize, 24);
+        roundRect(ctx, badgeX, badgeY, badgeSize, badgeSize, 34);
         ctx.fill();
         ctx.restore();
 
@@ -499,34 +531,100 @@ layout: default
       }, 1500);
     }
 
+    async function copySopLink() {
+      const copyButton = document.getElementById("copy-link-btn");
+
+      if (!navigator.clipboard) {
+        alert("Copying links is not supported in this browser.");
+        return;
+      }
+
+      await navigator.clipboard.writeText(pageUrl);
+
+      const originalText = copyButton.textContent;
+      copyButton.textContent = "Copied";
+      setTimeout(() => {
+        copyButton.textContent = originalText;
+      }, 1500);
+    }
+
+    function openQrModal() {
+      const modal = document.getElementById("qr-generator-modal");
+      if (!modal) return;
+      modal.hidden = false;
+      document.body.classList.add("sop-qr-modal-open");
+    }
+
+    function closeQrModal() {
+      const modal = document.getElementById("qr-generator-modal");
+      if (!modal) return;
+      modal.hidden = true;
+      document.body.classList.remove("sop-qr-modal-open");
+    }
+
+    function placePageActionsBesideTitle() {
+      const actions = document.getElementById("sop-page-actions");
+      const contentArea = document.querySelector("#maincontent .px-1.py-4");
+      if (!actions || !contentArea) return;
+
+      const firstHeading = contentArea.querySelector("h1");
+      if (!firstHeading) return;
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "sop-title-row";
+
+      firstHeading.parentNode.insertBefore(titleRow, firstHeading);
+      titleRow.appendChild(firstHeading);
+      titleRow.appendChild(actions);
+    }
+
     function setupQrGenerator() {
-      const toggleButton = document.getElementById("toggle-qr-panel");
-      const panel = document.getElementById("qr-generator-panel");
+      const generateButton = document.getElementById("toggle-qr-panel");
+      const copyLinkButton = document.getElementById("copy-link-btn");
+      const modal = document.getElementById("qr-generator-modal");
       const output = document.getElementById("qr-generated-output");
       const styleButtons = document.querySelectorAll(".sop-qr-style-btn");
-      const copyButton = document.getElementById("copy-qr-btn");
+      const copyQrButton = document.getElementById("copy-qr-btn");
+      const closeButtons = document.querySelectorAll("[data-close-qr-modal]");
 
-      if (!toggleButton || !panel) return;
+      if (generateButton) {
+        generateButton.addEventListener("click", openQrModal);
+      }
 
-      toggleButton.addEventListener("click", function () {
-        panel.hidden = !panel.hidden;
+      if (copyLinkButton) {
+        copyLinkButton.addEventListener("click", copySopLink);
+      }
+
+      closeButtons.forEach(button => {
+        button.addEventListener("click", closeQrModal);
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && modal && !modal.hidden) {
+          closeQrModal();
+        }
       });
 
       styleButtons.forEach(button => {
         button.addEventListener("click", async function () {
           const style = button.getAttribute("data-style");
+
+          styleButtons.forEach(btn => btn.classList.remove("sop-qr-style-active"));
+          button.classList.add("sop-qr-style-active");
+
           await buildQrCanvas(style);
           output.hidden = false;
         });
       });
 
-      if (copyButton) {
-        copyButton.addEventListener("click", copyCanvasToClipboard);
+      if (copyQrButton) {
+        copyQrButton.addEventListener("click", copyCanvasToClipboard);
       }
     }
 
     document.addEventListener("DOMContentLoaded", function () {
       generatePrintQrCode();
+      placePageActionsBesideTitle();
       setupQrGenerator();
     });
 
@@ -536,11 +634,11 @@ layout: default
 {% endif %}
 
 <script>
-    /* mobile sidebar toggle */
-    const sidebarToggle = document.body.querySelector('#sidebarToggle');
-    const sidebarNav = document.body.querySelector('#sidebar-wrapper');
-    sidebarToggle.addEventListener('click', event => {
-        event.preventDefault();
-        sidebarNav.classList.toggle('sidebar-show');
-    });
+  /* mobile sidebar toggle */
+  const sidebarToggle = document.body.querySelector('#sidebarToggle');
+  const sidebarNav = document.body.querySelector('#sidebar-wrapper');
+  sidebarToggle.addEventListener('click', event => {
+    event.preventDefault();
+    sidebarNav.classList.toggle('sidebar-show');
+  });
 </script>

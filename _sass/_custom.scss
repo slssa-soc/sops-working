@@ -52,27 +52,41 @@ button.side-bar-item.btn-toggle::after {
   list-style: none;
 }
 
-/* SOP QR generator */
-.sop-qr-tools {
-  margin: 2rem 0 2.5rem;
-  padding: 1.5rem;
-  border: 1px solid #d9e2ec;
-  border-radius: 24px;
-  background: #f8fafc;
-  text-align: center;
+/* SOP title action buttons */
+.sop-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
+.sop-title-row h1 {
+  margin-bottom: 0;
+}
+
+.sop-page-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 0.1rem;
+}
+
+/* SOP QR generator buttons */
 .sop-qr-primary-btn,
 .sop-qr-secondary-btn,
+.sop-qr-outline-btn,
 .sop-qr-style-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0.75rem 1rem;
+  min-height: 42px;
+  padding: 0.7rem 1rem;
   border-radius: 999px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   text-decoration: none !important;
   cursor: pointer;
   transition: all 0.18s ease;
@@ -88,6 +102,17 @@ button.side-bar-item.btn-toggle::after {
   background: #01538f;
 }
 
+.sop-qr-outline-btn {
+  border: 1px solid #9fc5e8;
+  background: transparent;
+  color: #0161AA !important;
+}
+
+.sop-qr-outline-btn:hover {
+  border-color: #0161AA;
+  background: #f4f9ff;
+}
+
 .sop-qr-secondary-btn {
   border: 1px solid #cbd5e1;
   background: #ffffff;
@@ -98,34 +123,126 @@ button.side-bar-item.btn-toggle::after {
   border-color: #0161AA;
 }
 
-.sop-qr-panel {
-  margin-top: 1rem;
-  padding-top: 1rem;
+/* Modal */
+body.sop-qr-modal-open {
+  overflow: hidden;
 }
 
-.sop-qr-panel-title {
-  margin: 0 0 1rem;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #334155;
+.sop-qr-modal[hidden] {
+  display: none !important;
 }
 
-.sop-qr-style-buttons {
+.sop-qr-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.sop-qr-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.52);
+}
+
+.sop-qr-modal-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 760px);
+  max-height: min(90vh, 920px);
+  overflow-y: auto;
+  border: 1px solid #d9e2ec;
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
+  padding: 1.5rem;
+}
+
+.sop-qr-modal-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.sop-qr-modal-kicker {
+  margin: 0 0 0.25rem;
+  color: #0161AA;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sop-qr-modal-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
+}
+
+.sop-qr-close-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #d9e2ec;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sop-qr-close-btn:hover {
+  background: #f8fafc;
+}
+
+.sop-qr-modal-intro {
+  margin: 0 0 1.25rem;
+  color: #475569;
+  line-height: 1.55;
+}
+
+/* Style selection cards */
+.sop-qr-style-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
 }
 
 .sop-qr-style-btn {
+  display: block;
+  min-height: 118px;
+  padding: 1rem;
   border: 1px solid #d9e2ec;
-  background: #ffffff;
+  border-radius: 22px;
+  background: #f8fafc;
   color: #334155;
+  text-align: left;
 }
 
-.sop-qr-style-btn:hover {
+.sop-qr-style-btn:hover,
+.sop-qr-style-active {
   border-color: #0161AA;
-  color: #0161AA;
+  background: #f4f9ff;
+}
+
+.sop-qr-style-title {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.sop-qr-style-desc {
+  display: block;
+  color: #64748b;
+  font-size: 0.86rem;
+  line-height: 1.35;
 }
 
 .sop-qr-output {
@@ -155,33 +272,61 @@ button.side-bar-item.btn-toggle::after {
   margin-bottom: 0.75rem;
 }
 
-.sop-qr-help {
-  margin: 0.25rem 0 0;
-  color: #64748b;
+.sop-qr-info-box {
+  max-width: 620px;
+  margin: 0.85rem auto 0;
+  padding: 1rem 1.15rem;
+  border: 1px solid #d9e2ec;
+  border-radius: 20px;
+  background: #f8fafc;
+}
+
+.sop-qr-info-box p {
+  margin: 0;
+  color: #475569;
   font-size: 0.92rem;
   line-height: 1.45;
 }
 
-.sop-qr-help-small {
-  font-size: 0.82rem;
+@media (max-width: 900px) {
+  .sop-title-row {
+    display: block;
+  }
+
+  .sop-title-row h1 {
+    margin-bottom: 1rem;
+  }
+
+  .sop-page-actions {
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .sop-qr-style-buttons {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
-  .sop-qr-tools {
-    padding: 1.25rem;
-    border-radius: 20px;
-  }
-
-  .sop-qr-style-buttons,
-  .sop-qr-action-buttons {
+  .sop-page-actions {
     flex-direction: column;
     align-items: stretch;
   }
 
   .sop-qr-primary-btn,
   .sop-qr-secondary-btn,
+  .sop-qr-outline-btn,
   .sop-qr-style-btn {
     width: 100%;
+  }
+
+  .sop-qr-modal {
+    padding: 0.75rem;
+  }
+
+  .sop-qr-modal-card {
+    border-radius: 22px;
+    padding: 1.2rem;
   }
 }
 
