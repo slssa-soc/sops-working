@@ -472,7 +472,7 @@ icon: house
 
   <section class="sop-card sop-hero">
     <div class="sop-hero-content">
-      <h1>Surf Life Saving SA Standard Operating Procedures</h1>
+      <h1>SLSSA Standard Operating Procedures</h1>
 
       <p>
         The Surf Life Saving SA (SLSSA) Standard Operating Procedures provide the operational framework for lifesaving services, patrol operations, emergency response, communications, equipment use, incident management, and post-incident support.
@@ -491,11 +491,7 @@ icon: house
 
   <section class="sop-card sop-ask">
     <div class="sop-ask-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/>
-        <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"/>
-        <path d="M12 17h.01"/>
-      </svg>
+      {% include icon.html icon="chat-dots" %}
     </div>
 
     <div>
@@ -518,12 +514,9 @@ icon: house
   </section>
 
   <section class="sop-section-heading">
-    <svg class="sop-section-heading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <rect x="4" y="3" width="16" height="18" rx="2"/>
-      <path d="M8 7h8"/>
-      <path d="M8 12h8"/>
-      <path d="M8 17h5"/>
-    </svg>
+    <span class="sop-section-heading-icon" aria-hidden="true">
+      {% include icon.html icon="journal-text" %}
+    </span>
 
     <div>
       <h2>SOP Sections</h2>
@@ -534,169 +527,133 @@ icon: house
   <section class="sop-tile-grid">
 
     <a class="sop-tile sop-tile-grey" href="{{ '/' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5"/><path d="M9 20v-6h6v6"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="house" %}</span>
       <span><span class="sop-tile-label">Home</span><span class="sop-tile-title">Welcome</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/introduction.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/></svg>
-      </span>
-      <span><span class="sop-tile-label">Introduction</span><span class="sop-tile-title">Introduction and Submit Feedback</span></span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="info-circle" %}</span>
+      <span><span class="sop-tile-label">Introduction</span><span class="sop-tile-title">Introduction</span></span>
+      <span class="sop-tile-chevron">›</span>
+    </a>
+
+    <a class="sop-tile sop-tile-grey" href="{{ '/submit-feedback.html' | relative_url }}">
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="chat-dots" %}</span>
+      <span><span class="sop-tile-label">Feedback</span><span class="sop-tile-title">Submit Feedback</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/1-work-health-and-safety/1.1-work-health-and-safety.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="shield-check" %}</span>
       <span><span class="sop-tile-label">Section 1</span><span class="sop-tile-title">Work Health and Safety</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/2-information-management/2.1-information-management-and-online-services.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h6l2 2h8v10a2 2 0 0 1-2 2H4V6Z"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="folder" %}</span>
       <span><span class="sop-tile-label">Section 2</span><span class="sop-tile-title">Information Management</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-green" href="{{ '/3-lifesaving-standards/3.1-lifesaving-service-agreements.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.2 2.2L15.8 9"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="check-circle" %}</span>
       <span><span class="sop-tile-label">Section 3</span><span class="sop-tile-title">Lifesaving Standards</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/4-rescue-vessels/4.1-licences.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h4"/><path d="M7 13h8"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="card-text" %}</span>
       <span><span class="sop-tile-label">Section 4</span><span class="sop-tile-title">Licences</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/5-gear-and-equipment/5.1-lifesaving-vehicles.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m14.7 6.3 3 3"/><path d="M2 22l7-7"/><path d="M8 16 3 11l5-5 5 5"/><path d="m13 11 6-6 3 3-6 6"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="tools" %}</span>
       <span><span class="sop-tile-label">Section 5</span><span class="sop-tile-title">Gear and Equipment</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/6-rescue-equipment/6.1-public-rescue-equipment-to-be-issued.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="m5.6 5.6 4.3 4.3"/><path d="m14.1 14.1 4.3 4.3"/><path d="m18.4 5.6-4.3 4.3"/><path d="m9.9 14.1-4.3 4.3"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="life-preserver" %}</span>
       <span><span class="sop-tile-label">Section 6</span><span class="sop-tile-title">Rescue Equipment</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-orange" href="{{ '/7-communications/7.1-radio-communications.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 0 0 6"/><path d="M3.5 6.5a10 10 0 0 0 0 11"/><path d="M18 9a6 6 0 0 1 0 6"/><path d="M20.5 6.5a10 10 0 0 1 0 11"/><path d="M12 12h.01"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="broadcast" %}</span>
       <span><span class="sop-tile-label">Section 7</span><span class="sop-tile-title">Communications</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-yellow" href="{{ '/8-patrol-operations-general/8.1-beach-management-methods-and-roles.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 4h12l-2 4 2 4H6"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="flag" %}</span>
       <span><span class="sop-tile-label">Section 8</span><span class="sop-tile-title">Patrol Operations (General)</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-red" href="{{ '/9-patrol-operations-emergency/9.1-emergency-patrol-area-closure-and-evacuation.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4.2 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="exclamation-triangle" %}</span>
       <span><span class="sop-tile-label">Section 9</span><span class="sop-tile-title">Patrol Operations (Emergency)</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/10-reduced-visibility-operations/10.1-reduced-visibility-operations.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 18H7a5 5 0 1 1 1.2-9.85A6 6 0 0 1 20 10.5 3.75 3.75 0 0 1 17.5 18Z"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="cloud" %}</span>
       <span><span class="sop-tile-label">Section 10</span><span class="sop-tile-title">Reduced Visibility Operations</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/11-search-and-rescue-SAR-operations/11.1-sar-responsibilities-to-be-issued.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="search" %}</span>
       <span><span class="sop-tile-label">Section 11</span><span class="sop-tile-title">Search and Rescue (SAR) Operations</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/12-state-operations-centre-soc-surfcom/12.1-state-operations-centre-soc-surfcom.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M9 8h1"/><path d="M14 8h1"/><path d="M9 12h1"/><path d="M14 12h1"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="headset" %}</span>
       <span><span class="sop-tile-label">Section 12</span><span class="sop-tile-title">State Operations Centre (SURFCOM)</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/13-operations-app/13.1-operations-app-general-operations.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 17h2"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="phone" %}</span>
       <span><span class="sop-tile-label">Section 13</span><span class="sop-tile-title">Operations App</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/14-vessels-and-aircraft/14.1-helicopter-landing-site.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18"/><path d="M5 17l2-6h10l2 6"/><path d="M7 11l5-7 5 7"/><path d="M8 21h8"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="compass" %}</span>
       <span><span class="sop-tile-label">Section 14</span><span class="sop-tile-title">Vessels and Aircraft</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-blue" href="{{ '/15-critical-incident-management-and-member-support/15.1-critical-incidents.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M2 21v-2a4 4 0 0 1 3-3.87"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="people" %}</span>
       <span><span class="sop-tile-label">Section 15</span><span class="sop-tile-title">Critical Incident Management and Member Support</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/16-SLSA-references/16.1-slsa-references.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="book" %}</span>
       <span><span class="sop-tile-label">Reference</span><span class="sop-tile-title">SLSA References</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/17-glossary/17.1-glossary.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 17V7a3 3 0 0 1 6 0v10"/><path d="M13 11h4"/><path d="M17 7v10"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="journal-text" %}</span>
       <span><span class="sop-tile-label">Reference</span><span class="sop-tile-title">Glossary</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/annexes/1-first-aid-response-possible-exposure-to-hab.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.6-8.8 8.8a5 5 0 0 1-7.1-7.1l9.2-9.2a3.5 3.5 0 0 1 5 5l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.8-8.8"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="paperclip" %}</span>
       <span><span class="sop-tile-label">Reference</span><span class="sop-tile-title">Annexes</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
     <a class="sop-tile sop-tile-grey" href="{{ '/18-change-log/18.1-change-log.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/><path d="M12 7v5l3 2"/></svg>
-      </span>
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="clock-history" %}</span>
       <span><span class="sop-tile-label">Reference</span><span class="sop-tile-title">Change Log</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
