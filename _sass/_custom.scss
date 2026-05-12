@@ -2,27 +2,29 @@
 
 /* Basic table styling */
 table {
-    border-collapse: collapse !important; /* Ensure borders are collapsed into a single line */
-    width: 100% !important; /* Optional: makes the table width 100% of its container */
-  }
-  
-  /* Styling table borders */
-  table, th, td {
-    border: 1px solid #dddddd !important; /* Change the border color and width as needed */
-  }
-  
-  /* Optional: Styling table headers */
-  th {
-    background-color: #f2f2f2 !important; /* Change background color for headers */
-    padding: 8px !important; /* Adjust padding for headers */
-  }
-  
-  /* Optional: Styling table cells */
-  td {
-    padding: 8px !important; /* Adjust padding for cells */
-  }
-  
-  /* Sidebar section heading alignment */
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+
+/* Styling table borders */
+table,
+th,
+td {
+  border: 1px solid #dddddd !important;
+}
+
+/* Optional: Styling table headers */
+th {
+  background-color: #f2f2f2 !important;
+  padding: 8px !important;
+}
+
+/* Optional: Styling table cells */
+td {
+  padding: 8px !important;
+}
+
+/* Sidebar section heading alignment */
 .side-bar-item {
   width: 100%;
   text-align: left;
@@ -40,13 +42,6 @@ button.side-bar-item.btn-toggle {
 button.side-bar-item.btn-toggle::after {
   flex-shrink: 0;
   margin-top: 0.2rem;
-}
-
-.sidebar-divider {
-  height: 1px;
-  margin: 0.75rem 0.5rem;
-  background: #d9e2ec;
-  list-style: none;
 }
 
 /* Sidebar divider between main pages and SOP sections */
@@ -67,23 +62,58 @@ button.side-bar-item.btn-toggle::after {
     margin: 18mm;
   }
 
-  body * {
-    visibility: hidden !important;
+  /* Hide normal page chrome and content */
+  header,
+  #breadcrumb-header,
+  #sidebar-wrapper,
+  .px-1.py-4,
+  #sidebar-footer,
+  footer,
+  .btn-next,
+  .my-5,
+  hr {
+    display: none !important;
   }
 
-  #print-version-control-notice,
-  #print-version-control-notice * {
+  /* Keep the required layout containers visible for print */
+  html,
+  body,
+  #wrapper,
+  #page-content-wrapper,
+  #maincontent {
+    display: block !important;
     visibility: visible !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
   }
 
+  #wrapper {
+    display: block !important;
+  }
+
+  #page-content-wrapper {
+    grid-area: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Show the print notice */
   #print-version-control-notice {
     display: block !important;
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    padding: 0;
-    background: #ffffff;
-    color: #111827;
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  #print-version-control-notice * {
+    visibility: visible !important;
   }
 
   .print-notice-card {
