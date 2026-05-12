@@ -3,6 +3,7 @@
 layout: default
 ---
 
+{% if page.section or page.section_id %}
 <div id="print-version-control-notice" aria-hidden="true">
   <div class="print-notice-card">
 
@@ -47,6 +48,7 @@ layout: default
 
   </div>
 </div>
+{% endif %}
 
 <div id="breadcrumb-header" class="py-2 border-bottom">
     <div class="container-xxl d-flex align-items-center">
@@ -198,6 +200,41 @@ layout: default
           <div class="px-1 py-4">
           {{ content }}
           </div>
+
+          {% if page.section or page.section_id %}
+          <div class="sop-qr-tools">
+            <button id="toggle-qr-panel" class="sop-qr-primary-btn" type="button">
+              Generate QR Code
+            </button>
+
+            <div id="qr-generator-panel" class="sop-qr-panel" hidden>
+              <p class="sop-qr-panel-title">Choose a QR code style</p>
+
+              <div class="sop-qr-style-buttons">
+                <button type="button" class="sop-qr-style-btn" data-style="blue">Blue, transparent background</button>
+                <button type="button" class="sop-qr-style-btn" data-style="black">Black, transparent background</button>
+                <button type="button" class="sop-qr-style-btn" data-style="white">White, transparent background</button>
+              </div>
+
+              <div id="qr-generated-output" class="sop-qr-output" hidden>
+                <canvas id="sop-qr-canvas" width="720" height="860" aria-label="Generated QR code"></canvas>
+
+                <div class="sop-qr-action-buttons">
+                  <button id="copy-qr-btn" class="sop-qr-primary-btn" type="button">Copy QR Code</button>
+                  <a id="download-qr-btn" class="sop-qr-secondary-btn" href="#" download>Download PNG</a>
+                </div>
+
+                <p class="sop-qr-help">
+                  The generated QR code includes the SOP title underneath. You can crop the title out if needed.
+                </p>
+
+                <p class="sop-qr-help sop-qr-help-small">
+                  White QR codes only work well when placed on a dark background.
+                </p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
           
           {% if prev_page_title or next_page_title %}<hr>{% endif %}
           <!-- Custom for SLSSA </a> -->
@@ -213,7 +250,8 @@ layout: default
     </div>
 </div>
 
-<!-- QRCode.js v1.0.0 by davidshimjs, MIT licensed. Local copy used to generate print-only page QR codes. -->
+{% if page.section or page.section_id %}
+<!-- QRCode.js v1.0.0 by davidshimjs, MIT licensed. Local copy used to generate print-only page QR codes and downloadable QR images. -->
 <script src="{{ '/assets/lib/qrcode.js' | relative_url }}"></script>
 
 <script>
@@ -221,6 +259,14 @@ layout: default
     const canonicalDomain = "https://sops.surflifesavingsa.com.au";
     const pagePath = "{{ page.url }}";
     const pageUrl = canonicalDomain + pagePath;
+    const sopTitle = {{ page.nav | default: page.title | jsonify }};
+    const qrLogoPath = {{ '/images/slssa-logo.png' | relative_url | jsonify }};
+
+    const qrColours = {
+      blue: "#0161AA",
+      black: "#111111",
+      white: "#FFFFFF"
+    };
 
     function formatAustralianDate(date) {
       return date.toLocaleDateString("en-AU", {
@@ -268,10 +314,226 @@ layout: default
       }
     }
 
-    document.addEventListener("DOMContentLoaded", generatePrintQrCode);
+    function slugifyFilename(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+    }
+
+    function wrapText(ctx, text, maxWidth) {
+      const words = text.split(" ");
+      const lines = [];
+      let line = "";
+
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line ? line + " " + words[i] : words[i];
+        const testWidth = ctx.measureText(testLine).width;
+
+        if (testWidth > maxWidth && line) {
+          lines.push(line);
+          line = words[i];
+        } else {
+          line = testLine;
+        }
+      }
+
+      if (line) {
+        lines.push(line);
+      }
+
+      return lines.slice(0, 3);
+    }
+
+    function makeBackgroundTransparent(imageData, style) {
+      const data = imageData.data;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+
+        if (style === "white") {
+          if (r < 12 && g < 12 && b < 12) {
+            data[i + 3] = 0;
+          }
+        } else {
+          if (r > 245 && g > 245 && b > 245) {
+            data[i + 3] = 0;
+          }
+        }
+      }
+
+      return imageData;
+    }
+
+    async function buildQrCanvas(style) {
+      const darkColour = qrColours[style];
+      const lightColour = style === "white" ? "#000000" : "#FFFFFF";
+
+      const tempContainer = document.createElement("div");
+      tempContainer.style.position = "absolute";
+      tempContainer.style.left = "-9999px";
+      tempContainer.style.top = "-9999px";
+      document.body.appendChild(tempContainer);
+
+      new QRCode(tempContainer, {
+        text: pageUrl,
+        width: 520,
+        height: 520,
+        colorDark: darkColour,
+        colorLight: lightColour,
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      await new Promise(resolve => requestAnimationFrame(resolve));
+
+      const sourceCanvas = tempContainer.querySelector("canvas");
+      const finalCanvas = document.getElementById("sop-qr-canvas");
+      const ctx = finalCanvas.getContext("2d");
+
+      ctx.clearRect(0, 0, finalCanvas.width, finalCanvas.height);
+
+      const offscreen = document.createElement("canvas");
+      offscreen.width = sourceCanvas.width;
+      offscreen.height = sourceCanvas.height;
+      const offscreenCtx = offscreen.getContext("2d");
+      offscreenCtx.drawImage(sourceCanvas, 0, 0);
+
+      let qrImageData = offscreenCtx.getImageData(0, 0, offscreen.width, offscreen.height);
+      qrImageData = makeBackgroundTransparent(qrImageData, style);
+      offscreenCtx.putImageData(qrImageData, 0, 0);
+
+      const qrSize = 520;
+      const qrX = (finalCanvas.width - qrSize) / 2;
+      const qrY = 30;
+
+      ctx.drawImage(offscreen, qrX, qrY, qrSize, qrSize);
+
+      try {
+        const logo = await loadImage(qrLogoPath);
+        const badgeSize = 110;
+        const logoSize = 72;
+        const badgeX = (finalCanvas.width - badgeSize) / 2;
+        const badgeY = qrY + (qrSize - badgeSize) / 2;
+
+        ctx.save();
+        ctx.fillStyle = "rgba(255,255,255,0.96)";
+        roundRect(ctx, badgeX, badgeY, badgeSize, badgeSize, 24);
+        ctx.fill();
+        ctx.restore();
+
+        const logoX = (finalCanvas.width - logoSize) / 2;
+        const logoY = badgeY + (badgeSize - logoSize) / 2;
+        ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
+      } catch (e) {
+        /* If the logo is missing, continue without it. */
+      }
+
+      ctx.save();
+      ctx.fillStyle = darkColour;
+      ctx.font = "700 28px Arial, Helvetica, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+
+      const lines = wrapText(ctx, sopTitle, 620);
+      let textY = qrY + qrSize + 32;
+
+      lines.forEach(line => {
+        ctx.fillText(line, finalCanvas.width / 2, textY);
+        textY += 38;
+      });
+
+      ctx.restore();
+
+      document.body.removeChild(tempContainer);
+
+      const downloadLink = document.getElementById("download-qr-btn");
+      const fileName = slugifyFilename(sopTitle || "sop-qr-code") + "-" + style + ".png";
+      downloadLink.href = finalCanvas.toDataURL("image/png");
+      downloadLink.download = fileName;
+    }
+
+    async function copyCanvasToClipboard() {
+      const canvas = document.getElementById("sop-qr-canvas");
+      const copyButton = document.getElementById("copy-qr-btn");
+
+      if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
+        alert("Copying images is not supported in this browser. Please use Download PNG instead.");
+        return;
+      }
+
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+      await navigator.clipboard.write([
+        new ClipboardItem({ "image/png": blob })
+      ]);
+
+      const originalText = copyButton.textContent;
+      copyButton.textContent = "Copied";
+      setTimeout(() => {
+        copyButton.textContent = originalText;
+      }, 1500);
+    }
+
+    function setupQrGenerator() {
+      const toggleButton = document.getElementById("toggle-qr-panel");
+      const panel = document.getElementById("qr-generator-panel");
+      const output = document.getElementById("qr-generated-output");
+      const styleButtons = document.querySelectorAll(".sop-qr-style-btn");
+      const copyButton = document.getElementById("copy-qr-btn");
+
+      if (!toggleButton || !panel) return;
+
+      toggleButton.addEventListener("click", function () {
+        panel.hidden = !panel.hidden;
+      });
+
+      styleButtons.forEach(button => {
+        button.addEventListener("click", async function () {
+          const style = button.getAttribute("data-style");
+          await buildQrCanvas(style);
+          output.hidden = false;
+        });
+      });
+
+      if (copyButton) {
+        copyButton.addEventListener("click", copyCanvasToClipboard);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      generatePrintQrCode();
+      setupQrGenerator();
+    });
+
     window.addEventListener("beforeprint", generatePrintQrCode);
   })();
 </script>
+{% endif %}
 
 <script>
     /* mobile sidebar toggle */
