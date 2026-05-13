@@ -154,6 +154,17 @@ icon: house
     line-height: 1.55;
   }
 
+  .sop-ask-warning {
+    margin: 0 0 14px !important;
+    padding: 10px 12px;
+    border: 1px solid #fcd34d;
+    border-radius: 12px;
+    background: #fffbeb;
+    color: #92400e !important;
+    font-size: 0.86rem;
+    line-height: 1.45 !important;
+  }
+
   .sop-ask-input {
     display: flex;
     align-items: stretch;
@@ -178,20 +189,97 @@ icon: house
     box-shadow: 0 0 0 3px rgba(1, 97, 170, 0.12);
   }
 
-  .sop-coming-soon {
+  .sop-ask-submit {
     flex: 0 0 auto;
     min-height: 48px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 16px;
+    padding: 10px 18px;
     border: 0;
     border-radius: 13px;
-    background: #9ca3af;
+    background: #0161AA;
     color: #ffffff;
     font-weight: 700;
     font-size: 0.88rem;
-    cursor: not-allowed;
+    cursor: pointer;
+    transition: background 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  }
+
+  .sop-ask-submit:hover {
+    background: #014f8c;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(1, 97, 170, 0.18);
+  }
+
+  .sop-ask-submit:disabled {
+    background: #9ca3af;
+    cursor: wait;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .sop-answer {
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    text-align: left;
+  }
+
+  .sop-answer-status {
+    margin-bottom: 10px;
+    color: #64748b;
+    font-size: 0.84rem;
+    font-weight: 700;
+  }
+
+  .sop-answer-content {
+    color: #0f172a;
+    font-size: 0.94rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  .sop-answer-sources {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .sop-answer-sources h3 {
+    margin: 0 0 10px;
+    color: #0f172a;
+    font-size: 1rem;
+  }
+
+  .sop-source-list {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .sop-source-list li {
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .sop-source-list a {
+    color: #0161AA;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .sop-source-list a:hover {
+    text-decoration: underline;
+  }
+
+  .sop-source-meta {
+    display: block;
+    color: #64748b;
+    font-size: 0.78rem;
   }
 
   .sop-section-heading {
@@ -413,7 +501,7 @@ icon: house
       text-align: left;
     }
 
-    .sop-coming-soon {
+    .sop-ask-submit {
       width: 100%;
     }
 
@@ -489,7 +577,7 @@ icon: house
     </div>
   </section>
 
-  <section class="sop-card sop-ask">
+  <section class="sop-card sop-ask" id="ask-sops">
     <div class="sop-ask-icon" aria-hidden="true">
       {% include icon.html icon="chat-dots" %}
     </div>
@@ -498,17 +586,28 @@ icon: house
       <h2>Ask the SOPs</h2>
 
       <p>
-        A future search and question tool will allow SLS personnel to ask operational questions and be guided to relevant SOP content.
+        Ask a general question about the SLSSA Standard Operating Procedures and the assistant will provide an answer based on relevant SOP content.
       </p>
 
-      <div class="sop-ask-input" aria-label="Future SOP question tool placeholder">
+      <p class="sop-ask-warning">
+        Do not enter personal information, patient details, member records, live incident details, radio logs, phone numbers, or sensitive operational tasking information.
+      </p>
+
+      <form class="sop-ask-input" id="sopAskForm">
         <input
+          id="sopQuestion"
           type="text"
-          placeholder="What temperature does a surf club patrol need to conduct a weekday patrol?"
-          onfocus="this.placeholder=''"
-          onblur="this.placeholder='What temperature does a surf club patrol need to conduct a weekday patrol?'"
+          placeholder="What is the process for reporting a member injury?"
+          autocomplete="off"
+          required
         >
-        <button class="sop-coming-soon" type="button" disabled>Coming soon</button>
+        <button class="sop-ask-submit" id="sopAskSubmit" type="submit">Ask</button>
+      </form>
+
+      <div class="sop-answer" id="sopAnswer" hidden>
+        <div class="sop-answer-status" id="sopAnswerStatus"></div>
+        <div class="sop-answer-content" id="sopAnswerContent"></div>
+        <div class="sop-answer-sources" id="sopAnswerSources"></div>
       </div>
     </div>
   </section>
@@ -661,3 +760,106 @@ icon: house
   </section>
 
 </div>
+
+<script>
+  const SOP_ASSISTANT_ENDPOINT = "https://func-sop-assistant-eph6gzhsdmbag7fn.australiasoutheast-01.azurewebsites.net/api/ask-sop";
+
+  const sopAskForm = document.getElementById("sopAskForm");
+  const sopQuestion = document.getElementById("sopQuestion");
+  const sopAskSubmit = document.getElementById("sopAskSubmit");
+  const sopAnswer = document.getElementById("sopAnswer");
+  const sopAnswerStatus = document.getElementById("sopAnswerStatus");
+  const sopAnswerContent = document.getElementById("sopAnswerContent");
+  const sopAnswerSources = document.getElementById("sopAnswerSources");
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function renderSources(sources) {
+    if (!Array.isArray(sources) || sources.length === 0) {
+      sopAnswerSources.innerHTML = "";
+      return;
+    }
+
+    const items = sources.map((source) => {
+      const title = escapeHtml(source.title || "SOP source");
+      const heading = escapeHtml(source.heading || "");
+      const version = escapeHtml(source.version || "");
+      const score = typeof source.score === "number" ? source.score.toFixed(3) : "";
+      const url = source.url ? "{{ site.baseurl }}" + source.url : "";
+
+      const label = heading ? `${title} — ${heading}` : title;
+
+      return `
+        <li>
+          ${url ? `<a href="${escapeHtml(url)}">${label}</a>` : label}
+          <span class="sop-source-meta">
+            ${version ? `Version: ${version}` : ""}
+            ${score ? ` · Relevance: ${score}` : ""}
+          </span>
+        </li>
+      `;
+    }).join("");
+
+    sopAnswerSources.innerHTML = `
+      <h3>Relevant SOPs</h3>
+      <ol class="sop-source-list">${items}</ol>
+    `;
+  }
+
+  sopAskForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const question = sopQuestion.value.trim();
+
+    if (!question) {
+      return;
+    }
+
+    sopAnswer.hidden = false;
+    sopAnswerStatus.textContent = "Searching the SOPs...";
+    sopAnswerContent.textContent = "";
+    sopAnswerSources.innerHTML = "";
+    sopAskSubmit.disabled = true;
+    sopAskSubmit.textContent = "Searching...";
+
+    try {
+      const response = await fetch(SOP_ASSISTANT_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          question: question,
+          topK: 8,
+          includeSources: true
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || "The SOP assistant returned an error.");
+      }
+
+      sopAnswerStatus.textContent = data.answer_status || "Answered";
+      sopAnswerContent.textContent = data.answer || "No answer was returned.";
+      renderSources(data.sources);
+
+    } catch (error) {
+      sopAnswerStatus.textContent = "Error";
+      sopAnswerContent.textContent = "The SOP assistant could not answer the question. Please try again or refer to the SOPs directly.";
+      sopAnswerSources.innerHTML = "";
+      console.error(error);
+    } finally {
+      sopAskSubmit.disabled = false;
+      sopAskSubmit.textContent = "Ask";
+    }
+  });
+</script>
