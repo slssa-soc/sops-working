@@ -371,6 +371,11 @@
     display: none !important;
   }
 
+  .sop-header-answer.sop-header-answer-loading {
+    background:
+      linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  }
+
   .sop-header-answer-status {
     margin-bottom: 10px;
     color: #64748b;
@@ -378,11 +383,48 @@
     font-weight: 700;
   }
 
+  .sop-header-answer-status.is-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #0f172a;
+  }
+
+  .sop-header-loading-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .sop-header-loading-dots span {
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: #64748b;
+    opacity: 0.34;
+    animation: sop-header-loading-dot 1.2s ease-in-out infinite;
+  }
+
+  .sop-header-loading-dots span:nth-child(2) {
+    animation-delay: 0.16s;
+  }
+
+  .sop-header-loading-dots span:nth-child(3) {
+    animation-delay: 0.32s;
+  }
+
   .sop-header-answer-content {
     color: #0f172a;
     font-size: 0.92rem;
     line-height: 1.58;
     white-space: pre-wrap;
+  }
+
+  .sop-header-loading-note {
+    color: #64748b;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    white-space: normal;
   }
 
   .sop-header-answer-sources {
@@ -446,6 +488,20 @@
     to {
       opacity: 0;
       transform: translateY(115%);
+    }
+  }
+
+  @keyframes sop-header-loading-dot {
+    0%,
+    80%,
+    100% {
+      opacity: 0.34;
+      transform: translateY(0);
+    }
+
+    40% {
+      opacity: 1;
+      transform: translateY(-2px);
     }
   }
 
@@ -542,7 +598,8 @@
   @media (prefers-reduced-motion: reduce) {
     .sop-header-ask-submit::before,
     .sop-header-ask-submit::after,
-    .sop-header-ask-prompt-text {
+    .sop-header-ask-prompt-text,
+    .sop-header-loading-dots span {
       animation: none !important;
     }
   }
@@ -610,6 +667,9 @@
     let sopHeaderPromptQueue = [];
     let sopHeaderPromptTimer = null;
     let sopHeaderCurrentPrompt = "";
+    let sopHeaderLoadingTimer = null;
+    let sopHeaderLoadingMessages = [];
+    let sopHeaderLoadingIndex = 0;
 
     function sopHeaderEscapeHtml(value) {
       return String(value || "")
@@ -723,6 +783,123 @@
       sopHeaderUpdatePromptVisibility();
     }
 
+    function sopHeaderGetQuestionTopic(question) {
+      const query = String(question || "").toLowerCase();
+
+      if (query.includes("injury") || query.includes("injuries") || query.includes("member injury")) {
+        return "member injury reporting";
+      }
+
+      if (query.includes("flag") || query.includes("flags")) {
+        return "patrol flag setup";
+      }
+
+      if (query.includes("closure") || query.includes("evacuation") || query.includes("close the beach")) {
+        return "patrol area closure and evacuation";
+      }
+
+      if (query.includes("surf risk") || query.includes("srr") || query.includes("risk rating")) {
+        return "Surf Risk Rating guidance";
+      }
+
+      if (query.includes("rescue ready")) {
+        return "rescue ready equipment requirements";
+      }
+
+      if (query.includes("critical incident") || query.includes("post incident")) {
+        return "critical incident management";
+      }
+
+      if (query.includes("peer support") || query.includes("pso")) {
+        return "peer support guidance";
+      }
+
+      if (query.includes("operations app") || query.includes("app")) {
+        return "Operations App requirements";
+      }
+
+      if (query.includes("helicopter") || query.includes("landing site") || query.includes("aircraft")) {
+        return "helicopter landing site procedures";
+      }
+
+      if (query.includes("radio") || query.includes("communications") || query.includes("soc") || query.includes("surfcom")) {
+        return "communications and SOC procedures";
+      }
+
+      if (query.includes("sar") || query.includes("search and rescue")) {
+        return "search and rescue procedures";
+      }
+
+      return "";
+    }
+
+    function sopHeaderBuildLoadingMessages(question) {
+      const topic = sopHeaderGetQuestionTopic(question);
+
+      if (topic) {
+        return [
+          `Searching SOPs for ${topic}...`,
+          "Reviewing relevant procedures...",
+          "Checking related SOP references...",
+          "Preparing answer..."
+        ];
+      }
+
+      return [
+        "Searching the SOPs...",
+        "Reviewing relevant procedures...",
+        "Checking related SOP references...",
+        "Preparing answer..."
+      ];
+    }
+
+    function sopHeaderRenderLoadingMessage(message) {
+      sopHeaderAnswerStatus.classList.add("is-loading");
+      sopHeaderAnswerStatus.innerHTML = `
+        <span>${sopHeaderEscapeHtml(message)}</span>
+        <span class="sop-header-loading-dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      `;
+
+      sopHeaderAnswerContent.innerHTML = `
+        <div class="sop-header-loading-note">
+          The assistant is checking the SOP content and source references before returning an answer.
+        </div>
+      `;
+    }
+
+    function sopHeaderStartLoading(question) {
+      sopHeaderStopLoading();
+
+      sopHeaderLoadingMessages = sopHeaderBuildLoadingMessages(question);
+      sopHeaderLoadingIndex = 0;
+
+      sopHeaderAnswer.hidden = false;
+      sopHeaderAnswer.classList.add("sop-header-answer-loading");
+      sopHeaderAnswerSources.innerHTML = "";
+
+      sopHeaderRenderLoadingMessage(sopHeaderLoadingMessages[sopHeaderLoadingIndex]);
+
+      sopHeaderLoadingTimer = window.setInterval(() => {
+        sopHeaderLoadingIndex = (sopHeaderLoadingIndex + 1) % sopHeaderLoadingMessages.length;
+        sopHeaderRenderLoadingMessage(sopHeaderLoadingMessages[sopHeaderLoadingIndex]);
+      }, 1800);
+    }
+
+    function sopHeaderStopLoading() {
+      if (sopHeaderLoadingTimer) {
+        window.clearInterval(sopHeaderLoadingTimer);
+        sopHeaderLoadingTimer = null;
+      }
+
+      sopHeaderAnswer.classList.remove("sop-header-answer-loading");
+      sopHeaderAnswerStatus.classList.remove("is-loading");
+      sopHeaderAnswerStatus.innerHTML = "";
+    }
+
     function sopHeaderRenderSources(sources) {
       if (!Array.isArray(sources) || sources.length === 0) {
         sopHeaderAnswerSources.innerHTML = "";
@@ -802,10 +979,7 @@
         return;
       }
 
-      sopHeaderAnswer.hidden = false;
-      sopHeaderAnswerStatus.textContent = "Searching the SOPs...";
-      sopHeaderAnswerContent.textContent = "";
-      sopHeaderAnswerSources.innerHTML = "";
+      sopHeaderStartLoading(question);
       sopHeaderAskSubmit.disabled = true;
       sopHeaderAskSubmit.textContent = "Searching...";
 
@@ -829,11 +1003,13 @@
           throw new Error(data.error || data.message || "The SOP assistant returned an error.");
         }
 
+        sopHeaderStopLoading();
         sopHeaderAnswerStatus.textContent = data.answer_status || "Answered";
         sopHeaderAnswerContent.textContent = data.answer || "No answer was returned.";
         sopHeaderRenderSources(data.sources);
 
       } catch (error) {
+        sopHeaderStopLoading();
         sopHeaderAnswerStatus.textContent = "Error";
         sopHeaderAnswerContent.textContent = "The SOP assistant could not answer the question. Please try again or refer to the SOPs directly.";
         sopHeaderAnswerSources.innerHTML = "";
