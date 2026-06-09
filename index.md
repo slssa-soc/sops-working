@@ -190,33 +190,236 @@ icon: house
   }
 
   .sop-ask-submit {
+    position: relative;
+    isolation: isolate;
+    overflow: visible;
     flex: 0 0 auto;
     min-height: 48px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 10px 18px;
-    border: 0;
+    border: 1px solid #014f8c;
     border-radius: 13px;
     background: #0161AA;
     color: #ffffff;
     font-weight: 700;
     font-size: 0.88rem;
     cursor: pointer;
+    box-shadow:
+      0 8px 18px rgba(1, 97, 170, 0.18),
+      0 0 0 1px rgba(255, 255, 255, 0.22) inset;
     transition: background 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  }
+
+  .sop-ask-submit::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    z-index: -1;
+    border-radius: 18px;
+    padding: 5px;
+    background:
+      radial-gradient(circle at 16% 42%, rgba(255, 183, 3, 0.95), transparent 18%),
+      radial-gradient(circle at 34% 20%, rgba(249, 115, 22, 0.95), transparent 22%),
+      radial-gradient(circle at 70% 24%, rgba(255, 255, 255, 0.85), transparent 20%),
+      radial-gradient(circle at 86% 64%, rgba(56, 189, 248, 0.95), transparent 24%),
+      radial-gradient(circle at 42% 88%, rgba(1, 97, 170, 0.95), transparent 26%),
+      linear-gradient(115deg, rgba(56, 189, 248, 0.75), rgba(249, 115, 22, 0.65), rgba(255, 255, 255, 0.45), rgba(1, 97, 170, 0.75));
+    background-size:
+      220% 220%,
+      240% 240%,
+      210% 210%,
+      230% 230%,
+      220% 220%,
+      260% 260%;
+    background-position:
+      5% 45%,
+      25% 10%,
+      70% 15%,
+      95% 65%,
+      40% 95%,
+      0% 50%;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0.96;
+    animation: sop-ai-border-glow 2.9s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .sop-ask-submit::after {
+    content: "";
+    position: absolute;
+    inset: -15px;
+    z-index: -2;
+    border-radius: 30px;
+    background:
+      radial-gradient(circle at 14% 44%, rgba(255, 183, 3, 0.36), transparent 24%),
+      radial-gradient(circle at 34% 22%, rgba(249, 115, 22, 0.48), transparent 28%),
+      radial-gradient(circle at 72% 20%, rgba(255, 255, 255, 0.30), transparent 28%),
+      radial-gradient(circle at 88% 66%, rgba(56, 189, 248, 0.48), transparent 32%),
+      radial-gradient(circle at 44% 90%, rgba(1, 97, 170, 0.42), transparent 34%);
+    background-size:
+      230% 230%,
+      250% 250%,
+      230% 230%,
+      250% 250%,
+      240% 240%;
+    background-position:
+      5% 50%,
+      25% 15%,
+      70% 10%,
+      95% 70%,
+      40% 95%;
+    filter: blur(16px);
+    opacity: 0.68;
+    animation: sop-ai-soft-glow 3.3s ease-in-out infinite;
+    pointer-events: none;
   }
 
   .sop-ask-submit:hover {
     background: #014f8c;
     transform: translateY(-1px);
-    box-shadow: 0 8px 18px rgba(1, 97, 170, 0.18);
+    box-shadow:
+      0 8px 18px rgba(1, 97, 170, 0.22),
+      0 0 0 1px rgba(255, 255, 255, 0.26) inset;
+  }
+
+  .sop-ask-submit:hover::before {
+    opacity: 1;
+  }
+
+  .sop-ask-submit:hover::after {
+    opacity: 0.82;
+  }
+
+  .sop-ask-submit:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 3px rgba(255, 255, 255, 0.85),
+      0 0 0 6px rgba(249, 115, 22, 0.22),
+      0 0 0 9px rgba(1, 97, 170, 0.16);
   }
 
   .sop-ask-submit:disabled {
     background: #9ca3af;
+    border-color: #9ca3af;
     cursor: wait;
     transform: none;
     box-shadow: none;
+  }
+
+  .sop-ask-submit:disabled::before,
+  .sop-ask-submit:disabled::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  @keyframes sop-ai-border-glow {
+    0%,
+    100% {
+      background-position:
+        5% 45%,
+        25% 10%,
+        70% 15%,
+        95% 65%,
+        40% 95%,
+        0% 50%;
+      opacity: 0.92;
+    }
+
+    28% {
+      background-position:
+        68% 8%,
+        82% 42%,
+        26% 84%,
+        14% 24%,
+        92% 76%,
+        55% 20%;
+      opacity: 1;
+    }
+
+    58% {
+      background-position:
+        92% 74%,
+        14% 82%,
+        84% 36%,
+        46% 10%,
+        10% 46%,
+        100% 80%;
+      opacity: 0.96;
+    }
+
+    82% {
+      background-position:
+        28% 94%,
+        58% 16%,
+        12% 42%,
+        76% 92%,
+        66% 22%,
+        35% 100%;
+      opacity: 1;
+    }
+  }
+
+  @keyframes sop-ai-soft-glow {
+    0%,
+    100% {
+      background-position:
+        5% 50%,
+        25% 15%,
+        70% 10%,
+        95% 70%,
+        40% 95%;
+      opacity: 0.58;
+      filter: blur(15px);
+    }
+
+    30% {
+      background-position:
+        70% 8%,
+        84% 44%,
+        24% 86%,
+        12% 28%,
+        94% 78%;
+      opacity: 0.78;
+      filter: blur(18px);
+    }
+
+    62% {
+      background-position:
+        96% 78%,
+        12% 84%,
+        86% 38%,
+        48% 12%,
+        8% 48%;
+      opacity: 0.72;
+      filter: blur(17px);
+    }
+
+    86% {
+      background-position:
+        30% 96%,
+        60% 18%,
+        10% 44%,
+        78% 94%,
+        68% 24%;
+      opacity: 0.82;
+      filter: blur(19px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sop-ask-submit::before,
+    .sop-ask-submit::after {
+      animation: none;
+    }
   }
 
   .sop-answer {
