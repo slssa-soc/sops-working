@@ -1,19 +1,850 @@
-<header class="py-3">
-    <nav class="">
-        <div class="container-xxl d-flex flex-wrap">
-            <a id="header-title" href="{{ '/' | relative_url }}" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto h4">
-                {% if site.title-icon %}<span class="me-2">{% include icon.html icon=site.title-icon %}</span>{% endif %}
-                {{ site.title }}
-            </a>
-            <form class="ms-auto mb-3 mb-lg-0" role="search" id="search" onsubmit="site_search(); return false;">
-                <input id="site-search" class="form-control" type="search" placeholder="Search" aria-label="Search box">
-            </form>
+<header class="py-3 sop-site-banner">
+  <nav>
+    <div class="container-xxl d-flex flex-wrap align-items-start">
+      <a id="header-title" href="{{ '/' | relative_url }}" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto h4">
+        {% if site.title-icon %}<span class="me-2">{% include icon.html icon=site.title-icon %}</span>{% endif %}
+        {{ site.title }}
+      </a>
+
+      <form class="ms-auto mb-3 mb-lg-0 sop-header-ask-shell" role="search" id="sopHeaderAskForm">
+        <div class="sop-header-ask-row">
+          <label class="visually-hidden" for="sopHeaderQuestion">Ask the SOPs</label>
+
+          <div class="sop-header-ask-input-wrap">
+            <span class="sop-header-ask-input-icon" aria-hidden="true">
+              {% include icon.html icon="search" %}
+            </span>
+
+            <input
+              id="sopHeaderQuestion"
+              class="sop-header-ask-input"
+              type="search"
+              aria-label="Ask the SOPs"
+              autocomplete="off"
+              aria-controls="sopHeaderAskCard"
+              aria-expanded="false"
+            >
+
+            <span class="sop-header-ask-prompt-window" aria-hidden="true">
+              <span class="sop-header-ask-prompt-text" id="sopHeaderQuestionPrompt"></span>
+            </span>
+          </div>
+
+          <button class="sop-header-ask-submit" id="sopHeaderAskSubmit" type="submit">Ask</button>
         </div>
-    </nav>
+      </form>
+    </div>
+  </nav>
+
+  <section class="sop-header-ask-card" id="sopHeaderAskCard" hidden>
+    <div class="container-xxl">
+      <div class="sop-header-ask-panel">
+        <div class="sop-header-ask-card-header">
+          <h2>Ask the SOPs</h2>
+
+          <p>
+            Ask a general question about the SLSSA Standard Operating Procedures and the assistant will provide an answer based on relevant SOP content.
+          </p>
+        </div>
+
+        <p class="sop-header-ask-warning">
+          Do not enter personal information, patient details, member records, live incident details, radio logs, phone numbers, or sensitive operational tasking information.
+        </p>
+
+        <div class="sop-header-answer" id="sopHeaderAnswer" hidden>
+          <div class="sop-header-answer-status" id="sopHeaderAnswerStatus"></div>
+          <div class="sop-header-answer-content" id="sopHeaderAnswerContent"></div>
+          <div class="sop-header-answer-sources" id="sopHeaderAnswerSources"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 </header>
-<script>
-    function site_search() {
-    var query = document.getElementById("site-search").value;
-    window.open("{{ '/search/index.html' | relative_url }}?q=" + encodeURIComponent(query), "_self" );
+
+<style>
+  .sop-site-banner {
+    position: relative;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+    background: rgba(255, 255, 255, 0.98);
+  }
+
+  .sop-header-ask-shell {
+    width: min(520px, 100%);
+  }
+
+  .sop-header-ask-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .sop-header-ask-input-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 260px;
+  }
+
+  .sop-header-ask-input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    width: 17px;
+    height: 17px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .sop-header-ask-input-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .sop-header-ask-input {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 14px 9px 40px;
+    border: 1px solid #d6dde7;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #0f172a;
+    font-size: 0.93rem;
+    line-height: 1.25;
+    outline: none;
+    box-shadow:
+      0 1px 2px rgba(15, 23, 42, 0.04),
+      0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+    transition:
+      border-color 0.16s ease,
+      box-shadow 0.16s ease,
+      background 0.16s ease;
+  }
+
+  .sop-header-ask-input:focus {
+    border-color: rgba(1, 97, 170, 0.48);
+    background: #ffffff;
+    box-shadow:
+      0 0 0 4px rgba(1, 97, 170, 0.10),
+      0 8px 22px rgba(15, 23, 42, 0.06);
+  }
+
+  .sop-header-ask-prompt-window {
+    position: absolute;
+    left: 40px;
+    right: 14px;
+    top: 50%;
+    height: 1.35em;
+    overflow: hidden;
+    color: #64748b;
+    font-size: 0.93rem;
+    line-height: 1.35;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .sop-header-ask-prompt-text {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .sop-header-ask-prompt-text.is-rolling-in {
+    animation: sop-header-prompt-roll-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .sop-header-ask-prompt-text.is-rolling-out {
+    animation: sop-header-prompt-roll-out 220ms cubic-bezier(0.64, 0, 0.78, 0) both;
+  }
+
+  .sop-header-ask-input-wrap.sop-header-ask-is-focused .sop-header-ask-prompt-window,
+  .sop-header-ask-input-wrap.sop-header-ask-has-value .sop-header-ask-prompt-window {
+    opacity: 0;
+  }
+
+  .sop-header-ask-submit {
+    position: relative;
+    isolation: isolate;
+    overflow: visible;
+    flex: 0 0 auto;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 18px;
+    border: 1px solid #014f8c;
+    border-radius: 14px;
+    background: #0161AA;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.88rem;
+    line-height: 1.2;
+    cursor: pointer;
+    box-shadow:
+      0 8px 18px rgba(1, 97, 170, 0.16),
+      0 0 0 1px rgba(255, 255, 255, 0.22) inset;
+    transition:
+      background 0.16s ease,
+      transform 0.16s ease,
+      box-shadow 0.16s ease;
+  }
+
+  .sop-header-ask-submit::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    z-index: -1;
+    border-radius: 19px;
+    padding: 5px;
+    background:
+      radial-gradient(circle at 16% 42%, rgba(255, 183, 3, 0.95), transparent 18%),
+      radial-gradient(circle at 34% 20%, rgba(249, 115, 22, 0.95), transparent 22%),
+      radial-gradient(circle at 70% 24%, rgba(255, 255, 255, 0.85), transparent 20%),
+      radial-gradient(circle at 86% 64%, rgba(56, 189, 248, 0.95), transparent 24%),
+      radial-gradient(circle at 42% 88%, rgba(1, 97, 170, 0.95), transparent 26%),
+      linear-gradient(115deg, rgba(56, 189, 248, 0.75), rgba(249, 115, 22, 0.65), rgba(255, 255, 255, 0.45), rgba(1, 97, 170, 0.75));
+    background-size:
+      220% 220%,
+      240% 240%,
+      210% 210%,
+      230% 230%,
+      220% 220%,
+      260% 260%;
+    background-position:
+      5% 45%,
+      25% 10%,
+      70% 15%,
+      95% 65%,
+      40% 95%,
+      0% 50%;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0.9;
+    animation: sop-header-ai-border-glow 2.9s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .sop-header-ask-submit::after {
+    content: "";
+    position: absolute;
+    inset: -13px;
+    z-index: -2;
+    border-radius: 26px;
+    background:
+      radial-gradient(circle at 14% 44%, rgba(255, 183, 3, 0.30), transparent 24%),
+      radial-gradient(circle at 34% 22%, rgba(249, 115, 22, 0.38), transparent 28%),
+      radial-gradient(circle at 88% 66%, rgba(56, 189, 248, 0.42), transparent 32%),
+      radial-gradient(circle at 44% 90%, rgba(1, 97, 170, 0.32), transparent 34%);
+    background-size:
+      230% 230%,
+      250% 250%,
+      250% 250%,
+      240% 240%;
+    background-position:
+      5% 50%,
+      25% 15%,
+      95% 70%,
+      40% 95%;
+    filter: blur(14px);
+    opacity: 0.52;
+    animation: sop-header-ai-soft-glow 3.3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .sop-header-ask-submit:hover {
+    background: #014f8c;
+    transform: translateY(-1px);
+    box-shadow:
+      0 10px 22px rgba(1, 97, 170, 0.20),
+      0 0 0 1px rgba(255, 255, 255, 0.26) inset;
+  }
+
+  .sop-header-ask-submit:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 3px rgba(255, 255, 255, 0.88),
+      0 0 0 6px rgba(249, 115, 22, 0.18),
+      0 0 0 9px rgba(1, 97, 170, 0.14);
+  }
+
+  .sop-header-ask-submit:disabled {
+    background: #9ca3af;
+    border-color: #9ca3af;
+    cursor: wait;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .sop-header-ask-submit:disabled::before,
+  .sop-header-ask-submit:disabled::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  .sop-header-ask-card {
+    position: absolute;
+    top: calc(100% - 4px);
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    padding: 0;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  .sop-header-ask-card[hidden] {
+    display: none !important;
+  }
+
+  .sop-header-ask-card .container-xxl {
+    pointer-events: none;
+  }
+
+  .sop-header-ask-panel {
+    max-width: 760px;
+    max-height: min(70vh, 640px);
+    overflow-y: auto;
+    margin-left: auto;
+    padding: 18px 20px;
+    border: 1px solid rgba(214, 221, 231, 0.94);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow:
+      0 24px 60px rgba(15, 23, 42, 0.16),
+      0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    pointer-events: auto;
+  }
+
+  .sop-header-ask-card-header h2 {
+    margin: 0 0 5px;
+    color: #0f172a;
+    font-size: 1.04rem;
+    font-weight: 760;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+
+  .sop-header-ask-card-header p {
+    margin: 0 0 12px;
+    color: #475569;
+    font-size: 0.9rem;
+    line-height: 1.48;
+  }
+
+  .sop-header-ask-warning {
+    margin: 2px 0 0 !important;
+    padding: 10px 12px;
+    border: 1px solid #f6d365;
+    border-radius: 14px;
+    background: #fffbeb;
+    color: #92400e !important;
+    font-size: 0.83rem !important;
+    line-height: 1.42 !important;
+  }
+
+  .sop-header-answer {
+    margin-top: 14px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #ffffff;
+    text-align: left;
+  }
+
+  .sop-header-answer[hidden] {
+    display: none !important;
+  }
+
+  .sop-header-answer-status {
+    margin-bottom: 10px;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .sop-header-answer-content {
+    color: #0f172a;
+    font-size: 0.92rem;
+    line-height: 1.58;
+    white-space: pre-wrap;
+  }
+
+  .sop-header-answer-sources {
+    margin-top: 16px;
+    padding-top: 13px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .sop-header-answer-sources h3 {
+    margin: 0 0 9px;
+    color: #0f172a;
+    font-size: 0.96rem;
+  }
+
+  .sop-header-source-list {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .sop-header-source-list li {
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 0.86rem;
+    line-height: 1.42;
+  }
+
+  .sop-header-source-list a {
+    color: #0161AA;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .sop-header-source-list a:hover {
+    text-decoration: underline;
+  }
+
+  .sop-header-source-meta {
+    display: block;
+    color: #64748b;
+    font-size: 0.76rem;
+  }
+
+  @keyframes sop-header-prompt-roll-in {
+    from {
+      opacity: 0;
+      transform: translateY(-115%);
     }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes sop-header-prompt-roll-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    to {
+      opacity: 0;
+      transform: translateY(115%);
+    }
+  }
+
+  @keyframes sop-header-ai-border-glow {
+    0%,
+    100% {
+      background-position:
+        5% 45%,
+        25% 10%,
+        70% 15%,
+        95% 65%,
+        40% 95%,
+        0% 50%;
+      opacity: 0.88;
+    }
+
+    28% {
+      background-position:
+        68% 8%,
+        82% 42%,
+        26% 84%,
+        14% 24%,
+        92% 76%,
+        55% 20%;
+      opacity: 1;
+    }
+
+    58% {
+      background-position:
+        92% 74%,
+        14% 82%,
+        84% 36%,
+        46% 10%,
+        10% 46%,
+        100% 80%;
+      opacity: 0.94;
+    }
+
+    82% {
+      background-position:
+        28% 94%,
+        58% 16%,
+        12% 42%,
+        76% 92%,
+        66% 22%,
+        35% 100%;
+      opacity: 1;
+    }
+  }
+
+  @keyframes sop-header-ai-soft-glow {
+    0%,
+    100% {
+      background-position:
+        5% 50%,
+        25% 15%,
+        95% 70%,
+        40% 95%;
+      opacity: 0.46;
+      filter: blur(14px);
+    }
+
+    30% {
+      background-position:
+        70% 8%,
+        84% 44%,
+        12% 28%,
+        94% 78%;
+      opacity: 0.64;
+      filter: blur(16px);
+    }
+
+    62% {
+      background-position:
+        96% 78%,
+        12% 84%,
+        48% 12%,
+        8% 48%;
+      opacity: 0.58;
+      filter: blur(15px);
+    }
+
+    86% {
+      background-position:
+        30% 96%,
+        60% 18%,
+        78% 94%,
+        68% 24%;
+      opacity: 0.66;
+      filter: blur(17px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sop-header-ask-submit::before,
+    .sop-header-ask-submit::after,
+    .sop-header-ask-prompt-text {
+      animation: none !important;
+    }
+  }
+
+  @media (max-width: 850px) {
+    .sop-header-ask-shell {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .sop-header-ask-row {
+      width: 100%;
+    }
+
+    .sop-header-ask-input-wrap {
+      min-width: 0;
+    }
+
+    .sop-header-ask-panel {
+      max-width: none;
+      margin-left: 0;
+      padding: 16px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .sop-header-ask-row {
+      gap: 8px;
+    }
+
+    .sop-header-ask-submit {
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const SOP_HEADER_ASSISTANT_ENDPOINT = "https://func-sop-assistant-eph6gzhsdmbag7fn.australiasoutheast-01.azurewebsites.net/api/ask-sop";
+
+    const sopHeaderAskForm = document.getElementById("sopHeaderAskForm");
+    const sopHeaderQuestion = document.getElementById("sopHeaderQuestion");
+    const sopHeaderAskSubmit = document.getElementById("sopHeaderAskSubmit");
+    const sopHeaderAskCard = document.getElementById("sopHeaderAskCard");
+    const sopHeaderAnswer = document.getElementById("sopHeaderAnswer");
+    const sopHeaderAnswerStatus = document.getElementById("sopHeaderAnswerStatus");
+    const sopHeaderAnswerContent = document.getElementById("sopHeaderAnswerContent");
+    const sopHeaderAnswerSources = document.getElementById("sopHeaderAnswerSources");
+    const sopHeaderQuestionWrap = sopHeaderQuestion.closest(".sop-header-ask-input-wrap");
+    const sopHeaderQuestionPrompt = document.getElementById("sopHeaderQuestionPrompt");
+
+    const SOP_HEADER_QUESTION_PROMPTS = [
+      "What is the process for reporting a member injury?",
+      "Where should I set up the flags?",
+      "What should I do during a patrol area closure?",
+      "When should a Surf Risk Rating be completed?",
+      "What is rescue ready?",
+      "What should happen after a critical incident?",
+      "When should peer support be offered?",
+      "What should be recorded in the Operations App?",
+      "What are the procedures for helicopter landing sites?"
+    ];
+
+    let sopHeaderPromptQueue = [];
+    let sopHeaderPromptTimer = null;
+    let sopHeaderCurrentPrompt = "";
+
+    function sopHeaderEscapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function sopHeaderShufflePrompts(items) {
+      const shuffled = [...items];
+
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+
+      return shuffled;
+    }
+
+    function sopHeaderGetNextPrompt() {
+      if (sopHeaderPromptQueue.length === 0) {
+        sopHeaderPromptQueue = sopHeaderShufflePrompts(SOP_HEADER_QUESTION_PROMPTS);
+
+        if (
+          sopHeaderPromptQueue.length > 1 &&
+          sopHeaderPromptQueue[0] === sopHeaderCurrentPrompt
+        ) {
+          const first = sopHeaderPromptQueue.shift();
+          sopHeaderPromptQueue.push(first);
+        }
+      }
+
+      sopHeaderCurrentPrompt = sopHeaderPromptQueue.shift();
+      return sopHeaderCurrentPrompt;
+    }
+
+    function sopHeaderPrefersReducedMotion() {
+      return window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    function sopHeaderSetPromptText(text, animate) {
+      if (!sopHeaderQuestionPrompt) {
+        return;
+      }
+
+      if (!animate || sopHeaderPrefersReducedMotion()) {
+        sopHeaderQuestionPrompt.classList.remove("is-rolling-in", "is-rolling-out");
+        sopHeaderQuestionPrompt.textContent = text;
+        return;
+      }
+
+      sopHeaderQuestionPrompt.classList.remove("is-rolling-in");
+      sopHeaderQuestionPrompt.classList.add("is-rolling-out");
+
+      window.setTimeout(() => {
+        sopHeaderQuestionPrompt.textContent = text;
+        sopHeaderQuestionPrompt.classList.remove("is-rolling-out");
+        sopHeaderQuestionPrompt.classList.add("is-rolling-in");
+
+        window.setTimeout(() => {
+          sopHeaderQuestionPrompt.classList.remove("is-rolling-in");
+        }, 280);
+      }, 220);
+    }
+
+    function sopHeaderAdvancePrompt() {
+      if (document.activeElement === sopHeaderQuestion || sopHeaderQuestion.value.trim()) {
+        return;
+      }
+
+      sopHeaderSetPromptText(sopHeaderGetNextPrompt(), true);
+    }
+
+    function sopHeaderStartPromptRotation() {
+      if (sopHeaderPromptTimer) {
+        return;
+      }
+
+      sopHeaderPromptTimer = window.setInterval(sopHeaderAdvancePrompt, 3000);
+    }
+
+    function sopHeaderStopPromptRotation() {
+      if (!sopHeaderPromptTimer) {
+        return;
+      }
+
+      window.clearInterval(sopHeaderPromptTimer);
+      sopHeaderPromptTimer = null;
+    }
+
+    function sopHeaderUpdatePromptVisibility() {
+      const isFocused = document.activeElement === sopHeaderQuestion;
+      const hasValue = Boolean(sopHeaderQuestion.value.trim());
+
+      sopHeaderQuestionWrap.classList.toggle("sop-header-ask-is-focused", isFocused);
+      sopHeaderQuestionWrap.classList.toggle("sop-header-ask-has-value", hasValue);
+
+      if (isFocused || hasValue) {
+        sopHeaderStopPromptRotation();
+      } else {
+        sopHeaderStartPromptRotation();
+      }
+    }
+
+    function sopHeaderSetAskOpen(open) {
+      sopHeaderAskCard.hidden = !open;
+      sopHeaderQuestion.setAttribute("aria-expanded", open ? "true" : "false");
+      sopHeaderUpdatePromptVisibility();
+    }
+
+    function sopHeaderRenderSources(sources) {
+      if (!Array.isArray(sources) || sources.length === 0) {
+        sopHeaderAnswerSources.innerHTML = "";
+        return;
+      }
+
+      const items = sources.map((source) => {
+        const title = sopHeaderEscapeHtml(source.title || "SOP source");
+        const heading = sopHeaderEscapeHtml(source.heading || "");
+        const version = sopHeaderEscapeHtml(source.version || "");
+        const score = typeof source.score === "number" ? source.score.toFixed(3) : "";
+        const url = source.url ? "{{ site.baseurl }}" + source.url : "";
+
+        const label = heading ? `${title} — ${heading}` : title;
+
+        return `
+          <li>
+            ${url ? `<a href="${sopHeaderEscapeHtml(url)}">${label}</a>` : label}
+            <span class="sop-header-source-meta">
+              ${version ? `Version: ${version}` : ""}
+              ${score ? ` · Relevance: ${score}` : ""}
+            </span>
+          </li>
+        `;
+      }).join("");
+
+      sopHeaderAnswerSources.innerHTML = `
+        <h3>Relevant SOPs</h3>
+        <ol class="sop-header-source-list">${items}</ol>
+      `;
+    }
+
+    sopHeaderQuestion.addEventListener("focus", function () {
+      sopHeaderSetAskOpen(true);
+      sopHeaderUpdatePromptVisibility();
+    });
+
+    sopHeaderQuestion.addEventListener("click", function () {
+      sopHeaderSetAskOpen(true);
+      sopHeaderUpdatePromptVisibility();
+    });
+
+    sopHeaderQuestion.addEventListener("input", function () {
+      sopHeaderUpdatePromptVisibility();
+    });
+
+    sopHeaderQuestion.addEventListener("blur", function () {
+      window.setTimeout(sopHeaderUpdatePromptVisibility, 120);
+    });
+
+    document.addEventListener("click", function (event) {
+      const clickedInsideHeaderAsk =
+        sopHeaderAskForm.contains(event.target) ||
+        sopHeaderAskCard.contains(event.target);
+
+      if (!clickedInsideHeaderAsk && !sopHeaderAskCard.hidden) {
+        sopHeaderSetAskOpen(false);
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !sopHeaderAskCard.hidden) {
+        sopHeaderSetAskOpen(false);
+        sopHeaderQuestion.blur();
+      }
+    });
+
+    sopHeaderAskForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const question = sopHeaderQuestion.value.trim();
+
+      sopHeaderSetAskOpen(true);
+
+      if (!question) {
+        sopHeaderQuestion.focus();
+        return;
+      }
+
+      sopHeaderAnswer.hidden = false;
+      sopHeaderAnswerStatus.textContent = "Searching the SOPs...";
+      sopHeaderAnswerContent.textContent = "";
+      sopHeaderAnswerSources.innerHTML = "";
+      sopHeaderAskSubmit.disabled = true;
+      sopHeaderAskSubmit.textContent = "Searching...";
+
+      try {
+        const response = await fetch(SOP_HEADER_ASSISTANT_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            question: question,
+            topK: 8,
+            includeSources: true,
+            page_url: window.location.pathname
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || data.message || "The SOP assistant returned an error.");
+        }
+
+        sopHeaderAnswerStatus.textContent = data.answer_status || "Answered";
+        sopHeaderAnswerContent.textContent = data.answer || "No answer was returned.";
+        sopHeaderRenderSources(data.sources);
+
+      } catch (error) {
+        sopHeaderAnswerStatus.textContent = "Error";
+        sopHeaderAnswerContent.textContent = "The SOP assistant could not answer the question. Please try again or refer to the SOPs directly.";
+        sopHeaderAnswerSources.innerHTML = "";
+        console.error(error);
+      } finally {
+        sopHeaderAskSubmit.disabled = false;
+        sopHeaderAskSubmit.textContent = "Ask";
+      }
+    });
+
+    sopHeaderSetPromptText(sopHeaderGetNextPrompt(), false);
+    sopHeaderUpdatePromptVisibility();
+  })();
 </script>
