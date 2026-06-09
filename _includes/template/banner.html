@@ -299,11 +299,11 @@
 
   .sop-header-ask-card {
     position: absolute;
-    top: calc(100% - 4px);
+    top: calc(100% + 8px);
     left: 0;
     right: 0;
     z-index: 1001;
-    padding: 0;
+    padding: 0 0 24px;
     background: transparent;
     pointer-events: none;
   }
@@ -317,11 +317,11 @@
   }
 
   .sop-header-ask-panel {
-    max-width: 760px;
-    max-height: min(70vh, 640px);
+    width: min(1040px, calc(100vw - 32px));
+    max-height: min(82vh, 760px);
     overflow-y: auto;
     margin-left: auto;
-    padding: 18px 20px;
+    padding: 22px 24px;
     border: 1px solid rgba(214, 221, 231, 0.94);
     border-radius: 24px;
     background: rgba(255, 255, 255, 0.98);
@@ -360,9 +360,9 @@
 
   .sop-header-answer {
     margin-top: 14px;
-    padding: 16px;
+    padding: 18px;
     border: 1px solid #e2e8f0;
-    border-radius: 16px;
+    border-radius: 18px;
     background: #ffffff;
     text-align: left;
   }
@@ -376,23 +376,23 @@
   }
 
   .sop-header-answer[data-status="sop_supported_answer"] {
-    border-color: #d9e2ec;
-    background: #ffffff;
+    border-color: #86efac;
+    background: #f0fdf4;
   }
 
   .sop-header-answer[data-status="partial_sop_answer"] {
-    border-color: #93c5fd;
-    background: #eff6ff;
-  }
-
-  .sop-header-answer[data-status="unsupported_assumption"] {
-    border-color: #f6d365;
+    border-color: #fcd34d;
     background: #fffbeb;
   }
 
+  .sop-header-answer[data-status="unsupported_assumption"] {
+    border-color: #fdba74;
+    background: #fff7ed;
+  }
+
   .sop-header-answer[data-status="no_clear_sop_answer"] {
-    border-color: #cbd5e1;
-    background: #f8fafc;
+    border-color: #facc15;
+    background: #fefce8;
   }
 
   .sop-header-answer[data-status="operational_escalation"] {
@@ -406,10 +406,8 @@
   }
 
   .sop-header-answer-status {
-    margin-bottom: 10px;
-    color: #64748b;
-    font-size: 0.82rem;
-    font-weight: 700;
+    position: relative;
+    margin-bottom: 14px;
   }
 
   .sop-header-answer-status.is-loading {
@@ -417,6 +415,119 @@
     align-items: center;
     gap: 8px;
     color: #0f172a;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .sop-header-status-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .sop-header-status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 5px 10px;
+    border: 1px solid;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+  }
+
+  .sop-header-status-badge[data-status="sop_supported_answer"] {
+    border-color: #16a34a;
+    background: #dcfce7;
+    color: #14532d;
+  }
+
+  .sop-header-status-badge[data-status="partial_sop_answer"] {
+    border-color: #d97706;
+    background: #fef3c7;
+    color: #78350f;
+  }
+
+  .sop-header-status-badge[data-status="unsupported_assumption"] {
+    border-color: #ea580c;
+    background: #ffedd5;
+    color: #7c2d12;
+  }
+
+  .sop-header-status-badge[data-status="no_clear_sop_answer"] {
+    border-color: #ca8a04;
+    background: #fef9c3;
+    color: #713f12;
+  }
+
+  .sop-header-status-badge[data-status="operational_escalation"],
+  .sop-header-status-badge[data-status="error"] {
+    border-color: #dc2626;
+    background: #fee2e2;
+    color: #7f1d1d;
+  }
+
+  .sop-header-status-info {
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .sop-header-status-info:hover,
+  .sop-header-status-info:focus-visible {
+    border-color: #0161AA;
+    color: #0161AA;
+    outline: none;
+  }
+
+  .sop-header-status-popover {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 1002;
+    width: min(420px, calc(100vw - 56px));
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #334155;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.18);
+  }
+
+  .sop-header-status-popover[hidden] {
+    display: none !important;
+  }
+
+  .sop-header-status-popover strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #0f172a;
+    font-size: 0.88rem;
+  }
+
+  .sop-header-status-popover p {
+    margin: 0 0 8px;
+    color: #475569;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .sop-header-status-popover p:last-child {
+    margin-bottom: 0;
   }
 
   .sop-header-loading-dots {
@@ -444,28 +555,78 @@
 
   .sop-header-answer-content {
     color: #0f172a;
-    font-size: 0.92rem;
-    line-height: 1.58;
-    white-space: pre-wrap;
+    font-size: 0.94rem;
+    line-height: 1.62;
+  }
+
+  .sop-header-answer-content p {
+    margin: 0 0 11px;
+  }
+
+  .sop-header-answer-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .sop-header-answer-content strong {
+    font-weight: 800;
+  }
+
+  .sop-header-answer-content em {
+    font-style: italic;
+  }
+
+  .sop-header-answer-content code {
+    padding: 1px 5px;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.06);
+    font-size: 0.88em;
+  }
+
+  .sop-header-answer-content ul,
+  .sop-header-answer-content ol {
+    margin: 0 0 12px;
+    padding-left: 21px;
+  }
+
+  .sop-header-answer-content li {
+    margin-bottom: 5px;
+  }
+
+  .sop-header-answer-content h3 {
+    margin: 16px 0 7px;
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 800;
+  }
+
+  .sop-header-answer-content h3:first-child {
+    margin-top: 0;
   }
 
   .sop-header-loading-note {
     color: #64748b;
     font-size: 0.88rem;
     line-height: 1.5;
-    white-space: normal;
   }
 
   .sop-header-answer-sources {
     margin-top: 16px;
     padding-top: 13px;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid rgba(148, 163, 184, 0.45);
   }
 
   .sop-header-answer-sources h3 {
-    margin: 0 0 9px;
+    margin: 0 0 4px;
     color: #0f172a;
     font-size: 0.96rem;
+    font-weight: 800;
+  }
+
+  .sop-header-answer-sources p {
+    margin: 0 0 9px;
+    color: #64748b;
+    font-size: 0.8rem;
+    line-height: 1.4;
   }
 
   .sop-header-source-list {
@@ -488,12 +649,6 @@
 
   .sop-header-source-list a:hover {
     text-decoration: underline;
-  }
-
-  .sop-header-source-meta {
-    display: block;
-    color: #64748b;
-    font-size: 0.76rem;
   }
 
   @keyframes sop-header-prompt-roll-in {
@@ -648,7 +803,8 @@
     }
 
     .sop-header-ask-panel {
-      max-width: none;
+      width: 100%;
+      max-height: min(82vh, 760px);
       margin-left: 0;
       padding: 16px;
     }
@@ -693,6 +849,24 @@
       "What are the procedures for helicopter landing sites?"
     ];
 
+    const SOP_HEADER_STATUS_LABELS = {
+      sop_supported_answer: "SOP Supported Answer",
+      partial_sop_answer: "Partial SOP Answer",
+      unsupported_assumption: "SOP Does Not Support Part of the Question",
+      no_clear_sop_answer: "No Clear SOP Answer Found",
+      operational_escalation: "Operational Direction May Be Required",
+      error: "Error"
+    };
+
+    const SOP_HEADER_STATUS_DESCRIPTIONS = {
+      sop_supported_answer: "The assistant found SOP content that appears to directly support the answer.",
+      partial_sop_answer: "The assistant found some relevant SOP content, but the SOPs may not fully answer the question.",
+      unsupported_assumption: "The question appears to include an assumption that is not supported by the SOP content returned.",
+      no_clear_sop_answer: "The assistant could not find a clear answer in the SOP content returned.",
+      operational_escalation: "The question may require current operational direction rather than relying only on SOP text.",
+      error: "The assistant could not complete the request because of a system error."
+    };
+
     let sopHeaderPromptQueue = [];
     let sopHeaderPromptTimer = null;
     let sopHeaderCurrentPrompt = "";
@@ -707,6 +881,92 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+    }
+
+    function sopHeaderFormatInlineMarkdown(value) {
+      return sopHeaderEscapeHtml(value)
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+    }
+
+    function sopHeaderFormatAnswerMarkdown(value) {
+      const lines = String(value || "").replace(/\r\n/g, "\n").split("\n");
+      const output = [];
+      let paragraphLines = [];
+      let listType = null;
+
+      function flushParagraph() {
+        if (paragraphLines.length === 0) {
+          return;
+        }
+
+        output.push(`<p>${paragraphLines.map(sopHeaderFormatInlineMarkdown).join("<br>")}</p>`);
+        paragraphLines = [];
+      }
+
+      function closeList() {
+        if (!listType) {
+          return;
+        }
+
+        output.push(`</${listType}>`);
+        listType = null;
+      }
+
+      for (const rawLine of lines) {
+        const line = rawLine.trim();
+
+        if (!line) {
+          flushParagraph();
+          closeList();
+          continue;
+        }
+
+        const headingMatch = line.match(/^#{1,3}\s+(.+)$/);
+        const bulletMatch = line.match(/^[-*]\s+(.+)$/);
+        const numberedMatch = line.match(/^\d+\.\s+(.+)$/);
+
+        if (headingMatch) {
+          flushParagraph();
+          closeList();
+          output.push(`<h3>${sopHeaderFormatInlineMarkdown(headingMatch[1])}</h3>`);
+          continue;
+        }
+
+        if (bulletMatch) {
+          flushParagraph();
+
+          if (listType !== "ul") {
+            closeList();
+            output.push("<ul>");
+            listType = "ul";
+          }
+
+          output.push(`<li>${sopHeaderFormatInlineMarkdown(bulletMatch[1])}</li>`);
+          continue;
+        }
+
+        if (numberedMatch) {
+          flushParagraph();
+
+          if (listType !== "ol") {
+            closeList();
+            output.push("<ol>");
+            listType = "ol";
+          }
+
+          output.push(`<li>${sopHeaderFormatInlineMarkdown(numberedMatch[1])}</li>`);
+          continue;
+        }
+
+        paragraphLines.push(line);
+      }
+
+      flushParagraph();
+      closeList();
+
+      return output.join("");
     }
 
     function sopHeaderShufflePrompts(items) {
@@ -928,6 +1188,75 @@
       sopHeaderAnswerStatus.innerHTML = "";
     }
 
+    function sopHeaderSourceMatchLabel(score) {
+      if (typeof score !== "number") {
+        return "No source match score was returned.";
+      }
+
+      if (score >= 0.32) {
+        return `Source match: strong (${score.toFixed(3)}).`;
+      }
+
+      if (score >= 0.22) {
+        return `Source match: moderate (${score.toFixed(3)}).`;
+      }
+
+      if (score >= 0.18) {
+        return `Source match: low (${score.toFixed(3)}).`;
+      }
+
+      return `Source match: very low (${score.toFixed(3)}).`;
+    }
+
+    function sopHeaderRenderAnswerStatus(data) {
+      const status = data.answer_status || "sop_supported_answer";
+      const label = SOP_HEADER_STATUS_LABELS[status] || data.answer_label || "SOP Answer";
+      const description = SOP_HEADER_STATUS_DESCRIPTIONS[status] || "The assistant classified this answer based on the SOP content returned.";
+      const topSourceScore =
+        typeof data.top_source_score === "number" ? data.top_source_score : null;
+      const sourceCount =
+        typeof data.source_count === "number" ? data.source_count : Array.isArray(data.sources) ? data.sources.length : 0;
+
+      sopHeaderAnswerStatus.innerHTML = `
+        <div class="sop-header-status-row">
+          <span class="sop-header-status-badge" data-status="${sopHeaderEscapeHtml(status)}">
+            ${sopHeaderEscapeHtml(label)}
+          </span>
+
+          <button
+            class="sop-header-status-info"
+            type="button"
+            aria-label="About this answer status"
+            aria-expanded="false"
+            aria-controls="sopHeaderStatusPopover"
+          >
+            ?
+          </button>
+
+          <div class="sop-header-status-popover" id="sopHeaderStatusPopover" hidden>
+            <strong>${sopHeaderEscapeHtml(label)}</strong>
+            <p>${sopHeaderEscapeHtml(description)}</p>
+            <p>${sopHeaderEscapeHtml(sopHeaderSourceMatchLabel(topSourceScore))}</p>
+            <p>The source match score shows how closely the returned SOP content matched the question. It is not a guarantee that the answer is complete or operationally current.</p>
+            <p>${sopHeaderEscapeHtml(sourceCount)} source${sourceCount === 1 ? "" : "s"} returned.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function sopHeaderCloseStatusPopover() {
+      const popover = document.getElementById("sopHeaderStatusPopover");
+      const button = sopHeaderAnswerStatus.querySelector(".sop-header-status-info");
+
+      if (popover) {
+        popover.hidden = true;
+      }
+
+      if (button) {
+        button.setAttribute("aria-expanded", "false");
+      }
+    }
+
     function sopHeaderRenderSources(sources) {
       if (!Array.isArray(sources) || sources.length === 0) {
         sopHeaderAnswerSources.innerHTML = "";
@@ -937,7 +1266,6 @@
       const items = sources.map((source) => {
         const title = sopHeaderEscapeHtml(source.title || "SOP source");
         const heading = sopHeaderEscapeHtml(source.heading || "");
-        const version = sopHeaderEscapeHtml(source.version || "");
         const url = source.url ? "{{ site.baseurl }}" + source.url : "";
 
         const label = heading ? `${title} — ${heading}` : title;
@@ -945,15 +1273,13 @@
         return `
           <li>
             ${url ? `<a href="${sopHeaderEscapeHtml(url)}">${label}</a>` : label}
-            <span class="sop-header-source-meta">
-              ${version ? `Version: ${version}` : ""}
-            </span>
           </li>
         `;
       }).join("");
 
       sopHeaderAnswerSources.innerHTML = `
-        <h3>Relevant SOPs</h3>
+        <h3>Sources</h3>
+        <p>SOP sections used to prepare this answer.</p>
         <ol class="sop-header-source-list">${items}</ol>
       `;
     }
@@ -976,6 +1302,24 @@
       window.setTimeout(sopHeaderUpdatePromptVisibility, 120);
     });
 
+    sopHeaderAnswerStatus.addEventListener("click", function (event) {
+      const button = event.target.closest(".sop-header-status-info");
+
+      if (!button) {
+        return;
+      }
+
+      const popover = document.getElementById("sopHeaderStatusPopover");
+
+      if (!popover) {
+        return;
+      }
+
+      const willOpen = popover.hidden;
+      popover.hidden = !willOpen;
+      button.setAttribute("aria-expanded", willOpen ? "true" : "false");
+    });
+
     document.addEventListener("click", function (event) {
       const clickedInsideHeaderAsk =
         sopHeaderAskForm.contains(event.target) ||
@@ -984,10 +1328,15 @@
       if (!clickedInsideHeaderAsk && !sopHeaderAskCard.hidden) {
         sopHeaderSetAskOpen(false);
       }
+
+      if (!sopHeaderAnswerStatus.contains(event.target)) {
+        sopHeaderCloseStatusPopover();
+      }
     });
 
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape" && !sopHeaderAskCard.hidden) {
+        sopHeaderCloseStatusPopover();
         sopHeaderSetAskOpen(false);
         sopHeaderQuestion.blur();
       }
@@ -1032,15 +1381,23 @@
         sopHeaderStopLoading();
 
         sopHeaderAnswer.dataset.status = data.answer_status || "sop_supported_answer";
-        sopHeaderAnswerStatus.textContent = data.answer_label || "SOP-supported answer";
-        sopHeaderAnswerContent.textContent = data.answer || "No answer was returned.";
+        sopHeaderRenderAnswerStatus(data);
+        sopHeaderAnswerContent.innerHTML = sopHeaderFormatAnswerMarkdown(data.answer || "No answer was returned.");
         sopHeaderRenderSources(data.sources);
 
       } catch (error) {
         sopHeaderStopLoading();
 
+        const errorData = {
+          answer_status: "error",
+          answer_label: "Error",
+          top_source_score: null,
+          source_count: 0,
+          sources: []
+        };
+
         sopHeaderAnswer.dataset.status = "error";
-        sopHeaderAnswerStatus.textContent = "Error";
+        sopHeaderRenderAnswerStatus(errorData);
         sopHeaderAnswerContent.textContent = "The SOP assistant could not answer the question. Please try again or refer to the SOPs directly.";
         sopHeaderAnswerSources.innerHTML = "";
         console.error(error);
