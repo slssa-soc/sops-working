@@ -375,34 +375,14 @@
     background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
   }
 
-  .sop-header-answer[data-status="sop_supported_answer"] {
-    border-color: #86efac;
-    background: #f0fdf4;
-  }
-
-  .sop-header-answer[data-status="partial_sop_answer"] {
-    border-color: #fcd34d;
-    background: #fffbeb;
-  }
-
-  .sop-header-answer[data-status="unsupported_assumption"] {
-    border-color: #fdba74;
-    background: #fff7ed;
-  }
-
-  .sop-header-answer[data-status="no_clear_sop_answer"] {
-    border-color: #facc15;
-    background: #fefce8;
-  }
-
-  .sop-header-answer[data-status="operational_escalation"] {
-    border-color: #fca5a5;
-    background: #fff1f2;
-  }
-
+  .sop-header-answer[data-status="sop_supported_answer"],
+  .sop-header-answer[data-status="partial_sop_answer"],
+  .sop-header-answer[data-status="unsupported_assumption"],
+  .sop-header-answer[data-status="no_clear_sop_answer"],
+  .sop-header-answer[data-status="operational_escalation"],
   .sop-header-answer[data-status="error"] {
-    border-color: #fca5a5;
-    background: #fef2f2;
+    border-color: #e2e8f0;
+    background: #ffffff;
   }
 
   .sop-header-answer-status {
@@ -1190,22 +1170,22 @@
 
     function sopHeaderSourceMatchLabel(score) {
       if (typeof score !== "number") {
-        return "No source match score was returned.";
+        return "Source match: Not available";
       }
 
       if (score >= 0.32) {
-        return `Source match: strong (${score.toFixed(3)}).`;
+        return "Source match: Strong";
       }
 
       if (score >= 0.22) {
-        return `Source match: moderate (${score.toFixed(3)}).`;
+        return "Source match: Moderate";
       }
 
       if (score >= 0.18) {
-        return `Source match: low (${score.toFixed(3)}).`;
+        return "Source match: Low";
       }
 
-      return `Source match: very low (${score.toFixed(3)}).`;
+      return "Source match: Very low";
     }
 
     function sopHeaderRenderAnswerStatus(data) {
@@ -1214,8 +1194,6 @@
       const description = SOP_HEADER_STATUS_DESCRIPTIONS[status] || "The assistant classified this answer based on the SOP content returned.";
       const topSourceScore =
         typeof data.top_source_score === "number" ? data.top_source_score : null;
-      const sourceCount =
-        typeof data.source_count === "number" ? data.source_count : Array.isArray(data.sources) ? data.sources.length : 0;
 
       sopHeaderAnswerStatus.innerHTML = `
         <div class="sop-header-status-row">
@@ -1237,8 +1215,7 @@
             <strong>${sopHeaderEscapeHtml(label)}</strong>
             <p>${sopHeaderEscapeHtml(description)}</p>
             <p>${sopHeaderEscapeHtml(sopHeaderSourceMatchLabel(topSourceScore))}</p>
-            <p>The source match score shows how closely the returned SOP content matched the question. It is not a guarantee that the answer is complete or operationally current.</p>
-            <p>${sopHeaderEscapeHtml(sourceCount)} source${sourceCount === 1 ? "" : "s"} returned.</p>
+            <p>Source match indicates how closely the selected SOP sections matched the question. The answer is generated from those sources, and the linked SOPs remain the authoritative reference.</p>
           </div>
         </div>
       `;
