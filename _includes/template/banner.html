@@ -371,9 +371,38 @@
     display: none !important;
   }
 
-  .sop-header-answer.sop-header-answer-loading {
-    background:
-      linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  .sop-header-answer[data-status="loading"] {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  }
+
+  .sop-header-answer[data-status="sop_supported_answer"] {
+    border-color: #d9e2ec;
+    background: #ffffff;
+  }
+
+  .sop-header-answer[data-status="partial_sop_answer"] {
+    border-color: #93c5fd;
+    background: #eff6ff;
+  }
+
+  .sop-header-answer[data-status="unsupported_assumption"] {
+    border-color: #f6d365;
+    background: #fffbeb;
+  }
+
+  .sop-header-answer[data-status="no_clear_sop_answer"] {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+  }
+
+  .sop-header-answer[data-status="operational_escalation"] {
+    border-color: #fca5a5;
+    background: #fff1f2;
+  }
+
+  .sop-header-answer[data-status="error"] {
+    border-color: #fca5a5;
+    background: #fef2f2;
   }
 
   .sop-header-answer-status {
@@ -878,7 +907,7 @@
       sopHeaderLoadingIndex = 0;
 
       sopHeaderAnswer.hidden = false;
-      sopHeaderAnswer.classList.add("sop-header-answer-loading");
+      sopHeaderAnswer.dataset.status = "loading";
       sopHeaderAnswerSources.innerHTML = "";
 
       sopHeaderRenderLoadingMessage(sopHeaderLoadingMessages[sopHeaderLoadingIndex]);
@@ -895,7 +924,6 @@
         sopHeaderLoadingTimer = null;
       }
 
-      sopHeaderAnswer.classList.remove("sop-header-answer-loading");
       sopHeaderAnswerStatus.classList.remove("is-loading");
       sopHeaderAnswerStatus.innerHTML = "";
     }
@@ -910,7 +938,6 @@
         const title = sopHeaderEscapeHtml(source.title || "SOP source");
         const heading = sopHeaderEscapeHtml(source.heading || "");
         const version = sopHeaderEscapeHtml(source.version || "");
-        const score = typeof source.score === "number" ? source.score.toFixed(3) : "";
         const url = source.url ? "{{ site.baseurl }}" + source.url : "";
 
         const label = heading ? `${title} — ${heading}` : title;
@@ -920,7 +947,6 @@
             ${url ? `<a href="${sopHeaderEscapeHtml(url)}">${label}</a>` : label}
             <span class="sop-header-source-meta">
               ${version ? `Version: ${version}` : ""}
-              ${score ? ` · Relevance: ${score}` : ""}
             </span>
           </li>
         `;
@@ -1004,12 +1030,16 @@
         }
 
         sopHeaderStopLoading();
-        sopHeaderAnswerStatus.textContent = data.answer_status || "Answered";
+
+        sopHeaderAnswer.dataset.status = data.answer_status || "sop_supported_answer";
+        sopHeaderAnswerStatus.textContent = data.answer_label || "SOP-supported answer";
         sopHeaderAnswerContent.textContent = data.answer || "No answer was returned.";
         sopHeaderRenderSources(data.sources);
 
       } catch (error) {
         sopHeaderStopLoading();
+
+        sopHeaderAnswer.dataset.status = "error";
         sopHeaderAnswerStatus.textContent = "Error";
         sopHeaderAnswerContent.textContent = "The SOP assistant could not answer the question. Please try again or refer to the SOPs directly.";
         sopHeaderAnswerSources.innerHTML = "";
