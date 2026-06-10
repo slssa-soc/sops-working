@@ -156,6 +156,16 @@
         </div>
 
         <p class="sop-feedback-status" id="sopFeedbackStatus"></p>
+
+        <a
+          class="sop-feedback-link"
+          id="sopFeedbackLink"
+          href="https://slssa-surfcom.atlassian.net/servicedesk/customer/portal/19/group/51/create/147"
+          target="_blank"
+          rel="noopener"
+        >
+          Submit detailed feedback
+        </a>
       </article>
     </div>
   </section>
@@ -1061,6 +1071,42 @@
     display: block;
   }
 
+  .sop-feedback-link {
+    display: none;
+    width: fit-content;
+    max-width: 100%;
+    margin: 10px auto 0;
+    padding: 9px 15px;
+    border: 1px solid #9fc5e8;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #0161AA !important;
+    font-size: 0.82rem;
+    font-weight: 650;
+    line-height: 1.2;
+    text-decoration: none !important;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
+    transition:
+      background 0.16s ease,
+      border-color 0.16s ease,
+      transform 0.16s ease,
+      box-shadow 0.16s ease;
+  }
+
+  .sop-feedback-link:hover {
+    background: #f4f9ff;
+    border-color: #0161AA;
+    color: #014f8c !important;
+    transform: translateY(-1px);
+    text-decoration: none !important;
+  }
+
+  .sop-feedback-link.is-visible {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   @keyframes sop-header-prompt-roll-in {
     from {
       opacity: 0;
@@ -1220,6 +1266,14 @@
       gap: 8px;
     }
 
+    .sop-header-ask-input {
+      font-size: 16px;
+    }
+
+    .sop-header-ask-prompt-window {
+      font-size: 16px;
+    }
+
     .sop-header-ask-submit {
       padding-left: 14px;
       padding-right: 14px;
@@ -1256,10 +1310,10 @@
 
     .sop-ask-modal-submit {
       width: auto;
-      min-width: 78px;
+      min-width: 112px;
       justify-self: end;
-      padding-left: 18px;
-      padding-right: 18px;
+      padding-left: 22px;
+      padding-right: 22px;
     }
 
     .sop-answer-feedback {
@@ -1271,6 +1325,10 @@
       max-width: calc(100% - 24px);
       margin-left: 12px;
       margin-right: 12px;
+    }
+
+    .sop-feedback-link {
+      max-width: calc(100% - 24px);
     }
   }
 </style>
@@ -1318,6 +1376,7 @@
     const tooltipButton = document.getElementById("sopTooltipButton");
     const tooltip = document.getElementById("sopTooltip");
     const feedbackStatus = document.getElementById("sopFeedbackStatus");
+    const feedbackLink = document.getElementById("sopFeedbackLink");
     const feedbackButtons = Array.from(document.querySelectorAll(".sop-feedback-button"));
     const iconTemplates = document.getElementById("sopIconTemplates");
 
@@ -2097,6 +2156,10 @@
       feedbackStatus.textContent = "Saving feedback...";
       feedbackStatus.classList.add("is-visible");
 
+      if (feedbackLink) {
+        feedbackLink.classList.add("is-visible");
+      }
+
       try {
         const response = await fetch(SOP_FEEDBACK_ENDPOINT, {
           method: "POST",
@@ -2123,7 +2186,7 @@
 
         feedbackStatus.textContent = "Feedback saved. Thank you.";
       } catch (error) {
-        feedbackStatus.textContent = "Feedback could not be saved. Use Submit Feedback if this needs review.";
+        feedbackStatus.textContent = "Feedback could not be saved. Use Submit detailed feedback if this needs review.";
       }
     }
 
@@ -2134,6 +2197,10 @@
 
       feedbackStatus.textContent = "";
       feedbackStatus.classList.remove("is-visible");
+
+      if (feedbackLink) {
+        feedbackLink.classList.remove("is-visible");
+      }
     }
 
     function startPromptRotation() {
