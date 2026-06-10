@@ -7,7 +7,6 @@ icon: house
 ---
 
 <style>
-  /* Hide the theme-generated page heading on this landing page only */
   #maincontent > div > h1:first-child,
   #maincontent h1:first-child {
     display: none;
@@ -24,55 +23,16 @@ icon: house
     box-sizing: border-box;
   }
 
+  .sop-home strong,
+  .sop-home b {
+    font-weight: 600;
+  }
+
   .sop-card {
     border: 1px solid #d9e2ec;
     border-radius: 22px;
     background: #ffffff;
     box-shadow: 0 8px 22px rgba(15, 23, 42, 0.035);
-  }
-
-  .sop-dev-banner {
-    display: grid;
-    grid-template-columns: 42px 1fr;
-    gap: 14px;
-    align-items: start;
-    margin-bottom: 18px;
-    padding: 16px 18px;
-    border: 1px solid #fb923c;
-    border-radius: 18px;
-    background: linear-gradient(180deg, #fff7ed 0%, #fffbeb 100%);
-    box-shadow: 0 8px 22px rgba(234, 88, 12, 0.08);
-  }
-
-  .sop-dev-banner-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 999px;
-    background: #fed7aa;
-    color: #c2410c;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .sop-dev-banner-icon svg {
-    width: 21px;
-    height: 21px;
-  }
-
-  .sop-dev-banner-content strong {
-    display: block;
-    margin: 0 0 4px;
-    color: #7c2d12;
-    font-size: 0.96rem;
-    line-height: 1.3;
-  }
-
-  .sop-dev-banner-content p {
-    margin: 0;
-    color: #7c2d12;
-    font-size: 0.9rem;
-    line-height: 1.5;
   }
 
   .sop-hero {
@@ -99,6 +59,7 @@ icon: house
   .sop-hero h1 {
     margin: 0 0 14px;
     font-size: 1.9rem;
+    font-weight: 650;
     line-height: 1.18;
     letter-spacing: -0.03em;
     color: #0f172a;
@@ -109,6 +70,7 @@ icon: house
     margin: 0 0 12px;
     color: #334155;
     font-size: 0.98rem;
+    font-weight: 400;
     line-height: 1.6;
   }
 
@@ -125,11 +87,16 @@ icon: house
     justify-content: center;
     min-height: 42px;
     padding: 10px 18px;
-    border-radius: 999px;
+    border-radius: 14px;
     font-size: 0.92rem;
-    font-weight: 700;
+    font-weight: 650;
+    line-height: 1.2;
     text-decoration: none !important;
-    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    transition:
+      transform 0.16s ease,
+      box-shadow 0.16s ease,
+      border-color 0.16s ease,
+      background 0.16s ease;
   }
 
   .sop-button:hover {
@@ -178,6 +145,7 @@ icon: house
     margin: 0 0 4px;
     color: #0f172a;
     font-size: 1.35rem;
+    font-weight: 650;
     line-height: 1.25;
     letter-spacing: -0.015em;
   }
@@ -186,6 +154,7 @@ icon: house
     margin: 0;
     color: #64748b;
     font-size: 0.95rem;
+    font-weight: 400;
   }
 
   .sop-tile-grid {
@@ -206,7 +175,11 @@ icon: house
     background: #ffffff;
     color: #0f172a !important;
     text-decoration: none !important;
-    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    transition:
+      transform 0.16s ease,
+      box-shadow 0.16s ease,
+      border-color 0.16s ease,
+      background 0.16s ease;
   }
 
   .sop-tile:hover {
@@ -236,7 +209,7 @@ icon: house
     margin-bottom: 3px;
     color: #0161AA;
     font-size: 0.68rem;
-    font-weight: 800;
+    font-weight: 650;
     letter-spacing: 0.06em;
     line-height: 1.15;
     text-transform: uppercase;
@@ -246,7 +219,7 @@ icon: house
     display: block;
     color: #111827;
     font-size: 0.94rem;
-    font-weight: 750;
+    font-weight: 650;
     line-height: 1.23;
   }
 
@@ -358,16 +331,6 @@ icon: house
       justify-content: center;
     }
 
-    .sop-dev-banner {
-      grid-template-columns: 1fr;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .sop-dev-banner-icon {
-      margin: 0 auto;
-    }
-
     .sop-section-heading {
       justify-content: center;
       text-align: center;
@@ -415,24 +378,12 @@ icon: house
 
     .sop-button {
       width: 100%;
+      border-radius: 14px;
     }
   }
 </style>
 
 <div class="sop-home">
-
-  <section class="sop-dev-banner" role="status" aria-label="Development site notice">
-    <span class="sop-dev-banner-icon" aria-hidden="true">
-      {% include icon.html icon="exclamation-triangle" %}
-    </span>
-
-    <div class="sop-dev-banner-content">
-      <strong>Development site</strong>
-      <p>
-        This is a development site. The SOPs on this site may not be the approved or current SLSSA Standard Operating Procedures and must not be used for operational purposes. Use the approved SOP source for operational decisions, training, compliance, or incident management.
-      </p>
-    </div>
-  </section>
 
   <section class="sop-card sop-hero">
     <div class="sop-hero-content">

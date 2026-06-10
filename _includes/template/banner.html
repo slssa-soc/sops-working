@@ -1,6 +1,6 @@
 <header class="py-3 sop-site-banner">
   <nav>
-    <div class="container-xxl d-flex flex-wrap align-items-start">
+    <div class="container-xxl d-flex flex-wrap align-items-start sop-banner-container">
       <a id="header-title" href="{{ '/' | relative_url }}" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto h4">
         {% if site.title-icon %}<span class="me-2">{% include icon.html icon=site.title-icon %}</span>{% endif %}
         {{ site.title }}
@@ -46,6 +46,17 @@
           </span>
         </div>
       </form>
+
+      <div class="sop-dev-strip-wrap">
+        <div class="sop-dev-strip" role="status" aria-label="Development site notice">
+          <span class="sop-dev-strip-icon" aria-hidden="true">
+            {% include icon.html icon="exclamation-triangle" %}
+          </span>
+          <span>
+            <strong>Development site</strong> — This site may not contain the approved or current SLSSA SOPs and must not be used for operational decisions, training, compliance, or incident management.
+          </span>
+        </div>
+      </div>
     </div>
   </nav>
 </header>
@@ -199,6 +210,55 @@
     background: rgba(255, 255, 255, 0.98);
   }
 
+  .sop-banner-container {
+    align-items: center !important;
+    row-gap: 8px;
+  }
+
+  .sop-dev-strip-wrap {
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  .sop-dev-strip {
+    width: fit-content;
+    max-width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 7px 11px;
+    border: 1px solid #fed7aa;
+    border-radius: 13px;
+    background: linear-gradient(180deg, #fff7ed 0%, #fffbeb 100%);
+    color: #7c2d12;
+    text-align: center;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  .sop-dev-strip strong {
+    color: #7c2d12;
+    font-weight: 650;
+  }
+
+  .sop-dev-strip-icon {
+    width: 17px;
+    height: 17px;
+    color: #c2410c;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .sop-dev-strip-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .sop-header-ask-shell {
     position: relative;
     width: min(560px, 100%);
@@ -329,11 +389,11 @@
     pointer-events: none;
   }
 
-  .sop-header-ask-submit {
+  .sop-header-ask-submit,
+  .sop-ask-modal-submit {
     position: relative;
     isolation: isolate;
     overflow: visible;
-    flex: 0 0 auto;
     min-height: 42px;
     display: inline-flex;
     align-items: center;
@@ -354,6 +414,14 @@
       background 0.16s ease,
       transform 0.16s ease,
       box-shadow 0.16s ease;
+  }
+
+  .sop-header-ask-submit {
+    flex: 0 0 auto;
+  }
+
+  .sop-ask-modal-submit {
+    min-width: 78px;
   }
 
   .sop-header-ask-submit::before,
@@ -639,24 +707,6 @@
 
   .sop-ask-modal-form input::placeholder {
     color: #334155;
-  }
-
-  .sop-ask-modal-submit {
-    position: relative;
-    isolation: isolate;
-    min-width: 64px;
-    height: 46px;
-    border: 1px solid #014f8c;
-    border-radius: 999px;
-    background: #0161AA;
-    color: #ffffff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 16px;
-    font-size: 0.86rem;
-    font-weight: 650;
-    cursor: pointer;
   }
 
   .sop-ask-modal-body {
@@ -1173,6 +1223,13 @@
     .sop-header-ask-submit {
       padding-left: 14px;
       padding-right: 14px;
+    }
+
+    .sop-dev-strip {
+      align-items: flex-start;
+      text-align: left;
+      font-size: 0.75rem;
+      padding: 7px 9px;
     }
 
     .sop-ask-modal {
