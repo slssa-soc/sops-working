@@ -187,6 +187,11 @@
     border: 0 !important;
   }
 
+  strong,
+  b {
+    font-weight: 600;
+  }
+
   .sop-site-banner {
     position: relative;
     z-index: 1000;
@@ -310,7 +315,7 @@
     background: #f1f5f9;
     color: #475569;
     font-size: 0.68rem;
-    font-weight: 850;
+    font-weight: 700;
     letter-spacing: 0.08em;
     line-height: 1;
   }
@@ -338,7 +343,7 @@
     border-radius: 14px;
     background: #0161AA;
     color: #ffffff;
-    font-weight: 700;
+    font-weight: 650;
     font-size: 0.88rem;
     line-height: 1.2;
     cursor: pointer;
@@ -484,7 +489,11 @@
   }
 
   body.sop-ask-modal-open {
+    position: fixed;
     overflow: hidden;
+    width: 100%;
+    left: 0;
+    right: 0;
   }
 
   .sop-ask-modal[hidden] {
@@ -498,6 +507,8 @@
     display: grid;
     place-items: center;
     padding: 24px;
+    overflow: hidden;
+    touch-action: none;
   }
 
   .sop-ask-modal-backdrop {
@@ -508,21 +519,47 @@
       rgba(15, 23, 42, 0.28);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    touch-action: none;
   }
 
   .sop-ask-sheet {
     position: relative;
     z-index: 1;
     width: min(720px, 100%);
-    max-height: min(90vh, 980px);
+    max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    scrollbar-gutter: stable;
     padding: 40px 34px 30px;
     border: 1px solid rgba(203, 213, 225, 0.82);
     border-radius: 32px;
     background: rgba(255, 255, 255, 0.97);
+    background-clip: padding-box;
     box-shadow:
       0 34px 90px rgba(15, 23, 42, 0.22),
       inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  }
+
+  .sop-ask-sheet::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .sop-ask-sheet::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 26px 0;
+  }
+
+  .sop-ask-sheet::-webkit-scrollbar-thumb {
+    border: 3px solid rgba(255, 255, 255, 0.97);
+    border-radius: 999px;
+    background: rgba(100, 116, 139, 0.34);
+  }
+
+  .sop-ask-sheet::-webkit-scrollbar-thumb:hover {
+    background: rgba(71, 85, 105, 0.44);
   }
 
   .sop-ask-modal-close {
@@ -618,7 +655,7 @@
     justify-content: center;
     padding: 0 16px;
     font-size: 0.86rem;
-    font-weight: 850;
+    font-weight: 650;
     cursor: pointer;
   }
 
@@ -635,7 +672,7 @@
     background: #eff6ff;
     color: #1e3a8a;
     font-size: 0.92rem;
-    font-weight: 700;
+    font-weight: 650;
   }
 
   .sop-ask-loading.is-visible {
@@ -716,7 +753,7 @@
     gap: 0.5rem;
     margin-bottom: 12px;
     font-size: 0.86rem;
-    font-weight: 850;
+    font-weight: 650;
   }
 
   .sop-answer-status-icon {
@@ -727,7 +764,7 @@
     align-items: center;
     justify-content: center;
     font-size: 0.78rem;
-    font-weight: 900;
+    font-weight: 700;
   }
 
   .sop-answer-status-icon-supported {
@@ -779,7 +816,7 @@
     align-items: center;
     justify-content: center;
     font-size: 0.78rem;
-    font-weight: 900;
+    font-weight: 700;
     cursor: pointer;
   }
 
@@ -830,7 +867,7 @@
 
   .sop-answer-body a {
     color: #0161AA;
-    font-weight: 800;
+    font-weight: 650;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
@@ -858,7 +895,7 @@
     margin: 0 0 10px;
     color: #0f172a;
     font-size: 0.95rem;
-    font-weight: 850;
+    font-weight: 650;
   }
 
   .sop-answer-source-grid {
@@ -907,6 +944,7 @@
     margin-top: 0.3rem;
     color: #0f172a;
     font-size: 0.8rem;
+    font-weight: 650;
     line-height: 1.22;
   }
 
@@ -954,16 +992,19 @@
 
   .sop-feedback-status {
     display: none;
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: calc(100% - 24px);
     margin: 10px auto 0;
     padding: 8px 10px;
-    width: fit-content;
-    max-width: 100%;
     border-radius: 999px;
     background: #f8fafc;
     color: #475569;
     text-align: center;
     font-size: 0.78rem;
     line-height: 1.35;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .sop-feedback-status.is-visible {
@@ -1135,10 +1176,17 @@
     }
 
     .sop-ask-modal {
-      padding: 12px;
+      align-items: start;
+      padding:
+        calc(12px + env(safe-area-inset-top))
+        12px
+        calc(12px + env(safe-area-inset-bottom));
     }
 
     .sop-ask-sheet {
+      width: 100%;
+      max-height: calc(100vh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
       padding: 34px 18px 22px;
       border-radius: 24px;
     }
@@ -1150,11 +1198,22 @@
     }
 
     .sop-ask-modal-submit {
-      width: 100%;
+      width: auto;
+      min-width: 78px;
+      justify-self: end;
+      padding-left: 18px;
+      padding-right: 18px;
     }
 
     .sop-answer-feedback {
       flex-wrap: wrap;
+    }
+
+    .sop-feedback-status {
+      width: auto;
+      max-width: calc(100% - 24px);
+      margin-left: 12px;
+      margin-right: 12px;
     }
   }
 </style>
@@ -1210,6 +1269,7 @@
     let promptTimer = null;
     let loadingTimer = null;
     let lastAnswerRecord = null;
+    let modalScrollY = 0;
 
     if (!headerForm || !headerInput || !modal || !modalForm) {
       return;
@@ -1320,8 +1380,16 @@
     }
 
     function openAskModal(question, clearPreviousAnswer) {
+      const wasHidden = modal.hidden;
+
       modal.hidden = false;
-      document.body.classList.add("sop-ask-modal-open");
+
+      if (wasHidden) {
+        modalScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+        document.body.style.top = "-" + modalScrollY + "px";
+        document.body.classList.add("sop-ask-modal-open");
+      }
+
       modalInput.value = question;
       headerInput.setAttribute("aria-expanded", "true");
       hideHeaderDisclaimer();
@@ -1342,6 +1410,8 @@
     function closeAskModal() {
       modal.hidden = true;
       document.body.classList.remove("sop-ask-modal-open");
+      document.body.style.top = "";
+      window.scrollTo(0, modalScrollY);
       loading.classList.remove("is-visible");
       tooltipWrap.classList.remove("is-open");
       headerInput.setAttribute("aria-expanded", "false");
@@ -2215,7 +2285,7 @@
     }
 
     function escapeRegExp(value) {
-      return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return String(value || "").replace(/[.*+?^$(){}|[\]\\]/g, "\\$&");
     }
   })();
 </script>
