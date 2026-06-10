@@ -90,28 +90,30 @@
       </div>
 
       <article class="sop-answer" id="sopAnswer">
-        <div class="sop-answer-status-row">
-          <span class="sop-answer-status-icon sop-answer-status-icon-supported" id="sopAnswerStatusIcon" aria-hidden="true">✓</span>
-          <span class="sop-answer-label sop-answer-label-supported" id="sopAnswerLabel">SOP supported answer</span>
-
-          <span class="sop-answer-tooltip-wrap" id="sopTooltipWrap">
-            <button class="sop-answer-tooltip-button" id="sopTooltipButton" type="button" aria-label="More information about this answer">i</button>
-            <span class="sop-answer-tooltip" id="sopTooltip" role="tooltip">
-              <strong>SOP supported answer</strong>
-              The assistant found SOP content that appears to directly support the answer.
-              <br><br>
-              Always check the linked SOPs for full context, related requirements, and current wording.
-            </span>
-          </span>
-        </div>
-
         <p class="sop-answer-question" id="sopAnswerQuestion"></p>
 
-        <p class="sop-answer-verify">
-          Verify the answer against the linked SOPs before relying on it. This development site may not contain the approved or current SLSSA SOPs and must not be used for operational decisions, training, compliance, or incident management.
-        </p>
+        <div class="sop-answer-card sop-answer-card-supported" id="sopAnswerCard">
+          <div class="sop-answer-card-label-row">
+            <span class="sop-answer-status-icon sop-answer-status-icon-supported" id="sopAnswerStatusIcon" aria-hidden="true">✓</span>
+            <span class="sop-answer-label sop-answer-label-supported" id="sopAnswerLabel">SOP supported answer</span>
 
-        <div class="sop-answer-card sop-answer-card-supported" id="sopAnswerBody"></div>
+            <span class="sop-answer-tooltip-wrap" id="sopTooltipWrap">
+              <button class="sop-answer-tooltip-button" id="sopTooltipButton" type="button" aria-label="More information about this answer">i</button>
+              <span class="sop-answer-tooltip" id="sopTooltip" role="tooltip">
+                <strong>SOP supported answer</strong>
+                The assistant found SOP content that appears to directly support the answer.
+                <br><br>
+                Always check the linked SOPs for full context, related requirements, and current wording.
+              </span>
+            </span>
+          </div>
+
+          <div class="sop-answer-body" id="sopAnswerBody"></div>
+
+          <p class="sop-answer-verify">
+            Verify the answer against the linked SOPs before relying on it. This development site may not contain the approved or current SLSSA SOPs and must not be used for operational decisions, training, compliance, or incident management.
+          </p>
+        </div>
 
         <div class="sop-answer-sources" id="sopAnswerSourcesWrap">
           <h3>Sources</h3>
@@ -146,6 +148,29 @@
       </article>
     </div>
   </section>
+</div>
+
+<div class="sop-icon-templates" id="sopIconTemplates" hidden>
+  <span data-sop-section="1">{% include icon.html icon="shield-check" %}</span>
+  <span data-sop-section="2">{% include icon.html icon="folder" %}</span>
+  <span data-sop-section="3">{% include icon.html icon="check-circle" %}</span>
+  <span data-sop-section="4">{% include icon.html icon="card-text" %}</span>
+  <span data-sop-section="5">{% include icon.html icon="tools" %}</span>
+  <span data-sop-section="6">{% include icon.html icon="life-preserver" %}</span>
+  <span data-sop-section="7">{% include icon.html icon="broadcast" %}</span>
+  <span data-sop-section="8">{% include icon.html icon="flag" %}</span>
+  <span data-sop-section="9">{% include icon.html icon="exclamation-triangle" %}</span>
+  <span data-sop-section="10">{% include icon.html icon="cloud" %}</span>
+  <span data-sop-section="11">{% include icon.html icon="search" %}</span>
+  <span data-sop-section="12">{% include icon.html icon="headset" %}</span>
+  <span data-sop-section="13">{% include icon.html icon="phone" %}</span>
+  <span data-sop-section="14">{% include icon.html icon="compass" %}</span>
+  <span data-sop-section="15">{% include icon.html icon="people" %}</span>
+  <span data-sop-section="16">{% include icon.html icon="book" %}</span>
+  <span data-sop-section="17">{% include icon.html icon="journal-text" %}</span>
+  <span data-sop-section="18">{% include icon.html icon="clock-history" %}</span>
+  <span data-sop-section="annexes">{% include icon.html icon="paperclip" %}</span>
+  <span data-sop-section="default">{% include icon.html icon="journal-text" %}</span>
 </div>
 
 <style>
@@ -646,15 +671,52 @@
     display: block;
   }
 
-  .sop-answer-status-row {
+  .sop-answer-question {
+    margin: 0 0 14px;
+    padding: 10px 12px;
+    border-radius: 15px;
+    background: #f8fafc;
+    color: #334155;
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .sop-answer-question strong {
+    color: #0f172a;
+  }
+
+  .sop-answer-card {
+    padding: 18px;
+    border-radius: 18px;
+    color: #1f2937;
+    font-size: 0.92rem;
+    line-height: 1.56;
+  }
+
+  .sop-answer-card-supported {
+    background: #dcfce7;
+    border: 1px solid #16a34a;
+  }
+
+  .sop-answer-card-limited {
+    background: #fef3c7;
+    border: 1px solid #d97706;
+  }
+
+  .sop-answer-card-none,
+  .sop-answer-card-unavailable {
+    background: #fee2e2;
+    border: 1px solid #dc2626;
+  }
+
+  .sop-answer-card-label-row {
     position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    min-height: 32px;
     margin-bottom: 12px;
     font-size: 0.86rem;
-    font-weight: 800;
+    font-weight: 850;
   }
 
   .sop-answer-status-icon {
@@ -669,40 +731,35 @@
   }
 
   .sop-answer-status-icon-supported {
-    border: 1px solid #86efac;
-    background: #dcfce7;
-    color: #15803d;
+    border: 1px solid #15803d;
+    background: #bbf7d0;
+    color: #14532d;
   }
 
   .sop-answer-status-icon-limited {
-    border: 1px solid #fcd34d;
-    background: #fef3c7;
-    color: #b45309;
+    border: 1px solid #b45309;
+    background: #fde68a;
+    color: #78350f;
   }
 
   .sop-answer-status-icon-none,
   .sop-answer-status-icon-unavailable {
-    border: 1px solid #fca5a5;
-    background: #fee2e2;
-    color: #b91c1c;
-  }
-
-  .sop-answer-label {
-    font-size: 0.86rem;
-    font-weight: 850;
+    border: 1px solid #b91c1c;
+    background: #fecaca;
+    color: #7f1d1d;
   }
 
   .sop-answer-label-supported {
-    color: #15803d;
+    color: #14532d;
   }
 
   .sop-answer-label-limited {
-    color: #b45309;
+    color: #78350f;
   }
 
   .sop-answer-label-none,
   .sop-answer-label-unavailable {
-    color: #b91c1c;
+    color: #7f1d1d;
   }
 
   .sop-answer-tooltip-wrap {
@@ -714,10 +771,10 @@
   .sop-answer-tooltip-button {
     width: 24px;
     height: 24px;
-    border: 1px solid #93c5fd;
+    border: 1px solid #cbd5e1;
     border-radius: 999px;
-    background: #eff6ff;
-    color: #0161AA;
+    background: rgba(255, 255, 255, 0.76);
+    color: #334155;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -753,90 +810,44 @@
     color: #0f172a;
   }
 
-  .sop-answer-question {
-    margin: 0 0 12px;
-    padding: 10px 12px;
-    border-radius: 15px;
-    background: #f8fafc;
-    color: #334155;
-    font-size: 0.88rem;
-    line-height: 1.45;
-  }
-
-  .sop-answer-question strong {
-    color: #0f172a;
-  }
-
-  .sop-answer-verify {
-    margin: 0 0 14px;
-    padding: 11px 13px;
-    border: 1px solid #bfdbfe;
-    border-radius: 16px;
-    background: #eff6ff;
-    color: #1e3a8a;
-    font-size: 0.84rem;
-    line-height: 1.45;
-  }
-
-  .sop-answer-card {
-    padding: 18px;
-    border-radius: 18px;
-    color: #1f2937;
-    font-size: 0.92rem;
-    line-height: 1.56;
-  }
-
-  .sop-answer-card-supported {
-    background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 52%, #f8fafc 100%);
-    border: 1px solid #bbf7d0;
-  }
-
-  .sop-answer-card-limited {
-    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 52%, #f8fafc 100%);
-    border: 1px solid #fcd34d;
-  }
-
-  .sop-answer-card-none {
-    background: #fffbeb;
-    border: 1px solid #fcd34d;
-    color: #78350f;
-  }
-
-  .sop-answer-card-unavailable {
-    background: #fff7ed;
-    border: 1px solid #fdba74;
-    color: #7c2d12;
-  }
-
-  .sop-answer-card p {
+  .sop-answer-body p {
     margin: 0 0 10px;
   }
 
-  .sop-answer-card p:last-child {
+  .sop-answer-body p:last-child {
     margin-bottom: 0;
   }
 
-  .sop-answer-card ul,
-  .sop-answer-card ol {
+  .sop-answer-body ul,
+  .sop-answer-body ol {
     margin: 0.4rem 0 0.6rem 1.25rem;
     padding: 0;
   }
 
-  .sop-answer-card li {
+  .sop-answer-body li {
     margin: 0 0 5px;
   }
 
-  .sop-answer-card a {
+  .sop-answer-body a {
     color: #0161AA;
     font-weight: 800;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
-  .sop-answer-card h3 {
+  .sop-answer-body h3 {
     margin: 0 0 8px;
     color: inherit;
     font-size: 1rem;
+  }
+
+  .sop-answer-verify {
+    margin: 14px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(15, 23, 42, 0.12);
+    color: rgba(15, 23, 42, 0.76);
+    font-size: 0.82rem;
+    line-height: 1.45;
   }
 
   .sop-answer-sources {
@@ -852,7 +863,7 @@
 
   .sop-answer-source-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
     gap: 10px;
   }
 
@@ -885,8 +896,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.72rem;
-    font-weight: 900;
+  }
+
+  .sop-answer-source-icon svg {
+    width: 18px;
+    height: 18px;
   }
 
   .sop-answer-source-card strong {
@@ -900,10 +914,6 @@
     color: #64748b;
     font-size: 0.72rem;
     line-height: 1.25;
-  }
-
-  .sop-answer-source-card-muted {
-    background: #f8fafc;
   }
 
   .sop-answer-feedback {
@@ -944,11 +954,16 @@
 
   .sop-feedback-status {
     display: none;
-    min-height: 1.2rem;
-    margin: 9px 0 0;
+    margin: 10px auto 0;
+    padding: 8px 10px;
+    width: fit-content;
+    max-width: 100%;
+    border-radius: 999px;
+    background: #f8fafc;
+    color: #475569;
     text-align: center;
-    color: #64748b;
     font-size: 0.78rem;
+    line-height: 1.35;
   }
 
   .sop-feedback-status.is-visible {
@@ -1094,12 +1109,6 @@
     }
   }
 
-  @media (max-width: 1050px) {
-    .sop-answer-source-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
   @media (max-width: 850px) {
     .sop-header-ask-shell {
       width: 100%;
@@ -1144,10 +1153,6 @@
       width: 100%;
     }
 
-    .sop-answer-source-grid {
-      grid-template-columns: 1fr;
-    }
-
     .sop-answer-feedback {
       flex-wrap: wrap;
     }
@@ -1187,6 +1192,7 @@
     const loading = document.getElementById("sopAskLoading");
     const loadingText = document.getElementById("sopAskLoadingText");
     const answer = document.getElementById("sopAnswer");
+    const answerCard = document.getElementById("sopAnswerCard");
     const answerStatusIcon = document.getElementById("sopAnswerStatusIcon");
     const answerLabel = document.getElementById("sopAnswerLabel");
     const answerQuestion = document.getElementById("sopAnswerQuestion");
@@ -1197,6 +1203,7 @@
     const tooltip = document.getElementById("sopTooltip");
     const feedbackStatus = document.getElementById("sopFeedbackStatus");
     const feedbackButtons = Array.from(document.querySelectorAll(".sop-feedback-button"));
+    const iconTemplates = document.getElementById("sopIconTemplates");
 
     let promptQueue = [];
     let currentPrompt = "";
@@ -1464,7 +1471,7 @@
       answer.classList.add("is-visible");
       answerQuestion.innerHTML = "<strong>Question:</strong> " + escapeHtml(question);
 
-      setAnswerStatus(status, getAnswerStatusLabel(status, data), matchBand);
+      setAnswerStatus(status, getAnswerStatusLabel(status), matchBand);
 
       if (status === "none") {
         answerBody.innerHTML = renderNoClearAnswer();
@@ -1574,11 +1581,7 @@
       return "supported";
     }
 
-    function getAnswerStatusLabel(status, data) {
-      if (data.answer_label) {
-        return String(data.answer_label).replace(/-/g, " ");
-      }
-
+    function getAnswerStatusLabel(status) {
       if (status === "supported") {
         return "SOP supported answer";
       }
@@ -1602,12 +1605,12 @@
       statusTypes.forEach(function (statusType) {
         answerStatusIcon.classList.remove("sop-answer-status-icon-" + statusType);
         answerLabel.classList.remove("sop-answer-label-" + statusType);
-        answerBody.classList.remove("sop-answer-card-" + statusType);
+        answerCard.classList.remove("sop-answer-card-" + statusType);
       });
 
       answerStatusIcon.classList.add("sop-answer-status-icon-" + type);
       answerLabel.classList.add("sop-answer-label-" + type);
-      answerBody.classList.add("sop-answer-card-" + type);
+      answerCard.classList.add("sop-answer-card-" + type);
 
       answerStatusIcon.textContent = type === "supported" ? "✓" : "!";
 
@@ -1791,26 +1794,16 @@
         const card = document.createElement("div");
         card.className = "sop-answer-source-card";
         card.innerHTML =
-          '<span class="sop-answer-source-icon">?</span>' +
+          '<span class="sop-answer-source-icon">' + getSourceIconMarkup({ sopNumber: "" }) + '</span>' +
           '<strong>No source SOPs identified</strong>' +
           '<small>Try rewording the question</small>';
         answerSources.appendChild(card);
         return;
       }
 
-      sources.slice(0, 3).forEach(function (source) {
+      sources.forEach(function (source) {
         answerSources.appendChild(createSourceCard(source));
       });
-
-      if (sources.length > 3) {
-        const extra = document.createElement("div");
-        extra.className = "sop-answer-source-card sop-answer-source-card-muted";
-        extra.innerHTML =
-          '<span class="sop-answer-source-icon">+</span>' +
-          '<strong>View all ' + sources.length + ' sources</strong>' +
-          '<small>Listed once per SOP</small>';
-        answerSources.appendChild(extra);
-      }
     }
 
     function createSourceCard(source) {
@@ -1825,11 +1818,40 @@
       }
 
       card.innerHTML =
-        '<span class="sop-answer-source-icon">' + escapeHtml(source.sopNumber || "SOP") + '</span>' +
+        '<span class="sop-answer-source-icon">' + getSourceIconMarkup(source) + '</span>' +
         '<strong>' + escapeHtml(title) + '</strong>' +
         '<small>' + escapeHtml(label) + '</small>';
 
       return card;
+    }
+
+    function getSourceIconMarkup(source) {
+      const sectionKey = getSourceSectionKey(source);
+      const template = iconTemplates
+        ? iconTemplates.querySelector('[data-sop-section="' + sectionKey + '"]') || iconTemplates.querySelector('[data-sop-section="default"]')
+        : null;
+
+      return template ? template.innerHTML : "";
+    }
+
+    function getSourceSectionKey(source) {
+      if (source.sopNumber) {
+        return source.sopNumber.split(".")[0];
+      }
+
+      const text = String(source.title || source.url || "").toLowerCase();
+
+      if (text.includes("annex")) {
+        return "annexes";
+      }
+
+      const match = text.match(/\b(\d{1,2})[\.-]/);
+
+      if (match) {
+        return match[1];
+      }
+
+      return "default";
     }
 
     function addCitationLinks(answerText, sources) {
@@ -1974,7 +1996,7 @@
 
         feedbackStatus.textContent = "Feedback saved. Thank you.";
       } catch (error) {
-        feedbackStatus.textContent = "Feedback could not be saved, but your selection has been recorded on this page.";
+        feedbackStatus.textContent = "Feedback could not be saved. Use Submit Feedback if this needs review.";
       }
     }
 
