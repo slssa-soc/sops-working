@@ -1,4 +1,4 @@
-# assets/lib
+﻿# assets/lib
 
 This directory contains libraries from external projects that the template depends on. 
 They are **not** under the same license as workshop-template-b code, and have their individual licenses stated in comments in the files where appropriate. 
