@@ -495,7 +495,7 @@ icon: house
       <span class="sop-tile-chevron">›</span>
     </a>
 
-    <a class="sop-tile sop-tile-grey" href="{{ '/11-search-and-rescue-SAR-operations/11.1-sar-responsibilities-to-be-issued.html' | relative_url }}">
+    <a class="sop-tile sop-tile-grey" href="{{ '/11-search-and-rescue-SAR-operations/11.1-sar-responsibilities.html' | relative_url }}">
       <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="search" %}</span>
       <span><span class="sop-tile-label">Section 11</span><span class="sop-tile-title">Search and Rescue (SAR) Operations</span></span>
       <span class="sop-tile-chevron">›</span>
