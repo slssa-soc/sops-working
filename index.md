@@ -1,4 +1,4 @@
-﻿---
+---
 title: Surf Life Saving SA Standard Operating Procedures
 nav: Welcome
 nav_order: 1
@@ -477,7 +477,7 @@ icon: house
       <span class="sop-tile-chevron">›</span>
     </a>
 
-    <a class="sop-tile sop-tile-yellow" href="{{ '/8-patrol-operations-general/8.1-beach-management-methods-and-roles.html' | relative_url }}">
+    <a class="sop-tile sop-tile-yellow" href="{{ '/8-patrol-operations-general/8.1-beach-management-principles.html' | relative_url }}">
       <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="flag" %}</span>
       <span><span class="sop-tile-label">Section 8</span><span class="sop-tile-title">Patrol Operations (General)</span></span>
       <span class="sop-tile-chevron">›</span>
@@ -495,21 +495,21 @@ icon: house
       <span class="sop-tile-chevron">›</span>
     </a>
 
-    <a class="sop-tile sop-tile-grey" href="{{ '/11-search-and-rescue-SAR-operations/11.1-sar-responsibilities.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="search" %}</span>
+    <a class="sop-tile sop-tile-grey" href="{{ '/11-search-and-rescue-sar-operations/11.1-sar-responsibilities.html' | relative_url }}">
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="binoculars" %}</span>
       <span><span class="sop-tile-label">Section 11</span><span class="sop-tile-title">Search and Rescue (SAR) Operations</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
-    <a class="sop-tile sop-tile-grey" href="{{ '/12-state-operations-centre-soc-surfcom/12.1-state-operations-centre-soc-surfcom.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="headset" %}</span>
-      <span><span class="sop-tile-label">Section 12</span><span class="sop-tile-title">State Operations Centre (SURFCOM)</span></span>
+    <a class="sop-tile sop-tile-grey" href="{{ '/12-emergency-management-and-response-operations/12.1-command-control-and-coordination-operations.html' | relative_url }}">
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="diagram-3" %}</span>
+      <span><span class="sop-tile-label">Section 12</span><span class="sop-tile-title">Emergency Management and Response Operations</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
-    <a class="sop-tile sop-tile-grey" href="{{ '/13-operations-app/13.1-operations-app-general-operations.html' | relative_url }}">
-      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="phone" %}</span>
-      <span><span class="sop-tile-label">Section 13</span><span class="sop-tile-title">Operations App</span></span>
+    <a class="sop-tile sop-tile-grey" href="{{ '/13-operational-reporting/13.1-patrol-reporting.html' | relative_url }}">
+      <span class="sop-tile-icon" aria-hidden="true">{% include icon.html icon="clipboard" %}</span>
+      <span><span class="sop-tile-label">Section 13</span><span class="sop-tile-title">Operational Reporting</span></span>
       <span class="sop-tile-chevron">›</span>
     </a>
 
