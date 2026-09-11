@@ -215,11 +215,11 @@ layout: default
 
       {% if page.section or page.section_id %}
       <div id="sop-page-actions" class="sop-page-actions" aria-label="SOP page actions">
-        <button id="toggle-qr-panel" class="sop-qr-primary-btn" type="button">
+        <button id="toggle-qr-panel" class="sop-qr-primary-btn" type="button" data-analytics-specific="true">
           Generate QR Code
         </button>
 
-        <button id="copy-link-btn" class="sop-qr-outline-btn" type="button">
+        <button id="copy-link-btn" class="sop-qr-outline-btn" type="button" data-analytics-specific="true">
           Copy Link
         </button>
       </div>
@@ -264,8 +264,8 @@ layout: default
             <canvas id="sop-qr-canvas" width="720" height="860" aria-label="Generated QR code"></canvas>
 
             <div class="sop-qr-action-buttons">
-              <button id="copy-qr-btn" class="sop-qr-primary-btn" type="button">Copy QR Code</button>
-              <a id="download-qr-btn" class="sop-qr-secondary-btn" href="#" download>Download PNG</a>
+              <button id="copy-qr-btn" class="sop-qr-primary-btn" type="button" data-analytics-specific="true">Copy QR Code</button>
+              <a id="download-qr-btn" class="sop-qr-secondary-btn" href="#" download data-analytics-specific="true">Download PNG</a>
             </div>
 
             <div class="sop-qr-info-box">
@@ -303,6 +303,26 @@ layout: default
     const pageUrl = canonicalDomain + pagePath;
     const sopTitle = {{ page.nav | default: page.title | jsonify }};
     const qrLogoPath = {{ '/images/slssa-logo.png' | relative_url | jsonify }};
+
+    function addTrackingParameters(url, source, medium) {
+      const trackedUrl = new URL(url);
+      trackedUrl.searchParams.set("utm_source", source);
+      trackedUrl.searchParams.set("utm_medium", medium);
+      return trackedUrl.toString();
+    }
+
+    function trackSopEvent(eventName, properties) {
+      if (
+        window.sopAnalytics &&
+        typeof window.sopAnalytics.trackEvent === "function"
+      ) {
+        window.sopAnalytics.trackEvent(eventName, properties || {});
+      }
+    }
+
+    const generatedQrUrl = addTrackingParameters(pageUrl, "sop_qr", "qr");
+    const printQrUrl = addTrackingParameters(pageUrl, "sop_print_qr", "qr");
+    const copiedLinkUrl = addTrackingParameters(pageUrl, "sop_copy_link", "share");
 
     const qrColours = {
       blue: "#0161AA",
@@ -346,7 +366,7 @@ layout: default
 
       if (typeof QRCode !== "undefined") {
         new QRCode(qrElement, {
-          text: pageUrl,
+          text: printQrUrl,
           width: 190,
           height: 190,
           correctLevel: QRCode.CorrectLevel.M
@@ -444,7 +464,7 @@ layout: default
       document.body.appendChild(tempContainer);
 
       new QRCode(tempContainer, {
-        text: pageUrl,
+        text: generatedQrUrl,
         width: 520,
         height: 520,
         colorDark: darkColour,
@@ -536,6 +556,17 @@ layout: default
         new ClipboardItem({ "image/png": blob })
       ]);
 
+      const activeStyleButton = document.querySelector(".sop-qr-style-btn.sop-qr-style-active");
+      const activeStyle = activeStyleButton
+        ? activeStyleButton.getAttribute("data-style") || "unknown"
+        : "unknown";
+
+      trackSopEvent("sop_qr_copy", {
+        qr_action: "copy",
+        qr_style: activeStyle,
+        sop_title: sopTitle
+      });
+
       const originalText = copyButton.textContent;
       copyButton.textContent = "Copied";
       setTimeout(() => {
@@ -551,7 +582,12 @@ layout: default
         return;
       }
 
-      await navigator.clipboard.writeText(pageUrl);
+      await navigator.clipboard.writeText(copiedLinkUrl);
+
+      trackSopEvent("sop_copy_link", {
+        copy_status: "success",
+        sop_title: sopTitle
+      });
 
       const originalText = copyButton.textContent;
       copyButton.textContent = "Copied";
@@ -565,6 +601,10 @@ layout: default
       if (!modal) return;
       modal.hidden = false;
       document.body.classList.add("sop-qr-modal-open");
+
+      trackSopEvent("sop_qr_open", {
+        sop_title: sopTitle
+      });
     }
 
     function closeQrModal() {
@@ -626,11 +666,34 @@ layout: default
 
           await buildQrCanvas(style);
           output.hidden = false;
+
+          trackSopEvent("sop_qr_generate", {
+            qr_style: style,
+            qr_source: "sop_qr",
+            sop_title: sopTitle
+          });
         });
       });
 
       if (copyQrButton) {
         copyQrButton.addEventListener("click", copyCanvasToClipboard);
+      }
+
+      const downloadQrButton = document.getElementById("download-qr-btn");
+
+      if (downloadQrButton) {
+        downloadQrButton.addEventListener("click", function () {
+          const activeStyleButton = document.querySelector(".sop-qr-style-btn.sop-qr-style-active");
+          const style = activeStyleButton
+            ? activeStyleButton.getAttribute("data-style") || "unknown"
+            : "unknown";
+
+          trackSopEvent("sop_qr_download", {
+            qr_action: "download",
+            qr_style: style,
+            sop_title: sopTitle
+          });
+        });
       }
     }
 

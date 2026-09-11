@@ -21,33 +21,30 @@
       return;
     }
 
-    const appInsights =
-      new Microsoft.ApplicationInsights.ApplicationInsights({
-        config: {
-          connectionString: connectionString,
-          autoTrackPageVisitTime: true,
-          enableAutoRouteTracking: false
-        }
-      });
+    const appInsights = new Microsoft.ApplicationInsights.ApplicationInsights({
+      config: {
+        connectionString: connectionString,
+        autoTrackPageVisitTime: true,
+        enableAutoRouteTracking: false
+      }
+    });
 
     appInsights.loadAppInsights();
 
     const SESSION_KEY = "sop_analytics_session_id";
     const TRAFFIC_KEY = "sop_analytics_traffic_source";
+    const ATTRIBUTION_PREFIX = "sop_analytics_attribution_";
 
     let visibleStartedAt = null;
     let totalVisibleMilliseconds = 0;
+    let printEventActive = false;
 
     function createId() {
       if (window.crypto && typeof window.crypto.randomUUID === "function") {
         return window.crypto.randomUUID();
       }
 
-      return (
-        Date.now().toString(36) +
-        "-" +
-        Math.random().toString(36).slice(2, 12)
-      );
+      return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12);
     }
 
     function getSessionId() {
@@ -62,10 +59,7 @@
     }
 
     function getDeviceClass() {
-      const width =
-        window.innerWidth ||
-        document.documentElement.clientWidth ||
-        0;
+      const width = window.innerWidth || document.documentElement.clientWidth || 0;
 
       if (width <= 767) {
         return "mobile";
@@ -76,6 +70,18 @@
       }
 
       return "desktop";
+    }
+
+    function getCurrentCampaign() {
+      const params = new URLSearchParams(window.location.search);
+
+      return {
+        source: params.get("utm_source") || "",
+        medium: params.get("utm_medium") || "",
+        campaign: params.get("utm_campaign") || "",
+        content: params.get("utm_content") || "",
+        term: params.get("utm_term") || ""
+      };
     }
 
     function getTrafficSource() {
@@ -126,19 +132,17 @@
         campaign: utmCampaign,
         content: utmContent,
         term: utmTerm,
-        referrer: referrer
+        referrer: referrer,
+        landing_path: window.location.pathname
       };
 
-      window.sessionStorage.setItem(
-        TRAFFIC_KEY,
-        JSON.stringify(traffic)
-      );
-
+      window.sessionStorage.setItem(TRAFFIC_KEY, JSON.stringify(traffic));
       return traffic;
     }
 
     function getCommonProperties() {
       const traffic = getTrafficSource();
+      const currentCampaign = getCurrentCampaign();
 
       return {
         component: "sops-web",
@@ -152,17 +156,18 @@
         traffic_content: traffic.content,
         traffic_term: traffic.term,
         initial_referrer: traffic.referrer,
+        landing_path: traffic.landing_path || "",
+        current_utm_source: currentCampaign.source,
+        current_utm_medium: currentCampaign.medium,
+        current_utm_campaign: currentCampaign.campaign,
+        current_utm_content: currentCampaign.content,
+        current_utm_term: currentCampaign.term,
         device_class: getDeviceClass()
       };
     }
 
     function trackEvent(name, properties) {
-      const eventProperties =
-        Object.assign(
-          {},
-          getCommonProperties(),
-          properties || {}
-        );
+      const eventProperties = Object.assign({}, getCommonProperties(), properties || {});
 
       appInsights.trackEvent(
         {
@@ -180,11 +185,54 @@
       });
     }
 
-    /*
-     * ---------------------------------------------------------
+    function trackAttributionVisit() {
+      const campaign = getCurrentCampaign();
+
+      if (!campaign.source) {
+        return;
+      }
+
+      const attributionKey = [
+        ATTRIBUTION_PREFIX,
+        campaign.source,
+        window.location.pathname,
+        campaign.campaign || "none"
+      ].join("|");
+
+      if (window.sessionStorage.getItem(attributionKey)) {
+        return;
+      }
+
+      window.sessionStorage.setItem(attributionKey, "1");
+
+      if (campaign.source === "sop_qr" || campaign.source === "sop_print_qr") {
+        trackEvent("sop_qr_scan", {
+          qr_source: campaign.source,
+          attribution_medium: campaign.medium || "qr",
+          attribution_campaign: campaign.campaign || ""
+        });
+        return;
+      }
+
+      if (campaign.source === "sop_copy_link") {
+        trackEvent("sop_copy_link_visit", {
+          attribution_source: campaign.source,
+          attribution_medium: campaign.medium || "share",
+          attribution_campaign: campaign.campaign || ""
+        });
+        return;
+      }
+
+      trackEvent("campaign_landing", {
+        attribution_source: campaign.source,
+        attribution_medium: campaign.medium,
+        attribution_campaign: campaign.campaign
+      });
+    }
+
+    /* ---------------------------------------------------------
      * ACTIVE READING TIME
-     * ---------------------------------------------------------
-     */
+     * --------------------------------------------------------- */
 
     function startVisibleTimer() {
       if (visibleStartedAt !== null) {
@@ -200,10 +248,8 @@
       }
 
       const elapsed = Date.now() - visibleStartedAt;
-
       totalVisibleMilliseconds += elapsed;
       visibleStartedAt = null;
-
       return elapsed;
     }
 
@@ -214,64 +260,63 @@
         return;
       }
 
-      const segmentSeconds =
-        Math.round(segmentMilliseconds / 1000);
+      const segmentSeconds = Math.round(segmentMilliseconds / 1000);
+      const totalVisibleSeconds = Math.round(totalVisibleMilliseconds / 1000);
 
-      const totalVisibleSeconds =
-        Math.round(totalVisibleMilliseconds / 1000);
-
-      /*
-       * Ignore extremely short visibility changes.
-       */
       if (segmentSeconds < 1) {
         return;
       }
 
-      trackEvent(
-        "page_engagement",
-        {
-          segment_seconds: segmentSeconds,
-          total_visible_seconds: totalVisibleSeconds,
-          engagement_reason: reason
-        }
-      );
+      trackEvent("page_engagement", {
+        segment_seconds: segmentSeconds,
+        total_visible_seconds: totalVisibleSeconds,
+        engagement_reason: reason
+      });
     }
 
     if (document.visibilityState === "visible") {
       startVisibleTimer();
     }
 
-    document.addEventListener(
-      "visibilitychange",
-      function () {
-        if (document.visibilityState === "hidden") {
-          trackEngagementSegment("tab_hidden");
-        } else {
-          startVisibleTimer();
-        }
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") {
+        trackEngagementSegment("tab_hidden");
+      } else {
+        startVisibleTimer();
       }
-    );
+    });
 
-    window.addEventListener(
-      "pagehide",
-      function () {
-        trackEngagementSegment("page_exit");
+    window.addEventListener("pagehide", function () {
+      trackEngagementSegment("page_exit");
 
-        /*
-         * Ask the SDK to send queued telemetry before the page
-         * is fully unloaded.
-         */
-        if (typeof appInsights.flush === "function") {
-          appInsights.flush();
-        }
+      if (typeof appInsights.flush === "function") {
+        appInsights.flush();
       }
-    );
+    });
 
-    /*
-     * ---------------------------------------------------------
+    /* ---------------------------------------------------------
+     * PRINT TRACKING
+     * --------------------------------------------------------- */
+
+    window.addEventListener("beforeprint", function () {
+      if (printEventActive) {
+        return;
+      }
+
+      printEventActive = true;
+
+      trackEvent("sop_print", {
+        print_status: "initiated"
+      });
+    });
+
+    window.addEventListener("afterprint", function () {
+      printEventActive = false;
+    });
+
+    /* ---------------------------------------------------------
      * CLICK / NAVIGATION TRACKING
-     * ---------------------------------------------------------
-     */
+     * --------------------------------------------------------- */
 
     function cleanText(value) {
       return String(value || "")
@@ -303,9 +348,7 @@
         return "telephone";
       }
 
-      if (
-        url.hostname === window.location.hostname
-      ) {
+      if (url.hostname === window.location.hostname) {
         return "internal";
       }
 
@@ -315,111 +358,74 @@
     document.addEventListener(
       "click",
       function (event) {
-        /*
-         * Anchor/navigation clicks.
-         */
+        const specificControl = event.target.closest('[data-analytics-specific="true"]');
+
+        if (specificControl) {
+          return;
+        }
+
         const link = event.target.closest("a");
 
         if (link) {
-          const href =
-            link.getAttribute("href") || "";
+          const href = link.getAttribute("href") || "";
 
-          if (
-            !href ||
-            href === "#" ||
-            href.startsWith("javascript:")
-          ) {
+          if (!href || href === "#" || href.startsWith("javascript:") || href.startsWith("data:")) {
             return;
           }
 
           let destinationUrl;
 
           try {
-            destinationUrl =
-              new URL(href, window.location.href);
+            destinationUrl = new URL(href, window.location.href);
           } catch (error) {
             return;
           }
 
-          const linkType =
-            getLinkType(destinationUrl);
-
+          const linkType = getLinkType(destinationUrl);
           const properties = {
-            from_path:
-              window.location.pathname,
-
-            link_text:
-              getElementLabel(link),
-
-            link_type:
-              linkType,
-
-            target:
-              link.getAttribute("target") || "_self"
+            from_path: window.location.pathname,
+            link_text: getElementLabel(link),
+            link_type: linkType,
+            target: link.getAttribute("target") || "_self"
           };
 
           if (linkType === "internal") {
-            properties.to_path =
-              destinationUrl.pathname;
+            properties.to_path = destinationUrl.pathname;
           } else if (linkType === "external") {
-            properties.destination_host =
-              destinationUrl.hostname;
-
-            properties.destination_path =
-              destinationUrl.pathname;
+            properties.destination_host = destinationUrl.hostname;
+            properties.destination_path = destinationUrl.pathname;
           } else {
-            properties.destination_scheme =
-              destinationUrl.protocol.replace(":", "");
+            properties.destination_scheme = destinationUrl.protocol.replace(":", "");
           }
 
-          trackEvent(
-            "navigation_click",
-            properties
-          );
-
+          trackEvent("navigation_click", properties);
           return;
         }
 
-        /*
-         * Track meaningful button clicks.
-         *
-         * We deliberately do not track clicks on text inputs,
-         * search fields or form content.
-         */
-        const button =
-          event.target.closest(
-            'button, [role="button"]'
-          );
+        const button = event.target.closest('button, [role="button"]');
 
         if (!button) {
           return;
         }
 
-        const label =
-          getElementLabel(button);
+        const label = getElementLabel(button);
 
         if (!label) {
           return;
         }
 
-        trackEvent(
-          "button_click",
-          {
-            button_label: label,
-            button_id: button.id || "",
-            button_name:
-              button.getAttribute("name") || ""
-          }
-        );
+        trackEvent("button_click", {
+          button_label: label,
+          button_id: button.id || "",
+          button_name: button.getAttribute("name") || ""
+        });
       },
       true
     );
 
-    /*
-     * ---------------------------------------------------------
+    /* ---------------------------------------------------------
      * PUBLIC ANALYTICS API
-     * ---------------------------------------------------------
-     */
+     * --------------------------------------------------------- */
 
     window.sopAnalytics = {
       appInsights: appInsights,
@@ -429,9 +435,7 @@
       getCommonProperties: getCommonProperties
     };
 
-    /*
-     * Initial page view.
-     */
     trackPageView();
+    trackAttributionVisit();
   })();
 </script>
