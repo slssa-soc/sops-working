@@ -47,20 +47,6 @@
         </div>
       </form>
 
-      <div class="sop-dev-strip-wrap">
-        <div class="sop-dev-strip" role="status" aria-label="Development site notice">
-          <span class="sop-dev-strip-icon" aria-hidden="true">
-            {% include icon.html icon="exclamation-triangle" %}
-          </span>
-          <span>
-            <strong>Development site</strong> — This site may not contain the approved or current SLSSA SOPs and must not be used for operational decisions, training, compliance, or incident management.
-          </span>
-        </div>
-      </div>
-    </div>
-  </nav>
-</header>
-
 <div class="sop-ask-modal" id="sopAskModal" hidden>
   <div class="sop-ask-modal-backdrop" data-sop-ask-close></div>
 
@@ -122,7 +108,7 @@
           <div class="sop-answer-body" id="sopAnswerBody"></div>
 
           <p class="sop-answer-verify">
-            Verify the answer against the linked SOPs before relying on it. This development site may not contain the approved or current SLSSA SOPs and must not be used for operational decisions, training, compliance, or incident management.
+            Verify the answer against the linked SOPs before relying on it.
           </p>
         </div>
 
@@ -2139,7 +2125,7 @@
 
     function renderNoClearAnswer() {
       return "<h3>No clear SOP answer found</h3>" +
-        "<p>I could not find a current SOP section in this development site that directly answers the question.</p>" +
+        "<p>I could not find a current SOP that directly answers the question.</p>" +
         "<ul>" +
           "<li>Try rewording the question with different terms.</li>" +
           "<li>Browse the SOP sections.</li>" +
