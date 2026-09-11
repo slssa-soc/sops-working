@@ -214,7 +214,13 @@ layout: default
       </div>
 
       {% if page.section or page.section_id %}
-      <div id="sop-page-actions" class="sop-page-actions" aria-label="SOP page actions">
+      <div
+        id="sop-page-actions"
+        class="sop-page-actions"
+        aria-label="SOP page actions"
+        data-sop-title="{{ page.nav | default: page.title | escape }}"
+        data-page-path="{{ page.url | escape }}"
+        data-qr-logo-path="{{ '/images/slssa-logo.png' | relative_url | escape }}">
         <button id="toggle-qr-panel" class="sop-qr-primary-btn" type="button" data-analytics-specific="true">
           Generate QR Code
         </button>
@@ -299,10 +305,21 @@ layout: default
 <script>
   (function () {
     const canonicalDomain = "https://sops.surflifesavingsa.com.au";
-    const pagePath = "{{ page.url }}";
+    const pageActions = document.getElementById("sop-page-actions");
+
+    const pagePath = pageActions
+      ? pageActions.dataset.pagePath
+      : window.location.pathname;
+
+    const sopTitle = pageActions
+      ? pageActions.dataset.sopTitle
+      : document.title;
+
+    const qrLogoPath = pageActions
+      ? pageActions.dataset.qrLogoPath
+      : "/images/slssa-logo.png";
+
     const pageUrl = canonicalDomain + pagePath;
-    const sopTitle = {{ page.nav | default: page.title | jsonify }};
-    const qrLogoPath = {{ '/images/slssa-logo.png' | relative_url | jsonify }};
 
     function addTrackingParameters(url, source, medium) {
       const trackedUrl = new URL(url);
