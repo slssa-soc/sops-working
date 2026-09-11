@@ -7,10 +7,7 @@
   (function () {
     const connectionString = "InstrumentationKey=db80adfe-d918-4768-b152-73bb9aa128da;IngestionEndpoint=https://australiasoutheast-0.in.applicationinsights.azure.com/;LiveEndpoint=https://australiasoutheast.livediagnostics.monitor.azure.com/;ApplicationId=2d42d0a8-b61c-4618-9c1e-694e278b9b5c";
 
-    if (
-      !connectionString ||
-      connectionString.includes("PASTE-YOUR")
-    ) {
+    if (!connectionString || connectionString.includes("PASTE-YOUR")) {
       console.warn("SOP analytics: Application Insights connection string has not been configured.");
       return;
     }
@@ -28,17 +25,7 @@
       new Microsoft.ApplicationInsights.ApplicationInsights({
         config: {
           connectionString: connectionString,
-
-          /*
-           * Records page visit duration for the previous
-           * instrumented page when another page view occurs.
-           */
           autoTrackPageVisitTime: true,
-
-          /*
-           * This is a normal multi-page Jekyll website,
-           * not a single-page application.
-           */
           enableAutoRouteTracking: false
         }
       });
@@ -48,11 +35,11 @@
     const SESSION_KEY = "sop_analytics_session_id";
     const TRAFFIC_KEY = "sop_analytics_traffic_source";
 
+    let visibleStartedAt = null;
+    let totalVisibleMilliseconds = 0;
+
     function createId() {
-      if (
-        window.crypto &&
-        typeof window.crypto.randomUUID === "function"
-      ) {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
         return window.crypto.randomUUID();
       }
 
@@ -64,18 +51,11 @@
     }
 
     function getSessionId() {
-      let sessionId =
-        window.sessionStorage.getItem(
-          SESSION_KEY
-        );
+      let sessionId = window.sessionStorage.getItem(SESSION_KEY);
 
       if (!sessionId) {
         sessionId = createId();
-
-        window.sessionStorage.setItem(
-          SESSION_KEY,
-          sessionId
-        );
+        window.sessionStorage.setItem(SESSION_KEY, sessionId);
       }
 
       return sessionId;
@@ -99,15 +79,8 @@
     }
 
     function getTrafficSource() {
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-
-      const existing =
-        window.sessionStorage.getItem(
-          TRAFFIC_KEY
-        );
+      const params = new URLSearchParams(window.location.search);
+      const existing = window.sessionStorage.getItem(TRAFFIC_KEY);
 
       if (existing) {
         try {
@@ -117,23 +90,12 @@
         }
       }
 
-      const utmSource =
-        params.get("utm_source") || "";
-
-      const utmMedium =
-        params.get("utm_medium") || "";
-
-      const utmCampaign =
-        params.get("utm_campaign") || "";
-
-      const utmContent =
-        params.get("utm_content") || "";
-
-      const utmTerm =
-        params.get("utm_term") || "";
-
-      const referrer =
-        document.referrer || "";
+      const utmSource = params.get("utm_source") || "";
+      const utmMedium = params.get("utm_medium") || "";
+      const utmCampaign = params.get("utm_campaign") || "";
+      const utmContent = params.get("utm_content") || "";
+      const utmTerm = params.get("utm_term") || "";
+      const referrer = document.referrer || "";
 
       let source = "direct";
       let medium = "none";
@@ -143,24 +105,14 @@
         medium = utmMedium || "campaign";
       } else if (referrer) {
         try {
-          const referrerUrl =
-            new URL(referrer);
+          const referrerUrl = new URL(referrer);
 
-          if (
-            referrerUrl.hostname !==
-            window.location.hostname
-          ) {
-            source =
-              referrerUrl.hostname;
-
-            medium =
-              "referral";
+          if (referrerUrl.hostname !== window.location.hostname) {
+            source = referrerUrl.hostname;
+            medium = "referral";
           } else {
-            source =
-              "internal";
-
-            medium =
-              "internal";
+            source = "internal";
+            medium = "internal";
           }
         } catch (error) {
           source = "referral";
@@ -186,44 +138,21 @@
     }
 
     function getCommonProperties() {
-      const traffic =
-        getTrafficSource();
+      const traffic = getTrafficSource();
 
       return {
         component: "sops-web",
-
-        session_id:
-          getSessionId(),
-
-        page_path:
-          window.location.pathname,
-
-        page_title:
-          document.title || "",
-
-        page_url:
-          window.location.href,
-
-        traffic_source:
-          traffic.source,
-
-        traffic_medium:
-          traffic.medium,
-
-        traffic_campaign:
-          traffic.campaign,
-
-        traffic_content:
-          traffic.content,
-
-        traffic_term:
-          traffic.term,
-
-        initial_referrer:
-          traffic.referrer,
-
-        device_class:
-          getDeviceClass()
+        session_id: getSessionId(),
+        page_path: window.location.pathname,
+        page_title: document.title || "",
+        page_url: window.location.href,
+        traffic_source: traffic.source,
+        traffic_medium: traffic.medium,
+        traffic_campaign: traffic.campaign,
+        traffic_content: traffic.content,
+        traffic_term: traffic.term,
+        initial_referrer: traffic.referrer,
+        device_class: getDeviceClass()
       };
     }
 
@@ -245,40 +174,259 @@
 
     function trackPageView() {
       appInsights.trackPageView({
-        name:
-          document.title ||
-          window.location.pathname,
-
-        uri:
-          window.location.href,
-
-        properties:
-          getCommonProperties()
+        name: document.title || window.location.pathname,
+        uri: window.location.href,
+        properties: getCommonProperties()
       });
     }
 
     /*
-     * Make a small analytics API available to the
-     * rest of the SOP website.
-     *
-     * banner.html, QR functions and print functions
-     * can use this later without knowing anything
-     * about Application Insights itself.
+     * ---------------------------------------------------------
+     * ACTIVE READING TIME
+     * ---------------------------------------------------------
      */
+
+    function startVisibleTimer() {
+      if (visibleStartedAt !== null) {
+        return;
+      }
+
+      visibleStartedAt = Date.now();
+    }
+
+    function stopVisibleTimer() {
+      if (visibleStartedAt === null) {
+        return 0;
+      }
+
+      const elapsed = Date.now() - visibleStartedAt;
+
+      totalVisibleMilliseconds += elapsed;
+      visibleStartedAt = null;
+
+      return elapsed;
+    }
+
+    function trackEngagementSegment(reason) {
+      const segmentMilliseconds = stopVisibleTimer();
+
+      if (segmentMilliseconds <= 0) {
+        return;
+      }
+
+      const segmentSeconds =
+        Math.round(segmentMilliseconds / 1000);
+
+      const totalVisibleSeconds =
+        Math.round(totalVisibleMilliseconds / 1000);
+
+      /*
+       * Ignore extremely short visibility changes.
+       */
+      if (segmentSeconds < 1) {
+        return;
+      }
+
+      trackEvent(
+        "page_engagement",
+        {
+          segment_seconds: segmentSeconds,
+          total_visible_seconds: totalVisibleSeconds,
+          engagement_reason: reason
+        }
+      );
+    }
+
+    if (document.visibilityState === "visible") {
+      startVisibleTimer();
+    }
+
+    document.addEventListener(
+      "visibilitychange",
+      function () {
+        if (document.visibilityState === "hidden") {
+          trackEngagementSegment("tab_hidden");
+        } else {
+          startVisibleTimer();
+        }
+      }
+    );
+
+    window.addEventListener(
+      "pagehide",
+      function () {
+        trackEngagementSegment("page_exit");
+
+        /*
+         * Ask the SDK to send queued telemetry before the page
+         * is fully unloaded.
+         */
+        if (typeof appInsights.flush === "function") {
+          appInsights.flush();
+        }
+      }
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * CLICK / NAVIGATION TRACKING
+     * ---------------------------------------------------------
+     */
+
+    function cleanText(value) {
+      return String(value || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 160);
+    }
+
+    function getElementLabel(element) {
+      return cleanText(
+        element.getAttribute("aria-label") ||
+        element.getAttribute("title") ||
+        element.innerText ||
+        element.textContent ||
+        ""
+      );
+    }
+
+    function getLinkType(url) {
+      if (!url) {
+        return "unknown";
+      }
+
+      if (url.protocol === "mailto:") {
+        return "email";
+      }
+
+      if (url.protocol === "tel:") {
+        return "telephone";
+      }
+
+      if (
+        url.hostname === window.location.hostname
+      ) {
+        return "internal";
+      }
+
+      return "external";
+    }
+
+    document.addEventListener(
+      "click",
+      function (event) {
+        /*
+         * Anchor/navigation clicks.
+         */
+        const link = event.target.closest("a");
+
+        if (link) {
+          const href =
+            link.getAttribute("href") || "";
+
+          if (
+            !href ||
+            href === "#" ||
+            href.startsWith("javascript:")
+          ) {
+            return;
+          }
+
+          let destinationUrl;
+
+          try {
+            destinationUrl =
+              new URL(href, window.location.href);
+          } catch (error) {
+            return;
+          }
+
+          const linkType =
+            getLinkType(destinationUrl);
+
+          const properties = {
+            from_path:
+              window.location.pathname,
+
+            link_text:
+              getElementLabel(link),
+
+            link_type:
+              linkType,
+
+            target:
+              link.getAttribute("target") || "_self"
+          };
+
+          if (linkType === "internal") {
+            properties.to_path =
+              destinationUrl.pathname;
+          } else if (linkType === "external") {
+            properties.destination_host =
+              destinationUrl.hostname;
+
+            properties.destination_path =
+              destinationUrl.pathname;
+          } else {
+            properties.destination_scheme =
+              destinationUrl.protocol.replace(":", "");
+          }
+
+          trackEvent(
+            "navigation_click",
+            properties
+          );
+
+          return;
+        }
+
+        /*
+         * Track meaningful button clicks.
+         *
+         * We deliberately do not track clicks on text inputs,
+         * search fields or form content.
+         */
+        const button =
+          event.target.closest(
+            'button, [role="button"]'
+          );
+
+        if (!button) {
+          return;
+        }
+
+        const label =
+          getElementLabel(button);
+
+        if (!label) {
+          return;
+        }
+
+        trackEvent(
+          "button_click",
+          {
+            button_label: label,
+            button_id: button.id || "",
+            button_name:
+              button.getAttribute("name") || ""
+          }
+        );
+      },
+      true
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * PUBLIC ANALYTICS API
+     * ---------------------------------------------------------
+     */
+
     window.sopAnalytics = {
       appInsights: appInsights,
-
-      trackEvent:
-        trackEvent,
-
-      trackPageView:
-        trackPageView,
-
-      getSessionId:
-        getSessionId,
-
-      getCommonProperties:
-        getCommonProperties
+      trackEvent: trackEvent,
+      trackPageView: trackPageView,
+      getSessionId: getSessionId,
+      getCommonProperties: getCommonProperties
     };
 
     /*
